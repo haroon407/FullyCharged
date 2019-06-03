@@ -12,7 +12,7 @@ Execute the following commands:
 2. ``` npm run build-dev  ```
 
 ## Production mode :
-For production mode, execute the following command instead of step 2 mentioned above:
+For production mode, execute the following command instead of step 3 mentioned above:
 ``` npm run build-prod  ```
 
 # Execute the following command to get the server running (Make sure mongodb is running in the background)
