@@ -118,8 +118,6 @@ light-bootstrap-dashboard-react
     │   │   └── CustomCheckbox.jsx
     │   ├── CustomRadio
     │   │   └── CustomRadio.jsx
-    │   ├── FixedPlugin
-    │   │   └── FixedPlugin.jsx
     │   ├── Footer
     │   │   └── Footer.jsx
     │   ├── FormInputs
