@@ -1,0 +1,22 @@
+.jumbotron {
+    padding-top: 148px !important;
+}
+
+.nav-bar-register {
+    min-width: 250px;
+}
+
+.nav-bar-text a{
+    font-weight: bold;
+    color: RGB(96,171,187);
+}
+
+.info {
+    margin: 50px;
+}
+
+.navbar-img {
+    width: 200px;
+    position: relative;
+    top: -80px;
+}

@@ -1,165 +1,83 @@
-import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
-import { Grid, Row, Col } from "react-bootstrap";
-
-import { Card } from "components/Card/Card.jsx";
-import { StatsCard } from "components/StatsCard/StatsCard.jsx";
-import { Tasks } from "components/Tasks/Tasks.jsx";
-import {
-  dataPie,
-  legendPie,
-  dataSales,
-  optionsSales,
-  responsiveSales,
-  legendSales,
-  dataBar,
-  optionsBar,
-  responsiveBar,
-  legendBar
-} from "variables/Variables.jsx";
+import React, {Component} from "react";
+import {MenuItem, Nav, NavDropdown, NavItem} from "react-bootstrap";
+import logo from "assets/img/logo.png";
 
 class Website extends Component {
-  createLegend(json) {
-    var legend = [];
-    for (var i = 0; i < json["names"].length; i++) {
-      var type = "fa fa-circle text-" + json["types"][i];
-      legend.push(<i className={type} key={i} />);
-      legend.push(" ");
-      legend.push(json["names"][i]);
+    render() {
+        return (
+            <div className="content">
+                <nav className="navbar navbar-inverse navbar-fixed-top">
+                    <div className="container">
+                        <div className="navbar-header">
+                            <a className="navbar-brand" href="#">
+                                <img className="navbar-img" src={logo} alt="logo_image" />
+                            </a>
+                        </div>
+                        <div id="navbar" className="navbar-collapse collapse">
+                            <div className="navbar-form navbar-right nav-bar-register">
+                                    <div className="col-md-7 nav-bar-text">
+                                        <NavDropdown
+                                            eventKey={2}
+                                            title="Register"
+                                            id="basic-nav-dropdown-right"
+                                        >
+                                            <MenuItem eventKey={2.1}>EV Owner</MenuItem>
+                                            <MenuItem eventKey={2.2}>EV Charging Provider</MenuItem>
+                                        </NavDropdown>
+                                    </div>
+                                    <div className="col-md-5 nav-bar-text">
+                                        <NavItem eventKey={3} href="#">
+                                            Log In
+                                        </NavItem>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <div className="jumbotron">
+                    <div className="container">
+                        <h1>Hello, world!</h1>
+                        <p>This is a template for a simple marketing or informational website. It includes a large
+                            callout
+                            called a jumbotron and three supporting pieces of content. Use it as a starting point to
+                            create
+                            something more unique.</p>
+                        <p><a className="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+                    </div>
+                </div>
+
+                <div className="row info">
+                    <div className="col-md-4">
+                        <h2>Heading</h2>
+                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo,
+                            tortor
+                            mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                            magna
+                            mollis euismod. Donec sed odio dui. </p>
+                        <p><a className="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                    </div>
+                    <div className="col-md-4">
+                        <h2>Heading</h2>
+                        <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo,
+                            tortor
+                            mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada
+                            magna
+                            mollis euismod. Donec sed odio dui. </p>
+                        <p><a className="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                    </div>
+                    <div className="col-md-4">
+                        <h2>Heading</h2>
+                        <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum
+                            id
+                            ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris
+                            condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+                        <p><a className="btn btn-default" href="#" role="button">View details &raquo;</a></p>
+                    </div>
+                </div>
+            </div>
+        );
     }
-    return legend;
-  }
-  render() {
-    return (
-      <div className="content">
-          <h1>Hello Website!</h1>
-        {/*<Grid fluid>*/}
-          {/*<Row>*/}
-            {/*<Col lg={3} sm={6}>*/}
-              {/*<StatsCard*/}
-                {/*bigIcon={<i className="pe-7s-server text-warning" />}*/}
-                {/*statsText="Capacity"*/}
-                {/*statsValue="105GB"*/}
-                {/*statsIcon={<i className="fa fa-refresh" />}*/}
-                {/*statsIconText="Updated now"*/}
-              {/*/>*/}
-            {/*</Col>*/}
-            {/*<Col lg={3} sm={6}>*/}
-              {/*<StatsCard*/}
-                {/*bigIcon={<i className="pe-7s-wallet text-success" />}*/}
-                {/*statsText="Revenue"*/}
-                {/*statsValue="$1,345"*/}
-                {/*statsIcon={<i className="fa fa-calendar-o" />}*/}
-                {/*statsIconText="Last day"*/}
-              {/*/>*/}
-            {/*</Col>*/}
-            {/*<Col lg={3} sm={6}>*/}
-              {/*<StatsCard*/}
-                {/*bigIcon={<i className="pe-7s-graph1 text-danger" />}*/}
-                {/*statsText="Errors"*/}
-                {/*statsValue="23"*/}
-                {/*statsIcon={<i className="fa fa-clock-o" />}*/}
-                {/*statsIconText="In the last hour"*/}
-              {/*/>*/}
-            {/*</Col>*/}
-            {/*<Col lg={3} sm={6}>*/}
-              {/*<StatsCard*/}
-                {/*bigIcon={<i className="fa fa-twitter text-info" />}*/}
-                {/*statsText="Followers"*/}
-                {/*statsValue="+45"*/}
-                {/*statsIcon={<i className="fa fa-refresh" />}*/}
-                {/*statsIconText="Updated now"*/}
-              {/*/>*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-          {/*<Row>*/}
-            {/*<Col md={8}>*/}
-              {/*<Card*/}
-                {/*statsIcon="fa fa-history"*/}
-                {/*id="chartHours"*/}
-                {/*title="Users Behavior"*/}
-                {/*category="24 Hours performance"*/}
-                {/*stats="Updated 3 minutes ago"*/}
-                {/*content={*/}
-                  {/*<div className="ct-chart">*/}
-                    {/*<ChartistGraph*/}
-                      {/*data={dataSales}*/}
-                      {/*type="Line"*/}
-                      {/*options={optionsSales}*/}
-                      {/*responsiveOptions={responsiveSales}*/}
-                    {/*/>*/}
-                  {/*</div>*/}
-                {/*}*/}
-                {/*legend={*/}
-                  {/*<div className="legend">{this.createLegend(legendSales)}</div>*/}
-                {/*}*/}
-              {/*/>*/}
-            {/*</Col>*/}
-            {/*<Col md={4}>*/}
-              {/*<Card*/}
-                {/*statsIcon="fa fa-clock-o"*/}
-                {/*title="Email Statistics"*/}
-                {/*category="Last Campaign Performance"*/}
-                {/*stats="Campaign sent 2 days ago"*/}
-                {/*content={*/}
-                  {/*<div*/}
-                    {/*id="chartPreferences"*/}
-                    {/*className="ct-chart ct-perfect-fourth"*/}
-                  {/*>*/}
-                    {/*<ChartistGraph data={dataPie} type="Pie" />*/}
-                  {/*</div>*/}
-                {/*}*/}
-                {/*legend={*/}
-                  {/*<div className="legend">{this.createLegend(legendPie)}</div>*/}
-                {/*}*/}
-              {/*/>*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-
-          {/*<Row>*/}
-            {/*<Col md={6}>*/}
-              {/*<Card*/}
-                {/*id="chartActivity"*/}
-                {/*title="2014 Sales"*/}
-                {/*category="All products including Taxes"*/}
-                {/*stats="Data information certified"*/}
-                {/*statsIcon="fa fa-check"*/}
-                {/*content={*/}
-                  {/*<div className="ct-chart">*/}
-                    {/*<ChartistGraph*/}
-                      {/*data={dataBar}*/}
-                      {/*type="Bar"*/}
-                      {/*options={optionsBar}*/}
-                      {/*responsiveOptions={responsiveBar}*/}
-                    {/*/>*/}
-                  {/*</div>*/}
-                {/*}*/}
-                {/*legend={*/}
-                  {/*<div className="legend">{this.createLegend(legendBar)}</div>*/}
-                {/*}*/}
-              {/*/>*/}
-            {/*</Col>*/}
-
-            {/*<Col md={6}>*/}
-              {/*<Card*/}
-                {/*title="Tasks"*/}
-                {/*category="Backend development"*/}
-                {/*stats="Updated 3 minutes ago"*/}
-                {/*statsIcon="fa fa-history"*/}
-                {/*content={*/}
-                  {/*<div className="table-full-width">*/}
-                    {/*<table className="table">*/}
-                      {/*<Tasks />*/}
-                    {/*</table>*/}
-                  {/*</div>*/}
-                {/*}*/}
-              {/*/>*/}
-            {/*</Col>*/}
-          {/*</Row>*/}
-        {/*</Grid>*/}
-      </div>
-    );
-  }
 }
 
 export default Website;
