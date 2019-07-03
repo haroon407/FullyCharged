@@ -1,14 +1,11 @@
 .jumbotron {
     padding-top: 148px !important;
+    background-color: #2a2a2a;
+    color: white;
 }
 
 .nav-bar-register {
     min-width: 250px;
-}
-
-.nav-bar-text a{
-    font-weight: bold;
-    color: RGB(96,171,187);
 }
 
 .info {
@@ -18,5 +15,9 @@
 .navbar-img {
     width: 200px;
     position: relative;
-    top: -80px;
+    top: -90px;
+}
+
+.footer {
+    background-color: #282828;
 }
