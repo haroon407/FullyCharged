@@ -1,0 +1,23 @@
+.jumbotron {
+    padding-top: 148px !important;
+    background-color: #2a2a2a;
+    color: white;
+}
+
+.nav-bar-register {
+    min-width: 250px;
+}
+
+.info {
+    margin: 50px;
+}
+
+.navbar-img {
+    width: 200px;
+    position: relative;
+    top: -90px;
+}
+
+.footer {
+    background-color: #282828;
+}
