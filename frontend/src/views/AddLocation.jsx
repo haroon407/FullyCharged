@@ -16,6 +16,10 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import avatar from "assets/img/faces/face-3.jpg";
 
 class AddLocation extends Component {
+    constructor(props){
+        super(props);
+        this.state = {};
+    }
     msg = ["Charging Unit 1","Charging Unit 2","Charging Unit 3"];
 
     render() {
