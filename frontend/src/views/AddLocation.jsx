@@ -67,10 +67,10 @@ class AddLocation extends Component {
                                                     defaultValue: ""
                                                 },
                                                 {
-                                                    label: "Country",
+                                                    label: "State",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Country",
+                                                    placeholder: "State",
                                                     defaultValue: ""
                                                 },
                                                 {
@@ -78,18 +78,6 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "ZIP Code"
-                                                }
-                                            ]}
-                                        />
-                                        <FormInputs
-                                            ncols={["col-md-12"]}
-                                            properties={[
-                                                {
-                                                    label: "State",
-                                                    type: "text",
-                                                    bsClass: "form-control",
-                                                    placeholder: "State",
-                                                    defaultValue: ""
                                                 }
                                             ]}
                                         />
