@@ -36,10 +36,11 @@ class AddLocation extends Component {
             basicBookingFee: 0.14,
             cancellationTimeout: 0
         };
-        this.chargingUnit = {
+        this.state.chargingUnitObj = {
             name: "",
             enabled: true,
-            energyPrice: 0.0
+            energyPrice: 0.0,
+            chargerType: {}
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -54,16 +55,26 @@ class AddLocation extends Component {
         // For Address
         if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
             this.state.address[name] = value;
+            this.setState({
+                address: {[name]: value},
+                name: 'he he, gotcha!!'
+            });
         } else if (name === 'chargerName' || name === 'energyPrice' || name === 'chargerType') {
             // For charging unit
             if (name === 'chargerName') {
-                this.chargingUnit.name = value;
+                this.setState({
+                    chargingUnitObj: {name: value}
+                });
             } else {
-                this.chargingUnit[name] = value;
+                this.setState({
+                    chargingUnitObj: {[name]: value}
+                });
             }
         } else {
             // For rest of the form
-            this.state[name] = value;
+            this.setState({
+                [name]: value
+            });
         }
     }
 
@@ -71,12 +82,14 @@ class AddLocation extends Component {
         const target = event.target;
         const name = target.name;
         // Adding a charging unit in state variable
-        debugger;
-        if(name === 'charging_unit_form'){
+        if (name === 'charging_unit_form') {
             // this.state.chargingUnit.push(JSON.parse(JSON.stringify(this.chargingUnit)));
-            this.state.chargingUnit.push(this.chargingUnit);
-            this.chargingUnit = this.clearChargingUnit();
-            debugger;
+            this.setState({
+                chargingUnit: this.state.chargingUnit.concat(this.state.chargingUnitObj)
+            });
+            // document.getElementById('#charging-unit').reset();
+            // this.state.chargingUnit.push(this.chargingUnit);
+            this.state.chargingUnitObj = this.clearChargingUnit();
         } else {
             alert('A form was submitted: ' + this.state);
         }
@@ -87,7 +100,8 @@ class AddLocation extends Component {
         return {
             name: "",
             enabled: true,
-            energyPrice: 0.14
+            energyPrice: 0.14,
+            chargerType: {}
         };
     }
 
@@ -109,9 +123,10 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Location Name",
-                                                    defaultValue: "",
+                                                    value: this.state.name,
                                                     name: "name",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
 
                                             ]}
@@ -124,9 +139,10 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Street",
-                                                    defaultValue: "",
+                                                    value: this.state.address.street,
                                                     name: "street",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
                                             ]}
                                         />
@@ -138,18 +154,20 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "City",
-                                                    defaultValue: "",
+                                                    value: this.state.address.city,
                                                     name: "city",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 },
                                                 {
                                                     label: "State",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "State",
-                                                    defaultValue: "",
+                                                    value: this.state.address.state,
                                                     name: "state",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 },
                                                 {
                                                     label: "Postal Code",
@@ -157,7 +175,9 @@ class AddLocation extends Component {
                                                     bsClass: "form-control",
                                                     placeholder: "Postal Code",
                                                     name: "postalCode",
-                                                    onChange: this.handleInputChange
+                                                    value: this.state.address.postalCode,
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
                                             ]}
                                         />
@@ -169,9 +189,10 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Country",
-                                                    defaultValue: "",
+                                                    value: this.state.address.country,
                                                     name: "country",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
                                             ]}
                                         />
@@ -183,8 +204,9 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Basic Booking Fee (Euros)",
-                                                    defaultValue: this.state.basicBookingFee,
-                                                    disabled: true
+                                                    value: this.state.basicBookingFee,
+                                                    disabled: true,
+                                                    required: true
                                                 }
                                             ]}
                                         />
@@ -196,9 +218,10 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Cancellation Timeout",
-                                                    defaultValue: "",
+                                                    value: this.state.cancellationTimeout,
                                                     name: "cancellationTimeout",
-                                                    onChange: this.handleInputChange
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
                                             ]}
                                         />
@@ -224,26 +247,26 @@ class AddLocation extends Component {
                             <Card
                                 title="Add/Edit Charging Unit"
                                 content={
-                                    <form name="charging_unit_form" onSubmit={this.handleSubmit}>
-                                        <FormInputs
-                                            ncols={["col-md-12"]}
-                                            properties={[
-                                                {
-                                                    label: "Charger Name",
-                                                    type: "text",
-                                                    bsClass: "form-control",
-                                                    placeholder: "Charger Name",
-                                                    defaultValue: "",
-                                                    name: "chargerName",
-                                                    onChange: this.handleInputChange
-                                                }
-                                            ]}
+                                    <form>
+                                        <FormInputs id="charging-unit"
+                                                    ncols={["col-md-12"]}
+                                                    properties={[
+                                                        {
+                                                            label: "Charger Name",
+                                                            type: "text",
+                                                            bsClass: "form-control",
+                                                            placeholder: "Charger Name",
+                                                            name: "chargerName",
+                                                            value: this.state.chargingUnitObj.name,
+                                                            onChange: this.handleInputChange
+                                                        }
+                                                    ]}
                                         />
                                         <label htmlFor="chargerType">Type of charger</label>
                                         <select className="form-control" name="chargerType"
                                                 onChange={this.handleInputChange}>
                                             {
-                                                this.chargerTypes.map((x) => <option value={x}>
+                                                this.chargerTypes.map((x) => <option value={JSON.stringify(x)}>
                                                     {x.connector}
                                                 </option>)
                                             }
@@ -255,9 +278,9 @@ class AddLocation extends Component {
                                                     label: "Cost per kWh",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "Street",
-                                                    defaultValue: "",
+                                                    placeholder: "Cost per kWh",
                                                     name: "energyPrice",
+                                                    value: this.state.chargingUnitObj.energyPrice,
                                                     onChange: this.handleInputChange
                                                 }
                                             ]}
@@ -265,7 +288,9 @@ class AddLocation extends Component {
                                         <Button bsStyle="danger" pullRight fill type="reset">
                                             Cancel
                                         </Button>
-                                        <Button style={{marginRight:'15px'}} bsStyle="info" pullRight fill type="submit">
+                                        <Button name="charging_unit_form" style={{marginRight: '15px'}} bsStyle="info"
+                                                pullRight fill type="submit"
+                                                onClick={this.handleSubmit}>
                                             Add/Update Charging unit
                                         </Button>
                                         <div className="clearfix"/>
