@@ -2,10 +2,7 @@ import React, {Component} from "react";
 import {
     Grid,
     Row,
-    Col,
-    FormGroup,
-    ControlLabel,
-    FormControl
+    Col
 } from "react-bootstrap";
 
 import {Card} from "components/Card/Card.jsx";
@@ -35,10 +32,30 @@ class AddLocation extends Component {
                 country: ""
             },
             chargingUnit: [],
-            "enabled": true,
-            "basicBookingFee": 0,
-            "cancellationTimeout": 0
+            enabled: true,
+            basicBookingFee: 0.14,
+            cancellationTimeout: 0
         };
+
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    };
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
+            this.state.address[name] = value;
+        } else {
+            this.state[name] = value;
+        }
+    }
+
+    handleSubmit(event) {
+        alert('A form was submitted: ' + this.state);
+        event.preventDefault();
     }
 
     render() {
@@ -50,7 +67,7 @@ class AddLocation extends Component {
                             <Card
                                 title="Charging Location"
                                 content={
-                                    <form>
+                                    <form onSubmit={this.handleSubmit}>
                                         <FormInputs
                                             ncols={["col-md-12"]}
                                             properties={[
@@ -59,8 +76,11 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Location Name",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "name",
+                                                    onChange: this.handleInputChange
                                                 }
+
                                             ]}
                                         />
                                         <FormInputs
@@ -71,7 +91,9 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Street",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "street",
+                                                    onChange: this.handleInputChange
                                                 }
                                             ]}
                                         />
@@ -83,20 +105,26 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "City",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "city",
+                                                    onChange: this.handleInputChange
                                                 },
                                                 {
                                                     label: "State",
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "State",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "state",
+                                                    onChange: this.handleInputChange
                                                 },
                                                 {
                                                     label: "Postal Code",
                                                     type: "number",
                                                     bsClass: "form-control",
-                                                    placeholder: "ZIP Code"
+                                                    placeholder: "Postal Code",
+                                                    name: "postalCode",
+                                                    onChange: this.handleInputChange
                                                 }
                                             ]}
                                         />
@@ -108,7 +136,22 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Country",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "country",
+                                                    onChange: this.handleInputChange
+                                                }
+                                            ]}
+                                        />
+                                        <FormInputs
+                                            ncols={["col-md-12"]}
+                                            properties={[
+                                                {
+                                                    label: "Basic Booking Fee (Euros)",
+                                                    type: "number",
+                                                    bsClass: "form-control",
+                                                    placeholder: "Basic Booking Fee (Euros)",
+                                                    defaultValue: this.state.basicBookingFee,
+                                                    disabled: true
                                                 }
                                             ]}
                                         />
@@ -120,7 +163,9 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Cancellation Timeout",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "cancellationTimeout",
+                                                    onChange: this.handleInputChange
                                                 }
                                             ]}
                                         />
