@@ -16,11 +16,30 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import avatar from "assets/img/faces/face-3.jpg";
 
 class AddLocation extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {};
+        this.chargerTypes = [
+            {chargingLevel: 1, power: 7.4, connector: "Type 1 plug"},
+            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
+            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
+            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
+        ];
+        // Initializing state
+        this.state = {
+            name: "",
+            address: {
+                street: "",
+                city: "",
+                state: "",
+                postalCode: 12343,
+                country: ""
+            },
+            chargingUnit: [],
+            "enabled": true,
+            "basicBookingFee": 0,
+            "cancellationTimeout": 0
+        };
     }
-    msg = ["Charging Unit 1","Charging Unit 2","Charging Unit 3"];
 
     render() {
         return (
@@ -109,11 +128,9 @@ class AddLocation extends Component {
                                         <Row>
                                             <Col md={12}>
                                                 <label>Charging Units</label>
-                                                <ul>
-                                                    {this.msg.map((value, index) => {
-                                                        return <li key={index}>{value}</li>
-                                                    })}
-                                                </ul>
+                                                {this.state.chargingUnit.map((value, index) => {
+                                                    return <div key={index}>{value}</div>
+                                                })}
                                             </Col>
                                         </Row>
                                         <Button bsStyle="info" pullRight fill type="submit">
@@ -144,11 +161,11 @@ class AddLocation extends Component {
                                         />
                                         <label htmlFor="chargerType">Type of charger</label>
                                         <select className="form-control" id="chargerType">
-                                            <option>1</option>
-                                            <option>2</option>
-                                            <option>3</option>
-                                            <option>4</option>
-                                            <option>5</option>
+                                            {
+                                                this.chargerTypes.map((x) => <option value={x}>
+                                                    {x.connector}
+                                                </option>)
+                                            }
                                         </select>
                                         <FormInputs
                                             ncols={["col-md-12"]}
