@@ -36,6 +36,11 @@ class AddLocation extends Component {
             basicBookingFee: 0.14,
             cancellationTimeout: 0
         };
+        this.chargingUnit = {
+            name: "",
+            enabled: true,
+            energyPrice: 0.0
+        };
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,16 +51,44 @@ class AddLocation extends Component {
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
 
+        // For Address
         if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
             this.state.address[name] = value;
+        } else if (name === 'chargerName' || name === 'energyPrice' || name === 'chargerType') {
+            // For charging unit
+            if (name === 'chargerName') {
+                this.chargingUnit.name = value;
+            } else {
+                this.chargingUnit[name] = value;
+            }
         } else {
+            // For rest of the form
             this.state[name] = value;
         }
     }
 
     handleSubmit(event) {
-        alert('A form was submitted: ' + this.state);
+        const target = event.target;
+        const name = target.name;
+        // Adding a charging unit in state variable
+        debugger;
+        if(name === 'charging_unit_form'){
+            // this.state.chargingUnit.push(JSON.parse(JSON.stringify(this.chargingUnit)));
+            this.state.chargingUnit.push(this.chargingUnit);
+            this.chargingUnit = this.clearChargingUnit();
+            debugger;
+        } else {
+            alert('A form was submitted: ' + this.state);
+        }
         event.preventDefault();
+    }
+
+    clearChargingUnit() {
+        return {
+            name: "",
+            enabled: true,
+            energyPrice: 0.14
+        };
     }
 
     render() {
@@ -67,7 +100,7 @@ class AddLocation extends Component {
                             <Card
                                 title="Charging Location"
                                 content={
-                                    <form onSubmit={this.handleSubmit}>
+                                    <form name="location_form" onSubmit={this.handleSubmit}>
                                         <FormInputs
                                             ncols={["col-md-12"]}
                                             properties={[
@@ -191,7 +224,7 @@ class AddLocation extends Component {
                             <Card
                                 title="Add/Edit Charging Unit"
                                 content={
-                                    <form>
+                                    <form name="charging_unit_form" onSubmit={this.handleSubmit}>
                                         <FormInputs
                                             ncols={["col-md-12"]}
                                             properties={[
@@ -200,12 +233,15 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Charger Name",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "chargerName",
+                                                    onChange: this.handleInputChange
                                                 }
                                             ]}
                                         />
                                         <label htmlFor="chargerType">Type of charger</label>
-                                        <select className="form-control" id="chargerType">
+                                        <select className="form-control" name="chargerType"
+                                                onChange={this.handleInputChange}>
                                             {
                                                 this.chargerTypes.map((x) => <option value={x}>
                                                     {x.connector}
@@ -220,14 +256,16 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Street",
-                                                    defaultValue: ""
+                                                    defaultValue: "",
+                                                    name: "energyPrice",
+                                                    onChange: this.handleInputChange
                                                 }
                                             ]}
                                         />
-                                        <Button bsStyle="danger" pullRight fill type="cancel">
+                                        <Button bsStyle="danger" pullRight fill type="reset">
                                             Cancel
                                         </Button>
-                                        <Button bsStyle="info form-save" pullRight fill type="submit">
+                                        <Button style={{marginRight:'15px'}} bsStyle="info" pullRight fill type="submit">
                                             Add/Update Charging unit
                                         </Button>
                                         <div className="clearfix"/>
