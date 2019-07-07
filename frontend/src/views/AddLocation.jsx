@@ -28,7 +28,7 @@ class AddLocation extends Component {
                 street: "",
                 city: "",
                 state: "",
-                postalCode: 12343,
+                postalCode: 0,
                 country: ""
             },
             chargingUnit: [],
@@ -40,7 +40,11 @@ class AddLocation extends Component {
             name: "",
             enabled: true,
             energyPrice: 0.0,
-            chargerType: {}
+            chargerType: {
+                chargingLevel: 0,
+                power: 0,
+                connector: ""
+            }
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -54,20 +58,32 @@ class AddLocation extends Component {
 
         // For Address
         if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
-            this.state.address[name] = value;
-            this.setState({
-                address: {[name]: value},
-                name: 'he he, gotcha!!'
+            debugger;
+            this.setState(prevState => {
+                let address = Object.assign({}, prevState.address); // creating copy of state variable address
+                address[name] = value; // update the property, assign the value
+                return {address}; // return new object address
             });
         } else if (name === 'chargerName' || name === 'energyPrice' || name === 'chargerType') {
             // For charging unit
             if (name === 'chargerName') {
-                this.setState({
-                    chargingUnitObj: {name: value}
+                this.setState(prevState => {
+                    let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
+                    chargingUnitObj.name = value;
+                    return {chargingUnitObj};
+
+                });
+            } else if (name === 'chargerType') {
+                this.setState(prevState => {
+                    let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
+                    chargingUnitObj.chargerType = JSON.parse(value); // Parsing string value back to object
+                    return {chargingUnitObj}
                 });
             } else {
-                this.setState({
-                    chargingUnitObj: {[name]: value}
+                this.setState(prevState => {
+                    let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
+                    chargingUnitObj[name] = value;
+                    return {chargingUnitObj};
                 });
             }
         } else {
@@ -79,31 +95,27 @@ class AddLocation extends Component {
     }
 
     handleSubmit(event) {
-        const target = event.target;
-        const name = target.name;
-        // Adding a charging unit in state variable
-        if (name === 'charging_unit_form') {
-            // this.state.chargingUnit.push(JSON.parse(JSON.stringify(this.chargingUnit)));
-            this.setState({
-                chargingUnit: this.state.chargingUnit.concat(this.state.chargingUnitObj)
-            });
-            // document.getElementById('#charging-unit').reset();
-            // this.state.chargingUnit.push(this.chargingUnit);
-            this.state.chargingUnitObj = this.clearChargingUnit();
-        } else {
-            alert('A form was submitted: ' + this.state);
-        }
+        alert('A form was submitted: ' + this.state);
         event.preventDefault();
     }
 
-    clearChargingUnit() {
-        return {
-            name: "",
-            enabled: true,
-            energyPrice: 0.14,
-            chargerType: {}
-        };
-    }
+    onAddItem = () => {
+        this.setState(state => {
+            const chargingUnit = [...state.chargingUnit, state.chargingUnitObj];
+            debugger;
+            return {
+                chargingUnit,
+            };
+        });
+        // this.setState(prevState => {
+        //     let chargingUnit = Object.assign([], prevState.chargingUnit);
+        //     let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
+        //     chargingUnit = chargingUnit.concat(chargingUnitObj);
+        //     return {
+        //         chargingUnit
+        //     };
+        // });
+    };
 
     render() {
         return (
@@ -230,7 +242,20 @@ class AddLocation extends Component {
                                             <Col md={12}>
                                                 <label>Charging Units</label>
                                                 {this.state.chargingUnit.map((value, index) => {
-                                                    return <div key={index}>{value}</div>
+                                                    return <div className="row charging-units">
+                                                        <div className={"col-md-8"}
+                                                             key={index}>{value.name + ' ' + value.chargerType.connector}</div>
+                                                        <div className={"col-md-4"}>
+                                                            <button
+                                                                className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
+                                                                pullRight fill>Update
+                                                            </button>
+                                                            <button
+                                                                className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
+                                                                pullRight fill>Delete
+                                                            </button>
+                                                        </div>
+                                                    </div>
                                                 })}
                                             </Col>
                                         </Row>
@@ -266,7 +291,8 @@ class AddLocation extends Component {
                                         <select className="form-control" name="chargerType"
                                                 onChange={this.handleInputChange}>
                                             {
-                                                this.chargerTypes.map((x) => <option value={JSON.stringify(x)}>
+                                                this.chargerTypes.map((x, value) => <option key={value}
+                                                                                            value={JSON.stringify(x)}>
                                                     {x.connector}
                                                 </option>)
                                             }
@@ -289,8 +315,8 @@ class AddLocation extends Component {
                                             Cancel
                                         </Button>
                                         <Button name="charging_unit_form" style={{marginRight: '15px'}} bsStyle="info"
-                                                pullRight fill type="submit"
-                                                onClick={this.handleSubmit}>
+                                                pullRight fill type="button"
+                                                onClick={this.onAddItem}>
                                             Add/Update Charging unit
                                         </Button>
                                         <div className="clearfix"/>
