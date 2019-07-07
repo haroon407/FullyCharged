@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a605533-ff52-4235-85de-0c93f1ba9837" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/assets/css/add-location.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/assets/css/add-location.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/views/AddLocation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/AddLocation.jsx" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -80,7 +80,7 @@
           <entry key="css" value="274" />
           <entry key="js" value="218" />
           <entry key="json" value="5" />
-          <entry key="jsx" value="4475" />
+          <entry key="jsx" value="4869" />
           <entry key="md" value="194" />
           <entry key="scss" value="21" />
         </counts>
@@ -89,7 +89,7 @@
         <counts>
           <entry key="CSS" value="274" />
           <entry key="JSON" value="5" />
-          <entry key="JSX Harmony" value="4475" />
+          <entry key="JSX Harmony" value="4869" />
           <entry key="JavaScript" value="218" />
           <entry key="PLAIN_TEXT" value="194" />
           <entry key="SCSS" value="21" />
@@ -123,8 +123,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/views/AddLocation.jsx">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="79" column="43" selection-start-line="79" selection-start-column="43" selection-end-line="79" selection-end-column="43" />
+            <state relative-caret-position="229">
+              <caret line="59" column="118" selection-start-line="59" selection-start-column="118" selection-end-line="59" selection-end-column="118" />
             </state>
           </provider>
         </entry>
@@ -178,7 +178,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>debugger</find>
       <find>creative</find>
       <find>createLegend</find>
       <find>Dashboard</find>
@@ -200,6 +199,8 @@
       <find>de</find>
       <find>evcl</find>
       <find>chargerType</find>
+      <find>onDeleteItem</find>
+      <find>debugger</find>
     </findStrings>
     <replaceStrings>
       <replace>Main</replace>
@@ -344,12 +345,12 @@
       <workItem from="1561217359952" duration="294000" />
       <workItem from="1561400694483" duration="409000" />
       <workItem from="1561593075009" duration="365000" />
-      <workItem from="1561648063950" duration="44819000" />
+      <workItem from="1561648063950" duration="46598000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="46397000" />
+    <option name="totallyTimeSpent" value="48176000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
@@ -679,8 +680,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/views/AddLocation.jsx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="79" column="43" selection-start-line="79" selection-start-column="43" selection-end-line="79" selection-end-column="43" />
+        <state relative-caret-position="229">
+          <caret line="59" column="118" selection-start-line="59" selection-start-column="118" selection-end-line="59" selection-end-column="118" />
         </state>
       </provider>
     </entry>

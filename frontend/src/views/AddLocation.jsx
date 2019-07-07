@@ -58,7 +58,6 @@ class AddLocation extends Component {
 
         // For Address
         if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
-            debugger;
             this.setState(prevState => {
                 let address = Object.assign({}, prevState.address); // creating copy of state variable address
                 address[name] = value; // update the property, assign the value
@@ -101,20 +100,37 @@ class AddLocation extends Component {
 
     onAddItem = () => {
         this.setState(state => {
+            if (state.chargingUnitObj.name === '') {
+                state.chargingUnitObj.name = 'Charger ' + (state.chargingUnit.length+1);
+            }
             const chargingUnit = [...state.chargingUnit, state.chargingUnitObj];
-            debugger;
+            const chargingUnitObj = {
+                name: "",
+                enabled: true,
+                energyPrice: 0.0,
+                chargerType: {
+                    chargingLevel: 0,
+                    power: 0,
+                    connector: ""
+                }
+            };
+            return {
+                chargingUnit,
+                chargingUnitObj
+            };
+        });
+        document.getElementById('chargerTypeSelect').selectedIndex = "0";
+    };
+
+    onDeleteItem = (e, index) => {
+        this.setState(state => {
+            let chargingUnit = [...state.chargingUnit];
+            chargingUnit.splice(index, 1);
             return {
                 chargingUnit,
             };
         });
-        // this.setState(prevState => {
-        //     let chargingUnit = Object.assign([], prevState.chargingUnit);
-        //     let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
-        //     chargingUnit = chargingUnit.concat(chargingUnitObj);
-        //     return {
-        //         chargingUnit
-        //     };
-        // });
+        e.preventDefault(); // Prevents form from auto submitting
     };
 
     render() {
@@ -252,7 +268,8 @@ class AddLocation extends Component {
                                                             </button>
                                                             <button
                                                                 className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
-                                                                pullRight fill>Delete
+                                                                pullRight fill
+                                                                onClick={(e) => this.onDeleteItem(e, index)}>Delete
                                                             </button>
                                                         </div>
                                                     </div>
@@ -288,7 +305,7 @@ class AddLocation extends Component {
                                                     ]}
                                         />
                                         <label htmlFor="chargerType">Type of charger</label>
-                                        <select className="form-control" name="chargerType"
+                                        <select id="chargerTypeSelect" className="form-control" name="chargerType"
                                                 onChange={this.handleInputChange}>
                                             {
                                                 this.chargerTypes.map((x, value) => <option key={value}
@@ -302,7 +319,7 @@ class AddLocation extends Component {
                                             properties={[
                                                 {
                                                     label: "Cost per kWh",
-                                                    type: "text",
+                                                    type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Cost per kWh",
                                                     name: "energyPrice",
