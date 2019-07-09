@@ -10,7 +10,7 @@ import {FormInputs} from "components/FormInputs/FormInputs.jsx";
 import {UserCard} from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
-import avatar from "assets/img/faces/face-3.jpg";
+import ChargingLocationService from "../services/chargingLocation.services";
 
 class AddLocation extends Component {
     constructor(props) {
@@ -95,13 +95,15 @@ class AddLocation extends Component {
 
     handleSubmit(event) {
         alert('A form was submitted: ' + this.state);
+        // Call the API function
+        // ChargingLocationService.addLocation();
         event.preventDefault();
     }
 
     onAddItem = () => {
         this.setState(state => {
             if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.chargingUnit.length+1);
+                state.chargingUnitObj.name = 'Charger ' + (state.chargingUnit.length + 1);
             }
             const chargingUnit = [...state.chargingUnit, state.chargingUnitObj];
             const chargingUnitObj = {

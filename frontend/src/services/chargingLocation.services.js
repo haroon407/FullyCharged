@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export class ChargingLocationService {
+class ChargingLocationServiceClass {
     addLocation(locationObject) {
         const URL = 'http://localhost:3200/addlocation';
         return axios(URL, {
@@ -15,3 +15,5 @@ export class ChargingLocationService {
             });
     }
 }
+const ChargingLocationService = new ChargingLocationServiceClass();
+export default ChargingLocationService;
