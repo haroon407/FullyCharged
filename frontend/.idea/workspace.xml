@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2a605533-ff52-4235-85de-0c93f1ba9837" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/services/chargingLocation.services.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/AddLocation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/AddLocation.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -56,7 +57,7 @@
           <entry key="css" value="14" />
           <entry key="html" value="2" />
           <entry key="ico" value="1" />
-          <entry key="js" value="11" />
+          <entry key="js" value="12" />
           <entry key="json" value="1" />
           <entry key="jsx" value="47" />
           <entry key="md" value="4" />
@@ -70,7 +71,7 @@
           <entry key="Image" value="1" />
           <entry key="JSON" value="1" />
           <entry key="JSX Harmony" value="47" />
-          <entry key="JavaScript" value="11" />
+          <entry key="JavaScript" value="12" />
           <entry key="PLAIN_TEXT" value="4" />
           <entry key="SCSS" value="6" />
         </counts>
@@ -78,7 +79,7 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="css" value="274" />
-          <entry key="js" value="218" />
+          <entry key="js" value="300" />
           <entry key="json" value="5" />
           <entry key="jsx" value="4869" />
           <entry key="md" value="194" />
@@ -90,7 +91,7 @@
           <entry key="CSS" value="274" />
           <entry key="JSON" value="5" />
           <entry key="JSX Harmony" value="4869" />
-          <entry key="JavaScript" value="218" />
+          <entry key="JavaScript" value="300" />
           <entry key="PLAIN_TEXT" value="194" />
           <entry key="SCSS" value="21" />
         </counts>
@@ -120,11 +121,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/views/AddLocation.jsx">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="229">
               <caret line="59" column="118" selection-start-line="59" selection-start-column="118" selection-end-line="59" selection-end-column="118" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/services/chargingLocation.services.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="165">
+              <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -154,7 +164,7 @@
         <entry file="file://$PROJECT_DIR$/src/routes.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="220">
-              <caret line="16" column="24" lean-forward="true" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+              <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
               <folding>
                 <element signature="e#0#44#0" expanded="true" />
               </folding>
@@ -175,6 +185,13 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -235,6 +252,7 @@
         <option value="$PROJECT_DIR$/src/routes.js" />
         <option value="$PROJECT_DIR$/src/assets/css/add-location.css" />
         <option value="$PROJECT_DIR$/src/views/AddLocation.jsx" />
+        <option value="$PROJECT_DIR$/src/services/chargingLocation.services.js" />
       </list>
     </option>
   </component>
@@ -254,7 +272,7 @@
       <path value="$PROJECT_DIR$/package.json" />
     </packageJsonPaths>
   </component>
-  <component name="ProjectFrameBounds" fullScreen="true">
+  <component name="ProjectFrameBounds">
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="800" />
@@ -295,6 +313,12 @@
               <item name="frontend" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="layouts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="frontend" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="services" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="frontend" type="b2602c69:ProjectViewProjectNode" />
@@ -345,21 +369,22 @@
       <workItem from="1561217359952" duration="294000" />
       <workItem from="1561400694483" duration="409000" />
       <workItem from="1561593075009" duration="365000" />
-      <workItem from="1561648063950" duration="46598000" />
+      <workItem from="1561648063950" duration="47082000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="48176000" />
+    <option name="totallyTimeSpent" value="48660000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1440" height="900" extended-state="0" />
+    <frame x="0" y="23" width="1440" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.28047922" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
+      <window_info anchor="bottom" id="Thumbnails" weight="0.329927" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.32961586" />
@@ -647,7 +672,7 @@
     <entry file="file://$PROJECT_DIR$/src/routes.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
-          <caret line="16" column="24" lean-forward="true" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
+          <caret line="16" column="24" selection-start-line="16" selection-start-column="24" selection-end-line="16" selection-end-column="24" />
           <folding>
             <element signature="e#0#44#0" expanded="true" />
           </folding>
@@ -671,6 +696,13 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/views/AddLocation.jsx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="229">
+          <caret line="59" column="118" selection-start-line="59" selection-start-column="118" selection-end-line="59" selection-end-column="118" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/assets/css/add-location.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
@@ -678,10 +710,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/views/AddLocation.jsx">
+    <entry file="file://$PROJECT_DIR$/src/services/chargingLocation.services.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="59" column="118" selection-start-line="59" selection-start-column="118" selection-end-line="59" selection-end-column="118" />
+        <state relative-caret-position="165">
+          <caret line="11" column="10" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
         </state>
       </provider>
     </entry>
