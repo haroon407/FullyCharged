@@ -21,20 +21,21 @@ class AddLocation extends Component {
             {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
             {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
         ];
-        // Initializing state
         this.state = {
-            name: "",
-            address: {
-                street: "",
-                city: "",
-                state: "",
-                postalCode: 0,
-                country: ""
-            },
-            chargingUnit: [],
-            enabled: true,
-            basicBookingFee: 0.14,
-            cancellationTimeout: 0
+            locationObject : {
+                name: "",
+                address: {
+                    street: "",
+                    city: "",
+                    state: "",
+                    postalCode: 0,
+                    country: ""
+                },
+                chargingUnit: [],
+                enabled: true,
+                basicBookingFee: 0.14,
+                cancellationTimeout: 0
+            }
         };
         this.state.chargingUnitObj = {
             name: "",
@@ -59,9 +60,9 @@ class AddLocation extends Component {
         // For Address
         if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
             this.setState(prevState => {
-                let address = Object.assign({}, prevState.address); // creating copy of state variable address
-                address[name] = value; // update the property, assign the value
-                return {address}; // return new object address
+                let locationObject = Object.assign({}, prevState.locationObject); // creating copy of state variable address
+                locationObject.address[name] = value; // update the property, assign the value
+                return {locationObject}; // return new object address
             });
         } else if (name === 'chargerName' || name === 'energyPrice' || name === 'chargerType') {
             // For charging unit
@@ -87,8 +88,10 @@ class AddLocation extends Component {
             }
         } else {
             // For rest of the form
-            this.setState({
-                [name]: value
+            this.setState(prevState => {
+                let locationObject = Object.assign({}, prevState.locationObject); // creating copy of state variable address
+                locationObject[name] = value; // update the property, assign the value
+                return {locationObject}; // return new object address
             });
         }
     }
@@ -103,9 +106,11 @@ class AddLocation extends Component {
     onAddItem = () => {
         this.setState(state => {
             if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.chargingUnit.length + 1);
+                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnit.length + 1);
             }
-            const chargingUnit = [...state.chargingUnit, state.chargingUnitObj];
+            const chargingUnit = [...state.locationObject.chargingUnit, state.chargingUnitObj];
+            let locationObject = Object.assign({}, state.locationObject);
+            locationObject.chargingUnit = chargingUnit;
             const chargingUnitObj = {
                 name: "",
                 enabled: true,
@@ -117,7 +122,7 @@ class AddLocation extends Component {
                 }
             };
             return {
-                chargingUnit,
+                locationObject,
                 chargingUnitObj
             };
         });
@@ -126,10 +131,12 @@ class AddLocation extends Component {
 
     onDeleteItem = (e, index) => {
         this.setState(state => {
-            let chargingUnit = [...state.chargingUnit];
+            let chargingUnit = [...state.locationObject.chargingUnit];
+            let locationObject = Object.assign({}, state.locationObject);
             chargingUnit.splice(index, 1);
+            locationObject.chargingUnit = chargingUnit;
             return {
-                chargingUnit,
+                locationObject,
             };
         });
         e.preventDefault(); // Prevents form from auto submitting
@@ -153,7 +160,7 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Location Name",
-                                                    value: this.state.name,
+                                                    value: this.state.locationObject.name,
                                                     name: "name",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -169,7 +176,7 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Street",
-                                                    value: this.state.address.street,
+                                                    value: this.state.locationObject.address.street,
                                                     name: "street",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -184,7 +191,7 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "City",
-                                                    value: this.state.address.city,
+                                                    value: this.state.locationObject.address.city,
                                                     name: "city",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -194,7 +201,7 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "State",
-                                                    value: this.state.address.state,
+                                                    value: this.state.locationObject.address.state,
                                                     name: "state",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -205,7 +212,7 @@ class AddLocation extends Component {
                                                     bsClass: "form-control",
                                                     placeholder: "Postal Code",
                                                     name: "postalCode",
-                                                    value: this.state.address.postalCode,
+                                                    value: this.state.locationObject.address.postalCode,
                                                     onChange: this.handleInputChange,
                                                     required: true
                                                 }
@@ -219,7 +226,7 @@ class AddLocation extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Country",
-                                                    value: this.state.address.country,
+                                                    value: this.state.locationObject.address.country,
                                                     name: "country",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -234,7 +241,7 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Basic Booking Fee (Euros)",
-                                                    value: this.state.basicBookingFee,
+                                                    value: this.state.locationObject.basicBookingFee,
                                                     disabled: true,
                                                     required: true
                                                 }
@@ -248,7 +255,7 @@ class AddLocation extends Component {
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Cancellation Timeout",
-                                                    value: this.state.cancellationTimeout,
+                                                    value: this.state.locationObject.cancellationTimeout,
                                                     name: "cancellationTimeout",
                                                     onChange: this.handleInputChange,
                                                     required: true
@@ -259,7 +266,7 @@ class AddLocation extends Component {
                                         <Row>
                                             <Col md={12}>
                                                 <label>Charging Units</label>
-                                                {this.state.chargingUnit.map((value, index) => {
+                                                {this.state.locationObject.chargingUnit.map((value, index) => {
                                                     return <div className="row charging-units">
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>
