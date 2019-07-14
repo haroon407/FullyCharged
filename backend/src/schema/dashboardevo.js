@@ -2,11 +2,8 @@ import mongoose from "mongoose";
 import uniqueValidator from "mongoose-unique-validator";
 import autoIncrement from "mongoose-auto-increment";
 
-const usersSchema = new mongoose.Schema({
-  first_name: {
-    type: String
-  },
-  last_name: {
+const dashboardSchema = new mongoose.Schema({
+  name: {
     type: String
   },
   role: {
@@ -27,4 +24,4 @@ const usersSchema = new mongoose.Schema({
 usersSchema.plugin(uniqueValidator);
 usersSchema.plugin(autoIncrement.plugin, "id");
 
-export default usersSchema;
+export default dashboardSchema;
