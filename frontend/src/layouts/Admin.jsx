@@ -57,6 +57,39 @@ class Admin extends Component {
             autoDismiss: 15
         });
     };
+
+    showNotification = (level, message) => {
+        var color = Math.floor(Math.random() * 4 + 1);
+        var level;
+        switch (color) {
+            case 1:
+                level = "success";
+                break;
+            case 2:
+                level = "warning";
+                break;
+            case 3:
+                level = "error";
+                break;
+            case 4:
+                level = "info";
+                break;
+            default:
+                break;
+        }
+        this.state._notificationSystem.addNotification({
+            title: <span data-notify="icon" className="pe-7s-info"/>,
+            message: (
+                <div>
+                    {message}
+                </div>
+            ),
+            level: level,
+            position: 'tr',
+            autoDismiss: 15
+        });
+    };
+
     getRoutes = routes => {
         return routes.map((prop, key) => {
             if (prop.layout === "/admin") {
@@ -67,6 +100,7 @@ class Admin extends Component {
                             <prop.component
                                 {...props}
                                 handleClick={this.handleNotificationClick}
+                                showNotification={this.showNotification}
                             />
                         )}
                         key={key}

@@ -1,4 +1,5 @@
 import Dashboard from "views/Dashboard.jsx";
+import AddLocation from "views/AddLocation";
 import UserProfile from "views/UserProfile.jsx";
 import TableList from "views/TableList.jsx";
 import Typography from "views/Typography.jsx";
@@ -20,6 +21,13 @@ const dashboardRoutes = [
         name: "Dashboard",
         icon: "pe-7s-graph",
         component: Dashboard,
+        layout: "/admin"
+    },
+    {
+        path: "/add/location",
+        name: "Add Location",
+        icon: "pe-7s-plus",
+        component: AddLocation,
         layout: "/admin"
     },
     {
