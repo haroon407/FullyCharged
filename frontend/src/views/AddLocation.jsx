@@ -97,6 +97,7 @@ class AddLocation extends Component {
     }
 
     handleSubmit(event) {
+        this.props.showNotification('success', 'Added successfully');
         alert('A form was submitted: ' + this.state);
         // Call the API function
         // ChargingLocationService.addLocation();
