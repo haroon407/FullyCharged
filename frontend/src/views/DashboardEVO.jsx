@@ -19,6 +19,20 @@ import {
 } from "variables/Variables.jsx";
 
 class DashboardEVO extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      dashboardEVOObject: {
+        booking_id: "",
+        date: "",
+        time: "",
+        estimated_charge: "",
+        estimated_charging_cost: "",
+        charger_name: "",
+        booking_date: ""
+      }
+    };
+  }
   render() {
     return (
       <div className="content">
