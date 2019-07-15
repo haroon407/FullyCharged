@@ -7,36 +7,50 @@ import {
 
 import {Card} from "components/Card/Card.jsx";
 import {FormInputs} from "components/FormInputs/FormInputs.jsx";
-import {UserCard} from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
 import ChargingLocationService from "../services/chargingLocation.services";
 
 class AddLocation extends Component {
+    updateLocationMode = false;
+    preLoadedLocation;
     constructor(props) {
         super(props);
+        // If update location, fetch state object
+        if(props.match.path === '/admin/update/location') {
+            this.preLoadedLocation = props.location.location.state;
+            this.updateLocationMode = true;
+        }
+
         this.chargerTypes = [
             {chargingLevel: 1, power: 7.4, connector: "Type 1 plug"},
             {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
             {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
             {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
         ];
-        this.state = {
-            locationObject : {
-                name: "",
-                address: {
-                    street: "",
-                    city: "",
-                    state: "",
-                    postalCode: 0,
-                    country: ""
-                },
-                chargingUnit: [],
-                enabled: true,
-                basicBookingFee: 0.14,
-                cancellationTimeout: 0
+
+        if(!this.updateLocationMode){
+            this.state = {
+                locationObject : {
+                    name: "",
+                    address: {
+                        street: "",
+                        city: "",
+                        state: "",
+                        postalCode: 0,
+                        country: ""
+                    },
+                    chargingUnit: [],
+                    enabled: true,
+                    basicBookingFee: 0.14,
+                    cancellationTimeout: 0
+                }
+            };
+        } else {
+            this.state = {
+                locationObject : this.preLoadedLocation
             }
-        };
+        }
         this.state.chargingUnitObj = {
             name: "",
             enabled: true,
@@ -272,10 +286,11 @@ class AddLocation extends Component {
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>
                                                         <div className={"col-md-4"}>
+                                                            {this.updateLocationMode && 
                                                             <button
-                                                                className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
-                                                                pullRight fill>Update
-                                                            </button>
+                                                            className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
+                                                            pullRight fill>Update
+                                                        </button>}
                                                             <button
                                                                 className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
                                                                 pullRight fill
@@ -286,9 +301,14 @@ class AddLocation extends Component {
                                                 })}
                                             </Col>
                                         </Row>
-                                        <Button bsStyle="info" pullRight fill type="submit">
+                                        { this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
+                                            Update Charging Location
+                                        </Button>}
+
+                                        { !this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
                                             Add Charging Location
-                                        </Button>
+                                        </Button>}
+                                        
                                         <div className="clearfix"/>
                                     </form>
                                 }
