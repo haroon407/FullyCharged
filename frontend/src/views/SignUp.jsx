@@ -19,7 +19,88 @@ import avatar from "assets/img/faces/face-3.jpg";
 
 import logo from "assets/img/logo.png";
 
+import axios from 'axios';
+
 class SignUp extends Component {
+  constructor(props){
+    super(props);
+    this.onChangeFirstName = this.onChangeFirstName.bind(this);
+    this.onChangeLastName = this.onChangeLastName.bind(this);
+    this.onChangeRole = this.onChangeRole.bind(this);
+    this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+
+      this.state = {
+          first_name: '',
+          last_name: '',
+          email_address: '',
+          role: '',
+          password: '',
+          confirm_password: ''
+      }
+  }
+  
+  onChangeFirstName(e) {
+    this.setState({
+      first_name: e.target.value
+    });
+  }
+  onChangeLastName(e) {
+    this.setState({
+      last_name: e.target.value
+    });
+  }
+  onChangeRole(e) {
+    this.setState({
+      role: e.target.value
+    });
+  }
+  onChangeEmailAddress(e) {
+    this.setState({
+      email_address: e.target.value
+    });
+  }
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value
+    })  
+  }
+  
+  onChangeConfirmPassword(e) {
+    this.setState({
+      confirm_password: e.target.value
+    })  
+  }
+  
+  onSubmit(e) {
+    e.preventDefault();
+    {/* Add a notification. Add to database. Take to Sign in page */}
+    console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
+    
+    const obj = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      role: this.state.role,
+      email_address: this.state.email_address,
+      password: this.state.password,
+      confirm_password: this.state.confirm_password
+    };
+    axios.post('http://localhost:5000/backend/sign-up', obj)
+        .then(res => console.log(res.data));
+    
+    this.setState({
+      first_name: '',
+      last_name: '',
+      email_address: '',
+      role: '',
+      password: '',
+      confirm_password: ''
+    })
+  }
+  
+  
   render() {
     return (
       <div className="content">
@@ -58,7 +139,7 @@ class SignUp extends Component {
                 <Card
                   title="Sign Up"
                   content={
-                    <form>
+                    <form onSubmit={this.onSubmit}>
                       <FormInputs
                         ncols={["col-md-6", "col-md-6"]}
                         properties={[
@@ -67,14 +148,20 @@ class SignUp extends Component {
                             type: "text",
                             bsClass: "form-control",
                             placeholder: "First Name",
-                            defaultValue: "e.g. Elon"
+                            defaultValue: "e.g. Elon",
+                            value: this.state.first_name,
+                            onChange: this.onChangeFirstName,
+                            required: true
                           },
                           {
                             label: "Last Name",
                             type: "text",
                             bsClass: "form-control",
                             placeholder: "Last Name",
-                            defaultValue: "e.g. Musk"
+                            defaultValue: "e.g. Musk",
+                            value: this.state.last_name,
+                            onChange: this.onChangeLastName,
+                            required: true
                           }
                         ]}
                       />
@@ -85,14 +172,20 @@ class SignUp extends Component {
                             label: "Email address",
                             type: "email",
                             bsClass: "form-control",
-                            placeholder: "Email"
+                            placeholder: "Email",
+                            value: this.state.email_address,
+                            onChange: this.onChangeEmailAddress,
+                            required: true
                           },
                           {
                             label: "Role",
                             type: "text",
                             bsClass: "form-control",
                             placeholder: "Role",
-                            defaultValue: "EVO or EVCP"
+                            defaultValue: "EVO or EVCP",
+                            value: this.state.role,
+                            onChange: this.onChangeRole,
+                            required: true
                           }
                         ]}
                       />
@@ -103,13 +196,19 @@ class SignUp extends Component {
                             label: "Password",
                             type: "text",
                             bsClass: "form-control",
-                            placeholder: "Password"
+                            placeholder: "Password",
+                            value: this.state.password,
+                            onChange: this.onChangePassword,
+                            required: true
                           },
                           {
                             label: "Confirm password",
                             type: "text",
                             bsClass: "form-control",
-                            placeholder: "Confirm password"
+                            placeholder: "Confirm password",
+                            value: this.state.confirm_password,
+                            onChange: this.onChangeConfirmPassword,
+                            required: true
                           }
                         ]}
                       />
