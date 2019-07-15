@@ -59,24 +59,6 @@ class Admin extends Component {
     };
 
     showNotification = (level, message) => {
-        var color = Math.floor(Math.random() * 4 + 1);
-        var level;
-        switch (color) {
-            case 1:
-                level = "success";
-                break;
-            case 2:
-                level = "warning";
-                break;
-            case 3:
-                level = "error";
-                break;
-            case 4:
-                level = "info";
-                break;
-            default:
-                break;
-        }
         this.state._notificationSystem.addNotification({
             title: <span data-notify="icon" className="pe-7s-info"/>,
             message: (
