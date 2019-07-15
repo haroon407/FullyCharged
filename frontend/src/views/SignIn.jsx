@@ -19,6 +19,39 @@ import SignInService from "../services/signin.services";
 import avatar from "assets/img/faces/face-3.jpg";
 
 class SignIn extends Component {
+  constructor(props){
+    super(props);
+    this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
+    this.onChangePassword = this.onChangePassword.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+
+      this.state = {
+          email_address: '',
+          password: ''
+      }
+  }
+  
+  onChangeEmailAddress(e) {
+    this.setState({
+      email_address: e.target.value
+    });
+  }
+  onChangePassword(e) {
+    this.setState({
+      password: e.target.value
+    })  
+  }
+  
+  onSubmit(e) {
+    e.preventDefault();
+    {/* Add Role based Auth */}
+    console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
+    this.setState({
+      email_address: '',
+      password: ''
+    })
+  }
+  
   render() {
     return (
       <div className="content">
@@ -57,7 +90,7 @@ class SignIn extends Component {
                 <Card
                   title="Sign In"
                   content={
-                    <form>
+                    <form onSubmit={this.onSubmit}>
                       <FormInputs
                         ncols={["col-md-6", "col-md-6"]}
                         properties={[
@@ -65,13 +98,19 @@ class SignIn extends Component {
                             label: "Email address",
                             type: "email",
                             bsClass: "form-control",
-                            placeholder: "Email"
+                            placeholder: "Email",
+                            value: this.state.email_address,
+                            onChange: this.onChangeEmailAddress,
+                            required: true
                           },
                           {
                             label: "Password",
                             type: "text",
                             bsClass: "form-control",
-                            placeholder: "Password"
+                            placeholder: "Password",
+                            value: this.state.password,
+                            onChange: this.onChangePassword,
+                            required: true
                           }
                         ]}
                       />
