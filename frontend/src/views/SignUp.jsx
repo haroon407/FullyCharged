@@ -19,6 +19,8 @@ import avatar from "assets/img/faces/face-3.jpg";
 
 import logo from "assets/img/logo.png";
 
+import axios from 'axios';
+
 class SignUp extends Component {
   constructor(props){
     super(props);
@@ -74,8 +76,20 @@ class SignUp extends Component {
   
   onSubmit(e) {
     e.preventDefault();
-    {/* Add a notification, Take to Sign in page */}
+    {/* Add a notification. Add to database. Take to Sign in page */}
     console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
+    
+    const obj = {
+      first_name: this.state.first_name,
+      last_name: this.state.last_name,
+      role: this.state.role,
+      email_address: this.state.email_address,
+      password: this.state.password,
+      confirm_password: this.state.confirm_password
+    };
+    axios.post('http://localhost:5000/backend/sign-up', obj)
+        .then(res => console.log(res.data));
+    
     this.setState({
       first_name: '',
       last_name: '',
