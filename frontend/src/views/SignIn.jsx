@@ -18,6 +18,8 @@ import SignInService from "../services/signin.services";
 
 import avatar from "assets/img/faces/face-3.jpg";
 
+import axios from 'axios';
+
 class SignIn extends Component {
   constructor(props){
     super(props);
@@ -46,6 +48,14 @@ class SignIn extends Component {
     e.preventDefault();
     {/* Add Role based Auth */}
     console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
+    
+    const obj = {
+      email_address: this.state.email_address,
+      password: this.state.password
+    };
+    axios.post('http://localhost:5000/backend/sign-in', obj)
+        .then(res => console.log(res.data));
+    
     this.setState({
       email_address: '',
       password: ''
