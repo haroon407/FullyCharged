@@ -67,20 +67,13 @@ class MakeBooking extends Component {
 
 
     handleSubmit(event) {
-        //alert('A form was submitted: ' + this.state);
 
-        // MakeBookingService.makeBooking()
-        // .then(res => {
-        //   this.setState(res)
-        //   console.log(res)
-        // })
-        // .catch(err => console.log('There was an error:' + err));
-
-        TestService.testGet().then((data) => {
-          console.log(data);
-        }).catch((e) => {
-            console.error(e);
-        });
+        MakeBookingService.makeBooking()
+        .then(res => {
+          this.setState(res)
+          console.log(res)
+        })
+        .catch(err => console.log('There was an error:' + err));
 
         event.preventDefault();
     }

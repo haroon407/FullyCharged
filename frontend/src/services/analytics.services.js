@@ -2,7 +2,7 @@ import axios from 'axios';
 
 class AnalyticsServiceClass {
 
-    getChargerDetails() {
+    getChargerDetails(id) {
         const URL = 'http://localhost:3001';
         return axios(URL, {
             method: 'GET',
@@ -11,6 +11,7 @@ class AnalyticsServiceClass {
             },
         }).then(response => {
           return {
+              selectedLocationId: id,
               chargerNames: ["Charger 1", "Charger 2", "Charger 3"],
               chargerLevels: ["Level 1", "Level 2", "Level 3"],
               chargerPowers: ["1.92 kW", "9.6 kW", "50.0 kW"],

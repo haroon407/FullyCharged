@@ -23,6 +23,9 @@ class Analytics extends Component {
         AnalyticsService.getChargerLocations()
         .then(res => {
           this.chargerLocations = res;
+          if (res!=null && res[0]!=null) {
+            this.updateUI({target: {value: res[0].id}});
+          }
         })
         .catch(err => console.log('There was an error:' + err));
         // Initializing state
@@ -32,8 +35,6 @@ class Analytics extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.updateUI = this.updateUI.bind(this);
-
-        this.updateUI();
     };
 
 
@@ -44,6 +45,7 @@ class Analytics extends Component {
 
     getEmptyState(){
       return {
+          selectedLocationId: 0,
           chargerNames: ["Loading.."],
           chargerLevels: ["Loading.."],
           chargerPowers: ["Loading.."],
@@ -81,9 +83,11 @@ class Analytics extends Component {
 
 
 
-    updateUI(){
+    updateUI(event){
+      var id = event.target.value;
+
       this.setState(this.getEmptyState());
-      AnalyticsService.getChargerDetails()
+      AnalyticsService.getChargerDetails(id)
       .then(res => {
         this.setState(res);
         this.tableElement.current.updateTable(res);
@@ -113,10 +117,10 @@ class Analytics extends Component {
               content={
                 <div>
                 <label htmlFor="chargerLocations">Choose location</label>
-                <select className="form-control" onChange={this.updateUI}>
+                <select className="form-control" onChange={this.updateUI} value={this.state.selectedLocationId}>
                     {
                         this.chargerLocations.map((x) =>
-                        <option value={x}>
+                        <option value={x.id}>
                           {x.location}
                         </option>)
                     }
