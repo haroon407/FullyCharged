@@ -5,25 +5,31 @@ export class TableDetails extends Component {
 
   constructor(props) {
       super(props);
+      console.log("Props: " + props);
       // Initializing state
       this.state = {
-          chargerNames: this.props.chargerNames,
-          chargerLevels: this.props.chargerLevels,
-          chargerPowers: this.props.chargerPowers,
-          chargerConnectors: this.props.chargerConnectors,
-          chargerCosts: this.props.chargerCosts
+          chargerNames: [],
+          chargerLevels: [],
+          chargerPowers: [],
+          chargerConnectors: [],
+          chargerCosts: []
       };
+
+      this.updateTable = this.updateTable.bind(this);
   };
 
+  updateTable(res){
+
+    this.setState({
+        chargerNames: res.chargerNames,
+        chargerLevels: res.chargerLevels,
+        chargerPowers: res.chargerPowers,
+        chargerConnectors: res.chargerConnectors,
+        chargerCosts: res.chargerCosts
+    });
+  }
+
   render() {
-
-    // TODO: Set this variables according to loaded data
-    // var chargerNames = ["Charger 1", "Charger 2", "Charger 3"];
-    // var chargerLevels = ["Level 1", "Level 2", "Level 3"];
-    // var chargerPowers = ["1.92 kW", "9.6 kW", "50.0 kW"];
-    // var chargerConnectors = ["Port J1772", "Tesla HPWC", "SAE Combo CCS"];
-    // var chargerCosts = ["0.11", "0.15", "0.16"];
-
     var tasks = [];
     if (this.state.chargerNames != null) {
       for (var i = 0; i < this.state.chargerNames.length; i++) {

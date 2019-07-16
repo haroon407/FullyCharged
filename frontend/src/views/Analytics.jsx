@@ -26,6 +26,7 @@ class Analytics extends Component {
         ];
         // Initializing state
         this.state = this.getEmptyState();
+        this.tableElement = React.createRef();
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -78,16 +79,11 @@ class Analytics extends Component {
     }
 
     updateUI(){
-      // TODO: Load data here
-      // NULL state values
-      // Call service function
-      // OnResponse fill state values
-      console.log("Here");
       this.setState(this.getEmptyState());
       AnalyticsService.getChargerDetails()
       .then(res => {
         this.setState(res)
-        console.log(res)
+        this.tableElement.current.updateTable(res);
       })
       .catch(err => console.log('There was an error:' + err));
     }
@@ -135,12 +131,7 @@ class Analytics extends Component {
               content={
                 <div className="table-full-width">
                   <table className="table">
-                    <TableDetails
-                    chargerNames={this.state.chargerNames}
-                    chargerLevels={this.state.chargerLevels}
-                    chargerPowers={this.state.chargerPowers}
-                    chargerConnectors={this.state.chargerConnectors}
-                    chargerCosts={this.state.chargerCosts}/>
+                    <TableDetails ref={this.tableElement}/>
                   </table>
                 </div>
               }

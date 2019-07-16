@@ -13,9 +13,9 @@ class AnalyticsServiceClass {
           return {
               chargerNames: ["Charger 1", "Charger 2", "Charger 3"],
               chargerLevels: ["Level 1", "Level 2", "Level 3"],
-              chargerPowers: ["Charger 1", "Charger 2", "Charger 3"],
-              chargerConnectors: ["Charger 1", "Charger 2", "Charger 3"],
-              chargerCosts: ["Charger 1", "Charger 2", "Charger 3"],
+              chargerPowers: ["1.92 kW", "9.6 kW", "50.0 kW"],
+              chargerConnectors: ["Port J1772", "Tesla HPWC", "SAE Combo CCS"],
+              chargerCosts: ["0.11", "0.15", "0.16"],
 
               chargerLocation: "Baker str 22, 81733, Munich",
 
