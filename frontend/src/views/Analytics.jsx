@@ -15,15 +15,16 @@ import {
 
 import AnalyticsService from "../services/analytics.services";
 
+
 class Analytics extends Component {
     constructor(props) {
         super(props);
-        this.chargerTypes = [
-            {chargingLevel: 1, power: 7.4, connector: "Tesla HPWC"},
-            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
-        ];
+        this.chargerLocations = [];
+        AnalyticsService.getChargerLocations()
+        .then(res => {
+          this.chargerLocations = res;
+        })
+        .catch(err => console.log('There was an error:' + err));
         // Initializing state
         this.state = this.getEmptyState();
         this.tableElement = React.createRef();
@@ -78,11 +79,13 @@ class Analytics extends Component {
       };
     }
 
+
+
     updateUI(){
       this.setState(this.getEmptyState());
       AnalyticsService.getChargerDetails()
       .then(res => {
-        this.setState(res)
+        this.setState(res);
         this.tableElement.current.updateTable(res);
       })
       .catch(err => console.log('There was an error:' + err));
@@ -109,11 +112,12 @@ class Analytics extends Component {
               title="Location Analytics"
               content={
                 <div>
-                <label htmlFor="chargerType">Choose location</label>
-                <select className="form-control" id="chargerType" onChange={this.updateUI}>
+                <label htmlFor="chargerLocations">Choose location</label>
+                <select className="form-control" onChange={this.updateUI}>
                     {
-                        this.chargerTypes.map((x) => <option value={x}>
-                            {x.connector + " | L" + x.chargingLevel + " | " + x.power + "kW"}
+                        this.chargerLocations.map((x) =>
+                        <option value={x}>
+                          {x.location}
                         </option>)
                     }
                 </select>

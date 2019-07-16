@@ -89,15 +89,19 @@ class AnalyticsServiceClass {
         });
     }
 
-    getEnergySold() {
-        const URL = 'http://localhost:3001/test';
+    getChargerLocations() {
+        const URL = 'http://localhost:3001';
         return axios(URL, {
             method: 'GET',
             headers: {
                 'content-type': 'application/json'
             },
         }).then(response => {
-          return response.data;
+          return [
+              {id: 1, location: "Baker str 22, 81733, Munich"},
+              {id: 2, location: "Garching 112, 84555, Munich"}
+            ];
+          // return response.data;
         }).catch(error => {
           throw error;
         });
