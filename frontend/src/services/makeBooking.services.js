@@ -9,7 +9,6 @@ class MakeBookingServiceClass {
             headers: {
                 'content-type': 'application/json'
             },
-            data: null,
         }).then(response => {
           return response.data;
         })

@@ -1,6 +1,7 @@
 import Dashboard from "views/Dashboard.jsx";
 import AddLocation from "views/AddLocation";
 import MakeBooking from "views/MakeBooking";
+import Analytics from "views/Analytics";
 import UserProfile from "views/UserProfile.jsx";
 import TableList from "views/TableList.jsx";
 import Typography from "views/Typography.jsx";
@@ -36,6 +37,13 @@ const dashboardRoutes = [
         name: "Make Booking",
         icon: "pe-7s-plus",
         component: MakeBooking,
+        layout: "/admin"
+    },
+    {
+        path: "/analytics",
+        name: "Analytics",
+        icon: "pe-7s-plus",
+        component: Analytics,
         layout: "/admin"
     },
     {

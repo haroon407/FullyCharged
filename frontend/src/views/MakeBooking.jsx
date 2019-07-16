@@ -16,6 +16,8 @@ import avatar from "assets/img/faces/face-3.jpg";
 
 import MakeBookingService from "../services/makeBooking.services";
 
+import TestService from "../services/testService.services";
+
 class MakeBooking extends Component {
     constructor(props) {
         super(props);
@@ -67,12 +69,18 @@ class MakeBooking extends Component {
     handleSubmit(event) {
         //alert('A form was submitted: ' + this.state);
 
-        MakeBookingService.makeBooking()
-        .then(res => {
-          this.setState(res)
-          console.log(res)
-        })
-        .catch(err => console.log('There was an error:' + err));
+        // MakeBookingService.makeBooking()
+        // .then(res => {
+        //   this.setState(res)
+        //   console.log(res)
+        // })
+        // .catch(err => console.log('There was an error:' + err));
+
+        TestService.testGet().then((data) => {
+          console.log(data);
+        }).catch((e) => {
+            console.error(e);
+        });
 
         event.preventDefault();
     }
