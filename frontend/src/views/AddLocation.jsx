@@ -40,7 +40,7 @@ class AddLocation extends Component {
                         postalCode: 0,
                         country: ""
                     },
-                    chargingUnit: [],
+                    chargingUnits: [],
                     enabled: true,
                     basicBookingFee: 0.14,
                     cancellationTimeout: 0
@@ -121,11 +121,11 @@ class AddLocation extends Component {
     onAddItem = () => {
         this.setState(state => {
             if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnit.length + 1);
+                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
             }
-            const chargingUnit = [...state.locationObject.chargingUnit, state.chargingUnitObj];
+            const chargingUnits = [...state.locationObject.chargingUnits, state.chargingUnitObj];
             let locationObject = Object.assign({}, state.locationObject);
-            locationObject.chargingUnit = chargingUnit;
+            locationObject.chargingUnits = chargingUnits;
             const chargingUnitObj = {
                 name: "",
                 enabled: true,
@@ -146,10 +146,10 @@ class AddLocation extends Component {
 
     onDeleteItem = (e, index) => {
         this.setState(state => {
-            let chargingUnit = [...state.locationObject.chargingUnit];
+            let chargingUnits = [...state.locationObject.chargingUnits];
             let locationObject = Object.assign({}, state.locationObject);
-            chargingUnit.splice(index, 1);
-            locationObject.chargingUnit = chargingUnit;
+            chargingUnits.splice(index, 1);
+            locationObject.chargingUnits = chargingUnits;
             return {
                 locationObject,
             };
@@ -281,7 +281,7 @@ class AddLocation extends Component {
                                         <Row>
                                             <Col md={12}>
                                                 <label>Charging Units</label>
-                                                {this.state.locationObject.chargingUnit.map((value, index) => {
+                                                {this.state.locationObject.chargingUnits.map((value, index) => {
                                                     return <div className="row charging-units">
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>

@@ -25,7 +25,7 @@ class EditLocation extends Component {
                         postalCode: 12345,
                         country: "Deutschland"
                     },
-                    chargingUnit: [{
+                    chargingUnits: [{
                         name: "unit 1",
                         enabled: true,
                         energyPrice: 0.4,
@@ -59,7 +59,7 @@ class EditLocation extends Component {
                         postalCode: 12312,
                         country: "Deutschland"
                     },
-                    chargingUnit: [{
+                    chargingUnits: [{
                         name: "unit 3",
                         enabled: true,
                         energyPrice: 0.4,
@@ -93,7 +93,7 @@ class EditLocation extends Component {
                         postalCode: 4535,
                         country: "Deutschland"
                     },
-                    chargingUnit: [{
+                    chargingUnits: [{
                         name: "unit 5",
                         enabled: true,
                         energyPrice: 0.4,
@@ -128,7 +128,7 @@ class EditLocation extends Component {
             let locations = [...prevState.locations];
             let index = this.getLocationFromId(locationId, locations)
             locations[index].enabled = !locations[index].enabled;
-            locations[index].chargingUnit.forEach((unit)=>{
+            locations[index].chargingUnits.forEach((unit)=>{
                 unit.enabled = !unit.enabled
             });
             return {
