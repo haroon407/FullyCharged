@@ -13,14 +13,13 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import ChargingLocationService from "../services/chargingLocation.services";
 
 class AddLocation extends Component {
+    state = {
+        loading: true
+    };
+    chargerTypes = [];
     constructor(props) {
         super(props);
-        this.chargerTypes = [
-            {chargingLevel: 1, power: 7.4, connector: "Type 1 plug"},
-            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
-        ];
+
         this.state = {
             locationObject : {
                 name: "",
@@ -51,6 +50,13 @@ class AddLocation extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
+
+    componentWillMount() {
+        ChargingLocationService.getChargerTypes().then((data)=>{
+            this.chargerTypes = data;
+            this.setState({loading: false});
+        });
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -144,6 +150,9 @@ class AddLocation extends Component {
     };
 
     render() {
+        if(this.loading) {
+            return 'Loading...'
+        }
         return (
             <div className="content">
                 <Grid fluid>
