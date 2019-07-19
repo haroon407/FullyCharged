@@ -7,7 +7,8 @@ class ChargingLocationServiceClass {
         return axios(URL, {
             method: 'POST',
             headers: {
-                'content-type': 'application/json'
+                'content-type': 'application/json',
+                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJmYjUyNzBjOGMzYzMzYWJmYjBlNzIiLCJpYXQiOjE1NjM0MDc2NTUsImV4cCI6MTU2MzQ5NDA1NX0.YNZXuLEwvG8Uj-y6lxwy5tIxhEBS1zK48msTmU31m14'
             },
             data: locationObject,
         }).then(response => response.data)

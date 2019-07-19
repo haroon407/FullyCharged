@@ -17,11 +17,11 @@ class AddLocation extends Component {
         loading: true
     };
     chargerTypes = [];
+
     constructor(props) {
         super(props);
-
         this.state = {
-            locationObject : {
+            locationObject: {
                 name: "",
                 address: {
                     street: "",
@@ -30,10 +30,12 @@ class AddLocation extends Component {
                     postalCode: 0,
                     country: ""
                 },
-                chargingUnit: [],
+                chargingUnits: [],
                 enabled: true,
+                deleted: false,
                 basicBookingFee: 0.14,
-                cancellationTimeout: 0
+                cancellationTimeout: 0,
+                owner: "5d2fb5270c8c3c33abfb0e72"
             }
         };
         this.state.chargingUnitObj = {
@@ -52,7 +54,7 @@ class AddLocation extends Component {
     };
 
     componentWillMount() {
-        ChargingLocationService.getChargerTypes().then((data)=>{
+        ChargingLocationService.getChargerTypes().then((data) => {
             this.chargerTypes = data;
             this.setState({loading: false});
         });
@@ -103,21 +105,23 @@ class AddLocation extends Component {
     }
 
     handleSubmit(event) {
-        this.props.showNotification('success', 'Added successfully');
-        alert('A form was submitted: ' + this.state);
         // Call the API function
-        // ChargingLocationService.addLocation();
+        ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+            this.props.showNotification('success', 'Added successfully');
+        }).catch((err) => {
+            this.props.showNotification('error', 'Error while adding location');
+        });
         event.preventDefault();
     }
 
     onAddItem = () => {
         this.setState(state => {
             if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnit.length + 1);
+                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
             }
-            const chargingUnit = [...state.locationObject.chargingUnit, state.chargingUnitObj];
+            const chargingUnits = [...state.locationObject.chargingUnits, state.chargingUnitObj];
             let locationObject = Object.assign({}, state.locationObject);
-            locationObject.chargingUnit = chargingUnit;
+            locationObject.chargingUnits = chargingUnits;
             const chargingUnitObj = {
                 name: "",
                 enabled: true,
@@ -138,10 +142,10 @@ class AddLocation extends Component {
 
     onDeleteItem = (e, index) => {
         this.setState(state => {
-            let chargingUnit = [...state.locationObject.chargingUnit];
+            let chargingUnits = [...state.locationObject.chargingUnit];
             let locationObject = Object.assign({}, state.locationObject);
-            chargingUnit.splice(index, 1);
-            locationObject.chargingUnit = chargingUnit;
+            chargingUnits.splice(index, 1);
+            locationObject.chargingUnits = chargingUnits;
             return {
                 locationObject,
             };
@@ -150,7 +154,7 @@ class AddLocation extends Component {
     };
 
     render() {
-        if(this.loading) {
+        if (this.loading) {
             return 'Loading...'
         }
         return (
@@ -276,7 +280,7 @@ class AddLocation extends Component {
                                         <Row>
                                             <Col md={12}>
                                                 <label>Charging Units</label>
-                                                {this.state.locationObject.chargingUnit.map((value, index) => {
+                                                {this.state.locationObject.chargingUnits.map((value, index) => {
                                                     return <div className="row charging-units">
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>
