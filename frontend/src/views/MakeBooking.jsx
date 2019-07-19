@@ -1,6 +1,4 @@
 import React, {Component} from "react";
-
-
 import {
     Grid,
     Row,
@@ -11,73 +9,150 @@ import {Card} from "components/Card/Card.jsx";
 import {FormInputs} from "components/FormInputs/FormInputs.jsx";
 import {UserCard} from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
-
 import avatar from "assets/img/faces/face-3.jpg";
 
 import MakeBookingService from "../services/makeBooking.services";
-
-import TestService from "../services/testService.services";
+import AuthService from "../services/auth.services";
 
 class MakeBooking extends Component {
     constructor(props) {
         super(props);
+        this.state = this.getEmptyState();
         this.chargerTypes = [
-            {chargingLevel: 1, power: 7.4, connector: "Tesla HPWC"},
-            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
+            {id: 1, chargingLevel: 1, power: 7.4, connector: "Tesla HPWC"},
+            {id: 2, chargingLevel: 2, power: 22, connector: "Type 2 plug"},
+            {id: 3, chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
+            {id: 4, chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
         ];
+        // this.chargerTypes = MakeBookingService.getChargers()
+        // .then(res => {
+        //   this.chargerTypes = res;
+        //   if (res!=null && res[0]!=null) {
+        //     this.updateUI({target: {value: res[0].id}});
+        //   }
+        // })
+        // .catch(err => console.log('There was an error:' + err));
         // Initializing state
-        this.state = {
-            name: "",
-            address: {
-                street: "",
-                city: "",
-                state: "",
-                postalCode: 12343,
-                country: ""
-            },
-            chargingUnit: [],
-            enabled: true,
-            basicBookingFee: 0.14,
-            cancellationTimeout: 0,
-            chargingLocation: "Baker street 22"
-        };
+        // AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
 
+
+        MakeBookingService.testFunc()
+        .then(res => {
+          console.log("Succ");
+          console.log(res);
+        })
+        .catch(err => console.log('There was an error:' + err));
+        
+
+        this.bookNow = this.bookNow.bind(this);
+        this.cancel = this.cancel.bind(this);
+        this.updateUI = this.updateUI.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
     };
 
-    testFunc(){
-
+    getEmptyState(){
+      return {
+        selectedChargerId: 0,
+        address: {
+          street: "Loading..",
+          city: "",
+          state: "",
+          postalCode: "",
+          country: ""
+        },
+        date: new Date(),
+        time: "Loading..",
+        estimatedCharge: "Loading..",
+        bookingFee: "Loading..",
+        estimatedChargingCost: "Loading..",
+        volumeFee: "Loading..",
+        estimatedTotalCost: "Loading.."
+      };
     }
 
     handleInputChange(event) {
         const target = event.target;
-        const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
-        if (name === 'street' || name === 'city' || name === 'country' || name === 'state' || name === 'postalCode') {
-            this.state.address[name] = value;
-        } else {
-            this.state[name] = value;
-        }
+        const value = event.target.value;
+        console.log("Changed: " + value + name);
     }
 
-
-
-    handleSubmit(event) {
-
-        MakeBookingService.makeBooking()
-        .then(res => {
-          this.setState(res)
-          console.log(res)
-        })
-        .catch(err => console.log('There was an error:' + err));
-
-        event.preventDefault();
+    bookNow(){
+      MakeBookingService.makeBooking()
+      .then(res => {
+        // this.setState(res);
+        // TODO: Go to history page
+      })
+      .catch(err => console.log('There was an error:' + err));
     }
 
+    cancel(event){
+      // TEST MODE
+      event.preventDefault();
+      // AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
+      // AuthService.registerUser('Sasalka', 'sasi@mail.com', 'pa$$w0rd', 'EVCP');
+
+      // var xhr = new XMLHttpRequest();
+      // xhr.open("POST", 'http://localhost:3001/auth/register', true);
+      // xhr.setRequestHeader('Content-Type', 'application/json');
+      // xhr.send(JSON.stringify({
+      //   name: "Peter",
+      //   email: 'peter.griffin@gmail.com',
+      //   password: 'test2012ktl',
+      //   role: 'EVCP'
+      // }));
+      // xhr.onload = function() {
+      //   console.log("HELLO")
+      //   console.log(this.responseText);
+      //   var data = JSON.parse(this.responseText);
+      //   console.log(data);
+      // }
+
+      // var xhr = new XMLHttpRequest();
+      // xhr.open("POST", 'http://localhost:3001/auth/login', true);
+      // xhr.setRequestHeader('Content-Type', 'application/json');
+      // xhr.send(JSON.stringify({
+      //   email: 'greenenergy@tum.de',
+      //   password: 'pa$$w0rd'
+      // }));
+      // xhr.onload = function() {
+      //   // console.log(this.responseText);
+      //   var data = JSON.parse(this.responseText);
+      //   var str = data.token;
+      //   console.log("Got: " + str);
+      //
+      //   MakeBookingService.testFunc(str).then(res => {
+      //     console.log(res)
+      //   })
+      //   .catch(err => console.log('There was an error:' + err));
+      // }
+
+// ===========
+      // MakeBookingService.testFunc().then(res => {
+      //   this.setState(res);
+      // })
+      // .catch(err => console.log('There was an error:' + err));
+      //
+      //
+      // // TODO: Go to previous page
+      // this.setState(this.getEmptyState());
+      //
+      // // TODO: Get input data as headers
+      // // Load calculated data from server and fill estimated cost data
+      // this.updateUI({target: {value: 1}});
+      event.preventDefault();
+    }
+
+    updateUI(event){
+      const id = event.target.value;
+
+      this.setState(this.getEmptyState());
+      MakeBookingService.calculateCost(id)
+      .then(res => {
+        this.setState(res);
+      })
+      .catch(err => console.log('There was an error:' + err));
+    }
 
 
     render() {
@@ -98,16 +173,15 @@ class MakeBooking extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "",
-                                                    value: this.state.chargingLocation,
-                                                    defaultValue: this.state.chargingLocation,
+                                                    value: this.state.address.street + ", " + this.state.address.postalCode + ", " + this.state.address.city + ", " + this.state.address.country,
                                                     disabled: true
                                                 }
                                             ]}
                                         />
                                         <label htmlFor="chargerType">Charger Type</label>
-                                        <select className="form-control" id="chargerType">
+                                        <select className="form-control" >
                                             {
-                                                this.chargerTypes.map((x) => <option value={x}>
+                                                this.chargerTypes.map((x) => <option value={x.id}>
                                                     {x.connector + " | L" + x.chargingLevel + " | " + x.power + "kW"}
                                                 </option>)
                                             }
@@ -116,12 +190,11 @@ class MakeBooking extends Component {
                                             ncols={["col-md-12"]}
                                             properties={[
                                                 {
+                                                    name: "date",
                                                     label: "Date",
                                                     type: "date",
+                                                    value: this.state.date,
                                                     bsClass: "form-control",
-                                                    placeholder: "07/26/2019",
-                                                    defaultValue: "",
-                                                    name: "name",
                                                     onChange: this.handleInputChange
                                                 }
 
@@ -131,11 +204,11 @@ class MakeBooking extends Component {
                                             ncols={["col-md-12"]}
                                             properties={[
                                                 {
+                                                    name: "time",
                                                     label: "Time",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "12.00 - 17.00",
-                                                    defaultValue: "12.00 - 17.00",
+                                                    value: this.state.time,
                                                     name: "street",
                                                     onChange: this.handleInputChange
                                                 }
@@ -149,8 +222,7 @@ class MakeBooking extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "",
-                                                    value: this.state.basicBookingFee,
-                                                    defaultValue: "42% (32kWh)",
+                                                    value: this.state.estimatedCharge,
                                                     disabled: true
                                                 }
                                             ]}
@@ -162,8 +234,7 @@ class MakeBooking extends Component {
                                                     label: "Booking Fee",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    placeholder: "",
-                                                    defaultValue: "0.5 €",
+                                                    value: this.state.bookingFee,
                                                     disabled: true
                                                 }
                                             ]}
@@ -176,7 +247,7 @@ class MakeBooking extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "",
-                                                    defaultValue: "8.96 €",
+                                                    value: this.state.estimatedChargingCost,
                                                     disabled: true
                                                 }
                                             ]}
@@ -189,7 +260,7 @@ class MakeBooking extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "",
-                                                    defaultValue: "0.448 €",
+                                                    value: this.state.volumeFee,
                                                     disabled: true
                                                 }
                                             ]}
@@ -202,15 +273,15 @@ class MakeBooking extends Component {
                                                     type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "",
-                                                    defaultValue: "9.908 €",
+                                                    value: this.state.estimatedTotalCost,
                                                     disabled: true
                                                 }
                                             ]}
                                         />
-                                        <Button bsStyle="danger" pullRight fill type="cancel" onClick={this.testFunc}>
+                                        <Button bsStyle="danger" pullRight fill type="cancel" onClick={this.cancel}>
                                             Cancel
                                         </Button>
-                                        <Button bsStyle="info form-save" pullRight fill type="submit">
+                                        <Button bsStyle="info form-save" pullRight fill type="submit" onClick={this.bookNow}>
                                             Book Now
                                         </Button>
                                         <div className="clearfix"/>

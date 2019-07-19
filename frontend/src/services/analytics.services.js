@@ -1,112 +1,196 @@
 import axios from 'axios';
+import HttpService from '../services/HttpService';
 
 class AnalyticsServiceClass {
 
-    getChargerDetails(id) {
-        const URL = 'http://localhost:3001';
-        return axios(URL, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-        }).then(response => {
-          return {
-              selectedLocationId: id,
-              chargerNames: ["Charger 1", "Charger 2", "Charger 3"],
-              chargerLevels: ["Level 1", "Level 2", "Level 3"],
-              chargerPowers: ["1.92 kW", "9.6 kW", "50.0 kW"],
-              chargerConnectors: ["Port J1772", "Tesla HPWC", "SAE Combo CCS"],
-              chargerCosts: ["0.11", "0.15", "0.16"],
+  getChargerLocations() {
+    let token = window.localStorage['jwtToken'];
+    const URL = 'http://localhost:3001/locations/analytics';
+    return axios(URL, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    }).then(response => {
+      let locations = response.data.locations;
+      var locs = [];
+      var i;
+      for (i=0; i<locations.length; i++) {
+        let option = {
+          id: locations[i]._id,
+          location: this.parseLocation(locations[i])
+        }
+        locs.push(option);
+      }
+      return locs;
+    }).catch(error => {
+      throw error;
+    });
+  }
 
-              chargerLocation: "Baker str 22, 81733, Munich",
+  parseLocation(data){
+    let location = data.address.street + ", " + data.address.postalCode + ", " +
+    data.address.city + ", " + data.address.state + ", " + data.address.country
+    return location;
+  }
 
-              chargersBar: {
-                names: ["Charger 1", "Charger 2", "Charger 3"],
-                types: ["info", "danger", "warning"]
-              },
-
-              dataEnegry: {
-                labels: [
-                  "Week 1",
-                  "Week 2",
-                  "Week 3",
-                  "Week4"
-                ],
-                series: [
-                  [287, 385, 490, 492],
-                  [67, 152, 143, 240],
-                  [554, 586, 698, 695]
-                ]
-              },
-
-              dataRevenue: {
-                labels: [
-                  "Jan",
-                  "Feb",
-                  "Mar",
-                  "Apr",
-                  "Mai",
-                  "Jun",
-                  "Jul",
-                  "Aug",
-                  "Sep",
-                  "Oct",
-                  "Nov",
-                  "Dec"
-                ],
-                series: [
-                  [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
-                  [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695],
-                  [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
-                ]
-              },
-
-              dataChargeTime: {
-                labels: ["40%", "20%", "40%"],
-                series: [40, 20, 40]
-              },
-
-              dataBookings: {
-                labels: [
-                  "09:00",
-                  "12:00",
-                  "15:00",
-                  "18:00",
-                  "21:00",
-                  "00:00",
-                  "03:00",
-                  "06:00"
-                ],
-                series: [
-                  [287, 385, 490, 492, 554, 586, 698, 695],
-                  [67, 152, 143, 240, 287, 335, 435, 437],
-                  [23, 113, 67, 108, 190, 239, 307, 308]
-                ]
-              }
-          };
-          // return response.data;
-        }).catch(error => {
-          throw error;
-        });
+  parseChargerNames(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.length; i++) {
+      result.push(data[i].name);
     }
+    return result;
+  }
 
-    getChargerLocations() {
-        const URL = 'http://localhost:3001';
-        return axios(URL, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-        }).then(response => {
-          return [
-              {id: 1, location: "Baker str 22, 81733, Munich"},
-              {id: 2, location: "Garching 112, 84555, Munich"}
-            ];
-          // return response.data;
-        }).catch(error => {
-          throw error;
-        });
+  parseChargerLevels(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.length; i++) {
+      result.push("Level " + data[i].charger.type.chargingLevel);
     }
+    return result;
+  }
+
+  parseChargerPowers(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.length; i++) {
+      result.push(data[i].charger.power);
+    }
+    return result;
+  }
+
+  parseChargerConnectors(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.length; i++) {
+      result.push(data[i].charger.type.connector);
+    }
+    return result;
+  }
+
+  parseChargerCosts(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.length; i++) {
+      result.push(data[i].energyPrice);
+    }
+    return result;
+  }
+
+  parseDataEnergy(data){
+    let labels = [];
+    let series = [];
+    var i;
+
+    for (i=0; i<data.length; i++) {
+      labels.push(this.parseDateDays(data[i].date));
+      series.push(data[i].energySold);
+    }
+    return {
+      labels: labels.reverse(),
+      series: [series.reverse()]
+    };
+  }
+
+  parseDataRevenue(data){
+    let labels = [];
+    let series = [];
+    var i;
+
+    for (i=0; i<data.length; i++) {
+      let str = this.parseDateMonths(data[i].date);
+      labels.push(str);
+      series.push(data[i].revenue);
+    }
+    return {
+      labels: labels.reverse(),
+      series: [series.reverse()]
+    };
+  }
+
+  parseDataBookings(data){
+    let labels = [];
+    let series = [];
+    var i;
+
+    for (i=0; i<data.length; i++) {
+      labels.push(this.parseDateDays(data[i].date));
+      series.push(data[i].numberOfBookings);
+    }
+    return {
+      labels: labels.reverse(),
+      series: [series.reverse()]
+    };
+  }
+
+  parseDataChargeTime(data){
+    let labels = [];
+    let series = [];
+    var i;
+
+    for (i=0; i<data.length; i++) {
+      labels.push(this.parseDateDays(data[i].date));
+      series.push(data[i].chargeTime);
+    }
+    return {
+      labels: labels.reverse(),
+      series: [series.reverse()]
+    };
+  }
+
+  parseDateDays(dateString){
+    let date = new Date(dateString);
+    let s1 = (date.getMonth()+1);
+    let n1 = (s1 < 10 ? '0' : '') + s1;
+    let s2 = date.getDate();
+    let n2 = (s2 < 10 ? '0' : '') + s2;
+    return n2 + "." + n1;
+  }
+
+
+  parseDateMonths(dateString){
+    let date = new Date(dateString);
+    let s1 = (date.getMonth()+1);
+    let n1 = (s1 < 10 ? '0' : '') + s1;
+    let s2 = date.getFullYear().toString().substring(2);
+    return n1 + "." + s2;
+  }
+
+  getChargerDetails(id) {
+    let token = window.localStorage['jwtToken'];
+    const URL = 'http://localhost:3001/locations/' + id + '/analytics';
+    return axios(URL, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    }).then(response => {
+      console.log(response.data);
+      return {
+        selectedLocationId: id,
+        chargerLocation: this.parseLocation(response.data.location),
+        chargerNames: this.parseChargerNames(response.data.location.chargingUnits),
+        chargerLevels: this.parseChargerLevels(response.data.location.chargingUnits),
+        chargerPowers: this.parseChargerPowers(response.data.location.chargingUnits),
+        chargerConnectors: this.parseChargerConnectors(response.data.location.chargingUnits),
+        chargerCosts: this.parseChargerCosts(response.data.location.chargingUnits),
+        chargersBar: {
+          names: this.parseChargerNames(response.data.location.chargingUnits),
+          types: ["info", "danger", "warning"]
+        },
+        dataEnegry: this.parseDataEnergy(response.data.dailyStatistics),
+        dataRevenue: this.parseDataRevenue(response.data.monthlyStatistics),
+        dataBookings: this.parseDataBookings(response.data.dailyStatistics),
+        dataChargeTime: this.parseDataChargeTime(response.data.dailyStatistics)
+      };
+    }).catch(error => { throw error; });
+  }
+
+
 }
 const AnalyticsService = new AnalyticsServiceClass();
 export default AnalyticsService;

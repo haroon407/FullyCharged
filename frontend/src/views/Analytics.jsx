@@ -7,14 +7,13 @@ import { Card } from "components/Card/Card.jsx";
 import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 import { TableDetails } from "components/Analytics/TableDetails.jsx";
 import {
-  optionsSales,
   optionsBar,
   responsiveSales,
   responsiveBar
 } from "variables/Variables.jsx";
 
 import AnalyticsService from "../services/analytics.services";
-
+import AuthService from "../services/auth.services";
 
 class Analytics extends Component {
     constructor(props) {
@@ -28,6 +27,7 @@ class Analytics extends Component {
           }
         })
         .catch(err => console.log('There was an error:' + err));
+        AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
         // Initializing state
         this.state = this.getEmptyState();
         this.tableElement = React.createRef();
@@ -95,16 +95,43 @@ class Analytics extends Component {
       .catch(err => console.log('There was an error:' + err));
     }
 
-    createLegend(json) {
-      var legend = [];
-      for (var i = 0; i < json["names"].length; i++) {
-        var type = "fa fa-circle text-" + json["types"][i];
-        legend.push(<i className={type} key={i} />);
-        legend.push(" ");
-        legend.push(json["names"][i]);
+    createOptions(data){
+      var min = 0;
+      var max = 0;
+      var arr = data.series[0];
+      if (arr!=null) {
+        var i;
+        for (i=0; i<arr.length; i++) {
+          if (min > arr[i]) {
+            min = arr[i];
+          }
+          if (max < arr[i]) {
+            max = arr[i];
+          }
+        }
+        max = max + max/4;
+      } else {
+        min = 0;
+        max = 800;
       }
-      return legend;
+      return {
+        low: min,
+        high: max,
+        showArea: false,
+        height: "245px",
+        axisX: {
+          showGrid: false
+        },
+        lineSmooth: true,
+        showLine: true,
+        showPoint: true,
+        fullWidth: true,
+        chartPadding: {
+          right: 50
+        }
+      };
     }
+
 
     render() {
         return (
@@ -151,81 +178,71 @@ class Analytics extends Component {
               <Col md={6}>
               <Card
                 title="Energy sold"
-                category="Energy sold per day for the last 4 weeks"
+                category="Average energy sold per day for the last week"
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
                       data={this.state.dataEnegry}
                       type="Line"
-                      options={optionsSales}
+                      options={this.createOptions(this.state.dataEnegry)}
                       responsiveOptions={responsiveSales}
                     />
                   </div>
-                }
-                legend={
-                  <div className="legend">{this.createLegend(this.state.chargersBar)}</div>
                 }
               />
               </Col>
 
               <Col md={6}>
               <Card
-                title="Bookings per day"
-                category="Average bookings per hour in a day for the last month"
+                title="Bookings"
+                category="Average bookings per day for the last week"
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
                       data={this.state.dataBookings}
                       type="Line"
-                      options={optionsSales}
+                      options={this.createOptions(this.state.dataBookings)}
                       responsiveOptions={responsiveSales}
                     />
                   </div>
-                }
-                legend={
-                  <div className="legend">{this.createLegend(this.state.chargersBar)}</div>
                 }
               />
               </Col>
             </Row>
 
             <Row>
-              <Col md={8}>
+              <Col md={7}>
               <Card
                 title="Revenue chart"
-                category="Revenue chart for the last year"
+                category="Average revenue per month for the last year"
                 content={
                   <div className="ct-chart">
                     <ChartistGraph
                       data={this.state.dataRevenue}
                       type="Bar"
-                      options={optionsBar}
+                      options={this.createOptions(this.state.dataRevenue)}
                       responsiveOptions={responsiveBar}
                     />
                   </div>
                 }
-                legend={
-                  <div className="legend">{this.createLegend(this.state.chargersBar)}</div>
-                }
               />
 
               </Col>
-              <Col md={4}>
-                <Card
-                  title="Charge time per day"
-                  category="Average charge time per day"
-                  content={
-                    <div
-                      id="chartPreferences"
-                      className="ct-chart ct-perfect-fourth"
-                    >
-                      <ChartistGraph data={this.state.dataChargeTime} type="Pie" />
-                    </div>
-                  }
-                  legend={
-                    <div className="legend">{this.createLegend(this.state.chargersBar)}</div>
-                  }
-                />
+              <Col md={5}>
+              <Card
+                title="Charge time"
+                category="Average charge time per day for the last week"
+                content={
+                  <div className="ct-chart">
+                    <ChartistGraph
+                      data={this.state.dataChargeTime}
+                      type="Line"
+                      options={this.createOptions(this.state.dataChargeTime)}
+                      responsiveOptions={responsiveSales}
+                    />
+                  </div>
+                }
+              />
               </Col>
             </Row>
             </Grid>

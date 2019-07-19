@@ -1,5 +1,3 @@
-"use strict";
-
 export default class HttpService {
     constructor() {
     }
@@ -10,8 +8,9 @@ export default class HttpService {
         let token = window.localStorage['jwtToken'];
         let header = new Headers();
         if(token) {
-            header.append('Authorization', `JWT ${token}`);
+            header.append('Authorization', `Bearer ${token}`);
         }
+        header.append('Content-Type', 'application/json');
 
         fetch(url, {
             method: 'GET',
@@ -21,6 +20,8 @@ export default class HttpService {
                 window.location = "/#login";
             }
             else {
+                console.log("Got here:");
+                console.log(resp);
                 return resp.json();
             }
         }).then((resp) => {
@@ -31,9 +32,13 @@ export default class HttpService {
                 if(resp.hasOwnProperty('token')) {
                     window.localStorage['jwtToken'] = resp.token;
                 }
+                console.log("Got here22:");
+                console.log(resp);
                 onSuccess(resp);
             }
         }).catch((e) => {
+          console.log("Got here33:");
+          console.log(e);
             onError(e.message);
         });
     }
@@ -42,7 +47,7 @@ export default class HttpService {
         let token = window.localStorage['jwtToken'];
         let header = new Headers();
         if(token) {
-            header.append('Authorization', `JWT ${token}`);
+            header.append('Authorization', `Bearer ${token}`);
         }
         header.append('Content-Type', 'application/json');
 
@@ -74,10 +79,11 @@ export default class HttpService {
     }
 
     static post(url, data, onSuccess, onError) {
+
         let token = window.localStorage['jwtToken'];
         let header = new Headers();
         if(token) {
-            header.append('Authorization', `JWT ${token}`);
+            header.append('Authorization', `Bearer ${token}`);
         }
         header.append('Content-Type', 'application/json');
 
@@ -112,7 +118,7 @@ export default class HttpService {
         let token = window.localStorage['jwtToken'];
         let header = new Headers();
         if(token) {
-            header.append('Authorization', `JWT ${token}`);
+            header.append('Authorization', `Bearer ${token}`);
         }
 
         fetch(url, {

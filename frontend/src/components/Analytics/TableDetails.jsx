@@ -5,7 +5,6 @@ export class TableDetails extends Component {
 
   constructor(props) {
       super(props);
-      console.log("Props: " + props);
       // Initializing state
       this.state = {
           chargerNames: [],
