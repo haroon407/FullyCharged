@@ -3,7 +3,6 @@ import { MenuItem, Nav, NavDropdown, NavItem } from "react-bootstrap";
 import logo from "assets/img/logo.png";
 
 import SignIn from "views/SignIn";
-import SignUp from "views/SignUp";
 
 class Website extends Component {
   render() {
@@ -24,12 +23,16 @@ class Website extends Component {
                     title="Register"
                     id="basic-nav-dropdown-right"
                   >
-                    <MenuItem eventKey={2.1}>EV Owner</MenuItem>
-                    <MenuItem eventKey={2.2}>EV Charging Provider</MenuItem>
+                    <MenuItem href="/index/evo-register" eventKey={2.1}>
+                      EV Owner
+                    </MenuItem>
+                    <MenuItem href="/index/evcp-register" eventKey={2.2}>
+                      EV Charging Provider
+                    </MenuItem>
                   </NavDropdown>
                 </div>
                 <div className="col-md-5 nav-bar-text">
-                  <NavItem eventKey={3} href="#">
+                  <NavItem eventKey={3} href="/index/sign-in">
                     Log In
                   </NavItem>
                 </div>

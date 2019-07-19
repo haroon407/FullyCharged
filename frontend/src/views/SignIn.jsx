@@ -14,57 +14,80 @@ import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
-import SignInService from "../services/signin.services";
+import { withContext } from "../AppContext";
+
+import UsersService from "../services/users.services";
 
 import avatar from "assets/img/faces/face-3.jpg";
+import { isContext } from "vm";
 
-import axios from 'axios';
+import axios from "axios";
 
 class SignIn extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-      this.state = {
-          email_address: '',
-          password: ''
-      }
+    this.state = {
+      email: "",
+      password: ""
+    };
   }
-  
+
   onChangeEmailAddress(e) {
     this.setState({
-      email_address: e.target.value
+      email: e.target.value
     });
   }
   onChangePassword(e) {
     this.setState({
       password: e.target.value
-    })  
+    });
   }
-  
+
   onSubmit(e) {
     e.preventDefault();
-    {/* Add Role based Auth */}
-    console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
+    alert("A form was submitted: " + this.state);
+
+    //Use below line of code
+    //this.props.showNotification("success", "Logged in successfully");
     
-    const obj = {
-      email_address: this.state.email_address,
-      password: this.state.password
-    };
-    axios.post('http://localhost:5000/backend/sign-in', obj)
-        .then(res => console.log(res.data));
-    
+    //this.props
+    //.login(this.state) // calling login function of Context
+    // .then(() => this.props.history.push("/index")); //admin/dashboard-evo
+
+    this.clearInputs();
+    //{
+    /* Add Role based Auth */
+    //}
+    console.log(
+      `The values are ${this.state.email_address} and ${this.state.password}`
+    );
+
+    //const obj = {
+    //email: this.state.email,
+    //password: this.state.password
+    //};
+    //axios
+    //.post("http://localhost:5000/backend/sign-in", obj)
+    //.then(res => console.log(res.data));
+
+    // calling API here
+    //let result = UsersService.signIn(obj).then(data => {
+    //Context.user = data
+    //});
+
     this.setState({
-      email_address: '',
-      password: ''
-    })
+      email: "",
+      password: ""
+    });
   }
-  
+
   render() {
     return (
-      <div className="content">
+      <div className="content loginform">
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">
@@ -80,8 +103,12 @@ class SignIn extends Component {
                     title="Register"
                     id="basic-nav-dropdown-right"
                   >
-                    <MenuItem eventKey={2.1}>EV Owner</MenuItem>
-                    <MenuItem eventKey={2.2}>EV Charging Provider</MenuItem>
+                    <MenuItem href="/index/evo-register" eventKey={2.1}>
+                      EV Owner
+                    </MenuItem>
+                    <MenuItem href="/index/evcp-register" eventKey={2.2}>
+                      EV Charging Provider
+                    </MenuItem>
                   </NavDropdown>
                 </div>
                 <div className="col-md-5 nav-bar-text">
@@ -107,17 +134,19 @@ class SignIn extends Component {
                           {
                             label: "Email address",
                             type: "email",
+                            name: "email",
                             bsClass: "form-control",
-                            placeholder: "Email",
-                            value: this.state.email_address,
+                            placeholder: "email",
+                            value: this.state.email,
                             onChange: this.onChangeEmailAddress,
                             required: true
                           },
                           {
                             label: "Password",
-                            type: "text",
+                            type: "password",
+                            name: "password",
                             bsClass: "form-control",
-                            placeholder: "Password",
+                            placeholder: "password",
                             value: this.state.password,
                             onChange: this.onChangePassword,
                             required: true
@@ -140,4 +169,5 @@ class SignIn extends Component {
   }
 }
 
+//export default withContext(SignIn);
 export default SignIn;

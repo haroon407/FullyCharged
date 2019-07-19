@@ -22,16 +22,58 @@ class DashboardEVO extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      dashboardEVOObject: {
-        booking_id: "",
-        date: "",
-        time: "",
-        estimated_charge: "",
-        estimated_charging_cost: "",
-        charger_name: "",
-        booking_date: ""
-      }
+      dashboardEVOObject: [
+        {
+          booking_id: "101",
+          date: "19-07-2019",
+          time: "15:00 - 16:00",
+          estimated_charge: "20%",
+          estimated_charging_cost: "15.25 Euros",
+          charger_name: "Charger 111",
+          booking_date: "18-07-2019"
+        },
+        {
+          booking_id: "",
+          date: "",
+          time: "",
+          estimated_charge: "",
+          estimated_charging_cost: "",
+          charger_name: "",
+          booking_date: ""
+        },
+        {
+          booking_id: "",
+          date: "",
+          time: "",
+          estimated_charge: "",
+          estimated_charging_cost: "",
+          charger_name: "",
+          booking_date: ""
+        },
+        {
+          booking_id: "",
+          date: "",
+          time: "",
+          estimated_charge: "",
+          estimated_charging_cost: "",
+          charger_name: "",
+          booking_date: ""
+        },
+        {
+          booking_id: "",
+          date: "",
+          time: "",
+          estimated_charge: "",
+          estimated_charging_cost: "",
+          charger_name: "",
+          booking_date: ""
+        }
+      ]
     };
+  }
+
+  onSubmit(e) {
+    console.log("make query to delete the data from database");
   }
   render() {
     return (
@@ -83,7 +125,9 @@ class DashboardEVO extends Component {
                     Date: 18.07.2019 Time: 11:30 - 12:30 Estimated charge: 42%
                     Estimated Charging cost: 8.9 Euros Charger Name: TX2098
                     Booking Date: 14.07.2019
-                    <Button variant="danger">Cancel Booking</Button>
+                    <Button variant="danger" type="submit">
+                      Cancel Booking
+                    </Button>
                   </Card.Body>
                 </Accordion.Collapse>
               </Card>

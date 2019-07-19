@@ -7,7 +7,8 @@ import Maps from "views/Maps.jsx";
 import Notifications from "views/Notifications.jsx";
 import Website from "views/Website";
 import SignIn from "views/SignIn";
-import SignUp from "views/SignUp";
+import EVORegister from "views/EVORegister";
+import EVCPRegister from "views/EVCPRegister";
 import DashboardEVO from "views/DashboardEVO";
 
 const dashboardRoutes = [
@@ -19,10 +20,17 @@ const dashboardRoutes = [
     layout: "/index"
   },
   {
-    path: "/sign-up",
-    name: "Sign Up",
+    path: "/evo-register",
+    name: "EVO Registration",
     icon: "pe-7s-graph",
-    component: SignUp,
+    component: EVORegister,
+    layout: "/index"
+  },
+  {
+    path: "/evcp-register",
+    name: "EVCP Registration",
+    icon: "pe-7s-graph",
+    component: EVCPRegister,
     layout: "/index"
   },
   {

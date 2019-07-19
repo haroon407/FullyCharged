@@ -13,35 +13,35 @@ import { Card } from "components/Card/Card.jsx";
 import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
-import SignUpService from "../services/signup.services";
+import UsersService from "../services/users.services";
 
 import avatar from "assets/img/faces/face-3.jpg";
 
 import logo from "assets/img/logo.png";
 
-import axios from 'axios';
+import axios from "axios";
 
-class SignUp extends Component {
-  constructor(props){
+class EVCPRegister extends Component {
+  constructor(props) {
     super(props);
     this.onChangeFirstName = this.onChangeFirstName.bind(this);
     this.onChangeLastName = this.onChangeLastName.bind(this);
-    this.onChangeRole = this.onChangeRole.bind(this);
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
+    this.onChangeCompanyName = this.onChangeCompanyName.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
-      this.state = {
-          first_name: '',
-          last_name: '',
-          email_address: '',
-          role: '',
-          password: '',
-          confirm_password: ''
-      }
+    this.state = {
+      first_name: "",
+      last_name: "",
+      email_address: "",
+      company_name: "",
+      password: "",
+      confirm_password: ""
+    };
   }
-  
+
   onChangeFirstName(e) {
     this.setState({
       first_name: e.target.value
@@ -52,11 +52,13 @@ class SignUp extends Component {
       last_name: e.target.value
     });
   }
-  onChangeRole(e) {
+
+  onChangeCompanyName(e) {
     this.setState({
-      role: e.target.value
+      company_name: e.target.value
     });
   }
+
   onChangeEmailAddress(e) {
     this.setState({
       email_address: e.target.value
@@ -65,42 +67,51 @@ class SignUp extends Component {
   onChangePassword(e) {
     this.setState({
       password: e.target.value
-    })  
+    });
   }
-  
+
   onChangeConfirmPassword(e) {
     this.setState({
       confirm_password: e.target.value
-    })  
+    });
   }
-  
+
   onSubmit(e) {
     e.preventDefault();
-    {/* Add a notification. Add to database. Take to Sign in page */}
-    console.log(`The values are ${this.state.email_address} and ${this.state.password}`)
-    
+    /* Add a notification. Add to database. Take to Sign in page */
+    //this.props.history.push("/index/sign-in");
+    this.props.history.location.pathname = "/index/sign-in";
+
+    console.log(
+      `The values are ${this.state.email_address} and ${this.state.password}`
+    );
+
     const obj = {
       first_name: this.state.first_name,
       last_name: this.state.last_name,
-      role: this.state.role,
+      company_name: this.company_name,
+      role: "EVCP",
       email_address: this.state.email_address,
       password: this.state.password,
       confirm_password: this.state.confirm_password
     };
-    axios.post('http://localhost:5000/backend/sign-up', obj)
-        .then(res => console.log(res.data));
-    
+
+    // calling API here
+    UsersService.signUpEVCP(obj);
+
+    //axios
+    //.post("http://localhost:5000/backend/sign-up", obj)
+    //.then(res => console.log(res.data));
+
     this.setState({
-      first_name: '',
-      last_name: '',
-      email_address: '',
-      role: '',
-      password: '',
-      confirm_password: ''
-    })
+      first_name: "",
+      last_name: "",
+      email_address: "",
+      password: "",
+      confirm_password: ""
+    });
   }
-  
-  
+
   render() {
     return (
       <div className="content">
@@ -119,12 +130,16 @@ class SignUp extends Component {
                     title="Register"
                     id="basic-nav-dropdown-right"
                   >
-                    <MenuItem eventKey={2.1}>EV Owner</MenuItem>
-                    <MenuItem eventKey={2.2}>EV Charging Provider</MenuItem>
+                    <MenuItem href="/index/evo-register" eventKey={2.1}>
+                      EV Owner
+                    </MenuItem>
+                    <MenuItem href="/index/evcp-register" eventKey={2.2}>
+                      EV Charging Provider
+                    </MenuItem>
                   </NavDropdown>
                 </div>
                 <div className="col-md-5 nav-bar-text">
-                  <NavItem eventKey={3} href="#">
+                  <NavItem eventKey={3} href="/index/sign-in">
                     Log In
                   </NavItem>
                 </div>
@@ -132,12 +147,12 @@ class SignUp extends Component {
             </div>
           </div>
         </nav>
-        <div>
+        <div className="form">
           <Grid fluid>
             <Row>
               <Col md={8}>
                 <Card
-                  title="Sign Up"
+                  title="EVCP Sign Up"
                   content={
                     <form onSubmit={this.onSubmit}>
                       <FormInputs
@@ -178,13 +193,12 @@ class SignUp extends Component {
                             required: true
                           },
                           {
-                            label: "Role",
-                            type: "text",
+                            label: "Company",
+                            type: "name",
                             bsClass: "form-control",
-                            placeholder: "Role",
-                            defaultValue: "EVO or EVCP",
-                            value: this.state.role,
-                            onChange: this.onChangeRole,
+                            placeholder: "Company Name",
+                            value: this.state.company_name,
+                            onChange: this.onChangeCompanyName,
                             required: true
                           }
                         ]}
@@ -194,7 +208,7 @@ class SignUp extends Component {
                         properties={[
                           {
                             label: "Password",
-                            type: "text",
+                            type: "password",
                             bsClass: "form-control",
                             placeholder: "Password",
                             value: this.state.password,
@@ -203,7 +217,7 @@ class SignUp extends Component {
                           },
                           {
                             label: "Confirm password",
-                            type: "text",
+                            type: "tepasswordxt",
                             bsClass: "form-control",
                             placeholder: "Confirm password",
                             value: this.state.confirm_password,
@@ -228,4 +242,4 @@ class SignUp extends Component {
   }
 }
 
-export default SignUp;
+export default EVCPRegister;
