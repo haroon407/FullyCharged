@@ -13,16 +13,15 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import ChargingLocationService from "../services/chargingLocation.services";
 
 class AddLocation extends Component {
+    state = {
+        loading: true
+    };
+    chargerTypes = [];
+
     constructor(props) {
         super(props);
-        this.chargerTypes = [
-            {chargingLevel: 1, power: 7.4, connector: "Type 1 plug"},
-            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
-        ];
         this.state = {
-            locationObject : {
+            locationObject: {
                 name: "",
                 address: {
                     street: "",
@@ -31,10 +30,12 @@ class AddLocation extends Component {
                     postalCode: 0,
                     country: ""
                 },
-                chargingUnit: [],
+                chargingUnits: [],
                 enabled: true,
+                deleted: false,
                 basicBookingFee: 0.14,
-                cancellationTimeout: 0
+                cancellationTimeout: 0,
+                owner: "5d2fb5270c8c3c33abfb0e72"
             }
         };
         this.state.chargingUnitObj = {
@@ -51,6 +52,13 @@ class AddLocation extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
+
+    componentWillMount() {
+        ChargingLocationService.getChargerTypes().then((data) => {
+            this.chargerTypes = data;
+            this.setState({loading: false});
+        });
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -97,21 +105,23 @@ class AddLocation extends Component {
     }
 
     handleSubmit(event) {
-        this.props.showNotification('success', 'Added successfully');
-        alert('A form was submitted: ' + this.state);
         // Call the API function
-        // ChargingLocationService.addLocation();
+        ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+            this.props.showNotification('success', 'Added successfully');
+        }).catch((err) => {
+            this.props.showNotification('error', 'Error while adding location');
+        });
         event.preventDefault();
     }
 
     onAddItem = () => {
         this.setState(state => {
             if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnit.length + 1);
+                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
             }
-            const chargingUnit = [...state.locationObject.chargingUnit, state.chargingUnitObj];
+            const chargingUnits = [...state.locationObject.chargingUnits, state.chargingUnitObj];
             let locationObject = Object.assign({}, state.locationObject);
-            locationObject.chargingUnit = chargingUnit;
+            locationObject.chargingUnits = chargingUnits;
             const chargingUnitObj = {
                 name: "",
                 enabled: true,
@@ -132,10 +142,10 @@ class AddLocation extends Component {
 
     onDeleteItem = (e, index) => {
         this.setState(state => {
-            let chargingUnit = [...state.locationObject.chargingUnit];
+            let chargingUnits = [...state.locationObject.chargingUnit];
             let locationObject = Object.assign({}, state.locationObject);
-            chargingUnit.splice(index, 1);
-            locationObject.chargingUnit = chargingUnit;
+            chargingUnits.splice(index, 1);
+            locationObject.chargingUnits = chargingUnits;
             return {
                 locationObject,
             };
@@ -144,6 +154,9 @@ class AddLocation extends Component {
     };
 
     render() {
+        if (this.loading) {
+            return 'Loading...'
+        }
         return (
             <div className="content">
                 <Grid fluid>
@@ -267,7 +280,7 @@ class AddLocation extends Component {
                                         <Row>
                                             <Col md={12}>
                                                 <label>Charging Units</label>
-                                                {this.state.locationObject.chargingUnit.map((value, index) => {
+                                                {this.state.locationObject.chargingUnits.map((value, index) => {
                                                     return <div className="row charging-units">
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>
