@@ -9,6 +9,7 @@ import {style} from "variables/Variables.jsx";
 import routes from "routes.js";
 
 class Admin extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -20,39 +21,6 @@ class Admin extends Component {
             fixedClasses: "dropdown show-dropdown open"
         };
     }
-
-    handleNotificationClick = position => {
-        var color = Math.floor(Math.random() * 4 + 1);
-        var level;
-        switch (color) {
-            case 1:
-                level = "success";
-                break;
-            case 2:
-                level = "warning";
-                break;
-            case 3:
-                level = "error";
-                break;
-            case 4:
-                level = "info";
-                break;
-            default:
-                break;
-        }
-        this.state._notificationSystem.addNotification({
-            title: <span data-notify="icon" className="pe-7s-gift"/>,
-            message: (
-                <div>
-                    Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-                    every web developer.
-                </div>
-            ),
-            level: level,
-            position: position,
-            autoDismiss: 15
-        });
-    };
 
     showNotification = (level, message) => {
         this.state._notificationSystem.addNotification({
@@ -77,7 +45,6 @@ class Admin extends Component {
                         render={props => (
                             <prop.component
                                 {...props}
-                                handleClick={this.handleNotificationClick}
                                 showNotification={this.showNotification}
                             />
                         )}
@@ -123,18 +90,6 @@ class Admin extends Component {
             default:
                 break;
         }
-        _notificationSystem.addNotification({
-            title: <span data-notify="icon" className="pe-7s-gift"/>,
-            message: (
-                <div>
-                    Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-                    every web developer.
-                </div>
-            ),
-            level: level,
-            position: "tr",
-            autoDismiss: 15
-        });
     }
 
     componentDidUpdate(e) {

@@ -49,7 +49,7 @@ class Sidebar extends Component {
           <ul className="nav">
             {this.state.width <= 991 ? <AdminNavbarLinks /> : null}
             {this.props.routes.map((prop, key) => {
-              if (!prop.redirect && prop.layout!=='/index')
+              if (!prop.redirect && !prop.noSideNav)
                 return (
                   <li
                     className={

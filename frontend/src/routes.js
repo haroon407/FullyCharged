@@ -1,5 +1,6 @@
 import Dashboard from "views/Dashboard.jsx";
 import AddLocation from "views/AddLocation";
+import EditLocation from "views/EditLocation";
 import UserProfile from "views/UserProfile.jsx";
 import TableList from "views/TableList.jsx";
 import Typography from "views/Typography.jsx";
@@ -14,7 +15,8 @@ const dashboardRoutes = [
         name: "Landing Page",
         icon: "pe-7s-graph",
         component: Website,
-        layout: "/index"
+        layout: "/index",
+        noSideNav: true
     },
     {
         path: "/dashboard",
@@ -29,6 +31,21 @@ const dashboardRoutes = [
         icon: "pe-7s-plus",
         component: AddLocation,
         layout: "/admin"
+    },
+    {
+        path: "/edit/location",
+        name: "Edit Location",
+        icon: "pe-7s-pen",
+        component: EditLocation,
+        layout: "/admin"
+    },
+    {
+        path: "/update/location",
+        name: "Edit Location",
+        icon: "pe-7s-plus",
+        component: AddLocation,
+        layout: "/admin",
+        noSideNav: true
     },
     {
         path: "/user",
