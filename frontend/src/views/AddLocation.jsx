@@ -35,13 +35,13 @@ class AddLocation extends Component {
                         street: "",
                         city: "",
                         state: "",
-                        postalCode: 0,
+                        postalCode: "",
                         country: ""
                     },
                     chargingUnits: [],
                     enabled: true,
                     deleted: false,
-                    basicBookingFee: 0.14,
+                    basicBookingFee: 0.50,
                     cancellationTimeout: 0,
                     owner: "5d2fb5270c8c3c33abfb0e72"
                 }
@@ -55,10 +55,12 @@ class AddLocation extends Component {
             name: "",
             enabled: true,
             energyPrice: 0.0,
-            chargerType: {
-                chargingLevel: 0,
+            charger: {
                 power: 0,
-                connector: ""
+                type: {
+                    chargingLevel: 0,
+                    connector: ""
+                }
             }
         };
 
@@ -85,7 +87,7 @@ class AddLocation extends Component {
                 locationObject.address[name] = value; // update the property, assign the value
                 return {locationObject}; // return new object address
             });
-        } else if (name === 'chargerName' || name === 'energyPrice' || name === 'chargerType') {
+        } else if (name === 'chargerName' || name === 'energyPrice' || name === 'charger' || name === 'power') {
             // For charging unit
             if (name === 'chargerName') {
                 this.setState(prevState => {
@@ -94,10 +96,17 @@ class AddLocation extends Component {
                     return {chargingUnitObj};
 
                 });
-            } else if (name === 'chargerType') {
+            } else if (name === 'charger') {
+                this.setState(prevState => {
+                    debugger;
+                    let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
+                    chargingUnitObj.charger.type = JSON.parse(value); // Parsing string value back to object
+                    return {chargingUnitObj}
+                });
+            }else if (name === 'power') {
                 this.setState(prevState => {
                     let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
-                    chargingUnitObj.chargerType = JSON.parse(value); // Parsing string value back to object
+                    chargingUnitObj.charger.power = value; // Parsing string value back to object
                     return {chargingUnitObj}
                 });
             } else {
@@ -118,6 +127,7 @@ class AddLocation extends Component {
     }
 
     handleSubmit(event) {
+        debugger;
         // Call the API function
         ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
             this.props.showNotification('success', 'Added successfully');
@@ -139,10 +149,12 @@ class AddLocation extends Component {
                 name: "",
                 enabled: true,
                 energyPrice: 0.0,
-                chargerType: {
-                    chargingLevel: 0,
+                charger: {
                     power: 0,
-                    connector: ""
+                    type: {
+                        chargingLevel: 0,
+                        connector: ""
+                    }
                 }
             };
             return {
@@ -235,7 +247,7 @@ class AddLocation extends Component {
                                                 },
                                                 {
                                                     label: "Postal Code",
-                                                    type: "number",
+                                                    type: "text",
                                                     bsClass: "form-control",
                                                     placeholder: "Postal Code",
                                                     name: "postalCode",
@@ -264,7 +276,7 @@ class AddLocation extends Component {
                                             ncols={["col-md-12"]}
                                             properties={[
                                                 {
-                                                    label: "Basic Booking Fee (Euros)",
+                                                    label: "Basic Booking Fee (€)",
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Basic Booking Fee (Euros)",
@@ -278,7 +290,7 @@ class AddLocation extends Component {
                                             ncols={["col-md-12"]}
                                             properties={[
                                                 {
-                                                    label: "Cancellation Timeout (Minutes)",
+                                                    label: "Cancellation Timeout (Hours)",
                                                     type: "number",
                                                     bsClass: "form-control",
                                                     placeholder: "Cancellation Timeout",
@@ -296,7 +308,7 @@ class AddLocation extends Component {
                                                 {this.state.locationObject.chargingUnits.map((value, index) => {
                                                     return <div className="row charging-units">
                                                         <div className={"col-md-8"}
-                                                             key={index}>{value.name + ' ' + value.chargerType.connector}</div>
+                                                             key={value._id}>{value.name + ' ' + value.charger.type.connector}</div>
                                                         <div className={"col-md-4"}>
                                                             {this.updateLocationMode &&
                                                             <button
@@ -347,8 +359,8 @@ class AddLocation extends Component {
                                                         }
                                                     ]}
                                         />
-                                        <label htmlFor="chargerType">Type of charger</label>
-                                        <select id="chargerTypeSelect" className="form-control" name="chargerType"
+                                        <label htmlFor="charger">Type of charger</label>
+                                        <select id="chargerTypeSelect" className="form-control" name="charger"
                                                 onChange={this.handleInputChange}>
                                             {
                                                 this.chargerTypes.map((x, value) => <option key={value}
@@ -357,6 +369,20 @@ class AddLocation extends Component {
                                                 </option>)
                                             }
                                         </select>
+                                        <FormInputs
+                                            ncols={["col-md-12"]}
+                                            properties={[
+                                                {
+                                                    label: "Power (kWh)",
+                                                    type: "number",
+                                                    bsClass: "form-control",
+                                                    placeholder: "Power (kWh)",
+                                                    name: "power",
+                                                    value: this.state.chargingUnitObj.charger.power,
+                                                    onChange: this.handleInputChange
+                                                }
+                                            ]}
+                                        />
                                         <FormInputs
                                             ncols={["col-md-12"]}
                                             properties={[
