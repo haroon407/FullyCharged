@@ -131,7 +131,7 @@ class EVORegister extends Component {
       return "Loading...";
     }
     return (
-      <div className="content">
+      <div className="content evoregisterform">
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">

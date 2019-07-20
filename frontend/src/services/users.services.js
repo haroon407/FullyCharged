@@ -16,7 +16,7 @@ class UsersServiceClass {
       });
   }
   signUpEVO(signUpObject) {
-    const URL = "http://localhost:5000/index/evo-register";
+    const URL = "http://localhost:5000/auth/register";
     return axios(URL, {
       method: "POST",
       headers: {
@@ -30,7 +30,7 @@ class UsersServiceClass {
       });
   }
   signUpEVCP(signUpObject) {
-    const URL = "http://localhost:5000/index/evcp-register";
+    const URL = "http://localhost:5000/auth/register";
     return axios(URL, {
       method: "POST",
       headers: {

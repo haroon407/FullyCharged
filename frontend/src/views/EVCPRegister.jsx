@@ -114,7 +114,7 @@ class EVCPRegister extends Component {
 
   render() {
     return (
-      <div className="content">
+      <div className="content evcpregisterform">
         <nav className="navbar navbar-inverse navbar-fixed-top">
           <div className="container">
             <div className="navbar-header">

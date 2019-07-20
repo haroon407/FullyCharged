@@ -1,137 +1,111 @@
 import React, { Component } from "react";
-import ChartistGraph from "react-chartist";
-import { Grid, Row, Col, Accordion, Button } from "react-bootstrap";
-
+import { createBrowserHistory } from "history";
+import { MDBCol, MDBIcon } from "mdbreact";
+import { Grid, Row, Col, Table, Accordion, Button } from "react-bootstrap";
 import { Card } from "components/Card/Card.jsx";
-import { StatsCard } from "components/StatsCard/StatsCard.jsx";
-import { Tasks } from "components/Tasks/Tasks.jsx";
-import {
-  dataPie,
-  legendPie,
-  dataSales,
-  optionsSales,
-  responsiveSales,
-  legendSales,
-  dataBar,
-  optionsBar,
-  responsiveBar,
-  legendBar
-} from "variables/Variables.jsx";
+import { thArray, tdArray } from "variables/Variables.jsx";
+
+import BookingsService from "../services/bookings.services";
+//import VehicleModelsService from "../services/vehiclemodels.services";
 
 class DashboardEVO extends Component {
+  state = {
+    loading: true
+  };
+  allBookings = [];
+
   constructor(props) {
     super(props);
     this.state = {
-      dashboardEVOObject: [
+      bookingsObject: [
         {
-          booking_id: "101",
-          date: "19-07-2019",
-          time: "15:00 - 16:00",
-          estimated_charge: "20%",
-          estimated_charging_cost: "15.25 Euros",
-          charger_name: "Charger 111",
-          booking_date: "18-07-2019"
-        },
-        {
-          booking_id: "",
-          date: "",
-          time: "",
-          estimated_charge: "",
-          estimated_charging_cost: "",
-          charger_name: "",
-          booking_date: ""
-        },
-        {
-          booking_id: "",
-          date: "",
-          time: "",
-          estimated_charge: "",
-          estimated_charging_cost: "",
-          charger_name: "",
-          booking_date: ""
-        },
-        {
-          booking_id: "",
-          date: "",
-          time: "",
-          estimated_charge: "",
-          estimated_charging_cost: "",
-          charger_name: "",
-          booking_date: ""
-        },
-        {
-          booking_id: "",
-          date: "",
-          time: "",
-          estimated_charge: "",
-          estimated_charging_cost: "",
-          charger_name: "",
-          booking_date: ""
+          used: false, // Used yet - if yes keep the cancel button inactive
+          canceled: false, // Canceled yet - if no make the cancel button active
+          _id: "5d30efc1c0ea4539d815f639", // Booking ID
+          startTime: "2019-07-20T06:00:00.000Z", // Booking time period
+          endTime: "2019-07-20T09:59:59.000Z", // Booking time period
+          chargingUnit: "5d30efc1c0ea4539d815f601", // Charging Unit ID
+          estimatedChargePercentage: 88, // Estimated charge (in %)
+          estimatedChargekWh: 88, // Estimated charge (in kwh)
+          estimatedChargingCost: 29.04, // Estimated charging cost
+          estimatedVolumeFee: 1.452, // Estimated Voulme fee
+          evo: "5d30efc1c0ea4539d815f5e9", // NOT REQUIRED
+          createdAt: "2019-07-18T22:16:33.532Z", // Booked on
+          updatedAt: "2019-07-18T22:16:33.532Z" // Last updated : Is it required?
         }
       ]
     };
   }
 
-  onSubmit(e) {
-    console.log("make query to delete the data from database");
+  componentWillMount() {
+    BookingsService.getAllBookings().then(data => {
+      this.allBookings = data;
+      this.setState({ loading: false });
+    });
   }
+
+  onSearch(){
+    BookingsSerice.get
+
+  }
+
+  onCancel(){
+
+  }
+
+  history = createBrowserHistory();
+
   render() {
+    if (this.loading) {
+      return "Loading...";
+    }
     return (
-      <div className="content">
+      <div className="bookingTable">
         <Grid fluid>
           <Row>
-            <Accordion>
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="0">
-                    Booking ID: 101 Date: 16.07.2019 Time: 14:00 - 14:30
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="0">
-                  <Card.Body>
-                    <h2>Booking ID: 101</h2>
-                    Date: 16.07.2019 Time: 14:00 - 14:30 Estimated charge: 42%
-                    Estimated Charging cost: 8.9 Euros Charger Name: TX2098
-                    Booking Date: 14.07.2019
-                    <Button variant="danger">Cancel Booking</Button>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Booking ID: 201 Date: 17.07.2019 Time: 11:30 - 12:30
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h2>Booking ID: 201</h2>
-                    Date: 17.07.2019 Time: 11:30 - 12:30 Estimated charge: 42%
-                    Estimated Charging cost: 8.9 Euros Charger Name: TX2098
-                    Booking Date: 14.07.2019
-                    <Button variant="danger">Cancel Booking</Button>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-              <Card>
-                <Card.Header>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="1">
-                    Booking ID: 301 Date: 18.07.2019 Time: 11:30 - 12:30
-                  </Accordion.Toggle>
-                </Card.Header>
-                <Accordion.Collapse eventKey="1">
-                  <Card.Body>
-                    <h2>Booking ID: 301</h2>
-                    Date: 18.07.2019 Time: 11:30 - 12:30 Estimated charge: 42%
-                    Estimated Charging cost: 8.9 Euros Charger Name: TX2098
-                    Booking Date: 14.07.2019
-                    <Button variant="danger" type="submit">
-                      Cancel Booking
-                    </Button>
-                  </Card.Body>
-                </Accordion.Collapse>
-              </Card>
-            </Accordion>
+            <Col md={1} className="searchIcon">
+              <MDBIcon icon="search" />
+            </Col>
+            <Col md={4} className="searchBox">
+              <input
+                className="form-control"
+                type="text"
+                placeholder="Search"
+                aria-label="Search"
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={12}>
+              <Card
+                title="Booking Details "
+                category=" Subtitle"
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    <thead>
+                      <tr>
+                        {thArray.map((prop, key) => {
+                          return <th key={key}>{prop}</th>;
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {this.allBookings.map((prop, key) => {
+                        return (
+                          <tr key={key}>
+                            {prop.map((prop, key) => {
+                              return <td key={key}>{JSON.stringify(prop)}</td>;
+                            })}
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </Table>
+                }
+              />
+            </Col>
           </Row>
         </Grid>
       </div>

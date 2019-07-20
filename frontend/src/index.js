@@ -10,18 +10,29 @@ import "./assets/css/demo.css";
 import "./assets/css/website.css";
 import "./assets/css/register.css";
 import "./assets/css/signin.css";
+import "./assets/css/bookings.css";
 import "./assets/css/pe-icon-7-stroke.css";
 
 import AdminLayout from "layouts/Admin.jsx";
 import WebsiteLayout from "layouts/Website.jsx";
 
+import RootContext from "RootContext"; 
+
 ReactDOM.render(
-  <BrowserRouter>
-    <Switch>
-      <Route path="/admin" render={props => <AdminLayout {...props} />} />
-      <Route path="/index" render={props => <WebsiteLayout {...props} />} />
-      <Redirect from="/" to="/index" />
-    </Switch>
-  </BrowserRouter>,
+  <RootContext>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/admin" render={props => <AdminLayout {...props} />} />
+        <Route path="/index" render={props => <WebsiteLayout {...props} />} />
+        <Redirect from="/" to="/index" />
+      </Switch>
+    </BrowserRouter>
+  </RootContext>,
+
+  // <Provider>
+  //   <Consumer>
+  //     <AdminLayout />
+  //   </Consumer>
+  // </Provider>,
   document.getElementById("root")
 );

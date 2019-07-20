@@ -14,14 +14,16 @@ import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
-import { withContext } from "../AppContext";
-
 import UsersService from "../services/users.services";
 
 import avatar from "assets/img/faces/face-3.jpg";
 import { isContext } from "vm";
 
 import axios from "axios";
+
+const StoreContext = React.createContext();
+//here
+//var Global = require("react-global");
 
 class SignIn extends Component {
   constructor(props) {
@@ -53,12 +55,12 @@ class SignIn extends Component {
 
     //Use below line of code
     //this.props.showNotification("success", "Logged in successfully");
-    
+
     //this.props
     //.login(this.state) // calling login function of Context
     // .then(() => this.props.history.push("/index")); //admin/dashboard-evo
 
-    this.clearInputs();
+    //this.clearInputs();
     //{
     /* Add Role based Auth */
     //}
@@ -66,18 +68,20 @@ class SignIn extends Component {
       `The values are ${this.state.email_address} and ${this.state.password}`
     );
 
-    //const obj = {
-    //email: this.state.email,
-    //password: this.state.password
-    //};
-    //axios
-    //.post("http://localhost:5000/backend/sign-in", obj)
-    //.then(res => console.log(res.data));
+    const obj = {
+      email: this.state.email,
+      password: this.state.password
+    };
 
     // calling API here
-    //let result = UsersService.signIn(obj).then(data => {
-    //Context.user = data
-    //});
+
+    // UsersService.signIn(obj)
+    //.then(res => res.json())
+    //.then((data) => {
+    //Global values={{
+    //TOKEN: data.token
+    //}}
+    //})
 
     this.setState({
       email: "",
@@ -169,5 +173,4 @@ class SignIn extends Component {
   }
 }
 
-//export default withContext(SignIn);
 export default SignIn;
