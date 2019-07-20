@@ -1,13 +1,9 @@
 import React, {Component} from "react";
 import ChartistGraph from "react-chartist";
 import { Grid, Row, Col } from "react-bootstrap";
-import avatar from "assets/img/faces/face-3.jpg";
-
 import { Card } from "components/Card/Card.jsx";
-import { StatsCard } from "components/StatsCard/StatsCard.jsx";
 import { TableDetails } from "components/Analytics/TableDetails.jsx";
 import {
-  optionsBar,
   responsiveSales,
   responsiveBar
 } from "variables/Variables.jsx";
@@ -15,10 +11,12 @@ import {
 import AnalyticsService from "../services/analytics.services";
 import AuthService from "../services/auth.services";
 
+
 class Analytics extends Component {
     constructor(props) {
         super(props);
         this.chargerLocations = [];
+
         AnalyticsService.getChargerLocations()
         .then(res => {
           this.chargerLocations = res;
@@ -27,7 +25,7 @@ class Analytics extends Component {
           }
         })
         .catch(err => console.log('There was an error:' + err));
-        AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
+        // AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
         // Initializing state
         this.state = this.getEmptyState();
         this.tableElement = React.createRef();
@@ -157,23 +155,7 @@ class Analytics extends Component {
             />
             </Col>
             </Row>
-
-            <Row>
-            <Col md={12}>
-            <Card
-              title="Details"
-              category={"Address: " + this.state.chargerLocation}
-              content={
-                <div className="table-full-width">
-                  <table className="table">
-                    <TableDetails ref={this.tableElement}/>
-                  </table>
-                </div>
-              }
-            />
-            </Col>
-            </Row>
-
+            <TableDetails ref={this.tableElement}/>
             <Row>
               <Col md={6}>
               <Card

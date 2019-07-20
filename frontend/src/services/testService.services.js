@@ -3,19 +3,26 @@ import HttpService from './HttpService';
 
 class TestServiceClass {
 
-  static baseURL() {return "http://localhost:3001/" }
+  static baseURL() {return "http://localhost:3002/" }
 
-  addLocation(locationObject) {
-      return axios(this.baseURL(), {
-          method: 'POST',
-          headers: {
-              'content-type': 'application/json'
-          },
-          data: locationObject,
-      }).then(response => response.data)
-          .catch(error => {
-              throw error;
-          });
+  getData() {
+    let token = window.localStorage['jwtToken'];
+    console.log("My token: " + token);
+    return HttpService.get(HttpService.apiURL() + '/booking', function onSuccess(res){
+      console.log(res);
+    }, function onError(error){
+      console.log(error);
+    });
+  }
+
+  asd(){
+     return new Promise((resolve, reject) => {
+         HttpService.get(this.baseURL(), function(data) {
+             resolve(data);
+         }, function(textStatus) {
+             reject(textStatus);
+         });
+     });
   }
 
     static testGet(){

@@ -5,7 +5,7 @@ class AnalyticsServiceClass {
 
   getChargerLocations() {
     let token = window.localStorage['jwtToken'];
-    const URL = 'http://localhost:3001/locations/analytics';
+    const URL = HttpService.apiURL() + '/locations/analytics';
     return axios(URL, {
       method: 'GET',
       headers: {
@@ -13,6 +13,7 @@ class AnalyticsServiceClass {
         'Authorization': 'Bearer ' + token
       },
     }).then(response => {
+      console.log(response.data);
       let locations = response.data.locations;
       var locs = [];
       var i;
@@ -23,7 +24,12 @@ class AnalyticsServiceClass {
         }
         locs.push(option);
       }
-      return locs;
+      let overall_option = {
+        id: 0,
+        location: "Overall statistics"
+      }
+      locs.push(overall_option);
+      return locs.reverse();
     }).catch(error => {
       throw error;
     });
@@ -160,34 +166,65 @@ class AnalyticsServiceClass {
   }
 
   getChargerDetails(id) {
+    var URL;
     let token = window.localStorage['jwtToken'];
-    const URL = 'http://localhost:3001/locations/' + id + '/analytics';
-    return axios(URL, {
-      method: 'GET',
-      headers: {
-        'content-type': 'application/json',
-        'Authorization': 'Bearer ' + token
-      },
-    }).then(response => {
-      console.log(response.data);
-      return {
-        selectedLocationId: id,
-        chargerLocation: this.parseLocation(response.data.location),
-        chargerNames: this.parseChargerNames(response.data.location.chargingUnits),
-        chargerLevels: this.parseChargerLevels(response.data.location.chargingUnits),
-        chargerPowers: this.parseChargerPowers(response.data.location.chargingUnits),
-        chargerConnectors: this.parseChargerConnectors(response.data.location.chargingUnits),
-        chargerCosts: this.parseChargerCosts(response.data.location.chargingUnits),
-        chargersBar: {
-          names: this.parseChargerNames(response.data.location.chargingUnits),
-          types: ["info", "danger", "warning"]
+    if (id==0) {
+      URL = HttpService.apiURL() + '/locations/analytics'
+      return axios(URL, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': 'Bearer ' + token
         },
-        dataEnegry: this.parseDataEnergy(response.data.dailyStatistics),
-        dataRevenue: this.parseDataRevenue(response.data.monthlyStatistics),
-        dataBookings: this.parseDataBookings(response.data.dailyStatistics),
-        dataChargeTime: this.parseDataChargeTime(response.data.dailyStatistics)
-      };
-    }).catch(error => { throw error; });
+      }).then(response => {
+        console.log(response.data);
+        return {
+          selectedLocationId: id,
+          chargerLocation: null,
+          chargerNames: null,
+          chargerLevels: null,
+          chargerPowers: null,
+          chargerConnectors: null,
+          chargerCosts: null,
+          chargersBar: {
+            names: null,
+            types: ["info", "danger", "warning"]
+          },
+          dataEnegry: this.parseDataEnergy(response.data.dailyStatistics),
+          dataRevenue: this.parseDataRevenue(response.data.monthlyStatistics),
+          dataBookings: this.parseDataBookings(response.data.dailyStatistics),
+          dataChargeTime: this.parseDataChargeTime(response.data.dailyStatistics)
+        };
+      }).catch(error => { throw error; });
+    } else {
+      URL = HttpService.apiURL() + '/locations/' + id + '/analytics'
+      return axios(URL, {
+        method: 'GET',
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+      }).then(response => {
+        console.log(response.data);
+        return {
+          selectedLocationId: id,
+          chargerLocation: this.parseLocation(response.data.location),
+          chargerNames: this.parseChargerNames(response.data.location.chargingUnits),
+          chargerLevels: this.parseChargerLevels(response.data.location.chargingUnits),
+          chargerPowers: this.parseChargerPowers(response.data.location.chargingUnits),
+          chargerConnectors: this.parseChargerConnectors(response.data.location.chargingUnits),
+          chargerCosts: this.parseChargerCosts(response.data.location.chargingUnits),
+          chargersBar: {
+            names: this.parseChargerNames(response.data.location.chargingUnits),
+            types: ["info", "danger", "warning"]
+          },
+          dataEnegry: this.parseDataEnergy(response.data.dailyStatistics),
+          dataRevenue: this.parseDataRevenue(response.data.monthlyStatistics),
+          dataBookings: this.parseDataBookings(response.data.dailyStatistics),
+          dataChargeTime: this.parseDataChargeTime(response.data.dailyStatistics)
+        };
+      }).catch(error => { throw error; });
+    }
   }
 
 

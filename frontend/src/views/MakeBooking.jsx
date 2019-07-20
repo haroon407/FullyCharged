@@ -13,6 +13,7 @@ import avatar from "assets/img/faces/face-3.jpg";
 
 import MakeBookingService from "../services/makeBooking.services";
 import AuthService from "../services/auth.services";
+import TestService from "../services/testService.services";
 
 class MakeBooking extends Component {
     constructor(props) {
@@ -24,6 +25,14 @@ class MakeBooking extends Component {
             {id: 3, chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
             {id: 4, chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
         ];
+        //mirzet.brkic@tum.de
+        //greenenergy@tum.de
+        //pa$$w0rd
+        //messi@tum.de
+        //petuh2@gmail.com
+        //test2012ktl
+        AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
+        // AuthService.loginUser('mirzet.brkic@tum.de', 'pa$$w0rd');
         // this.chargerTypes = MakeBookingService.getChargers()
         // .then(res => {
         //   this.chargerTypes = res;
@@ -36,13 +45,15 @@ class MakeBooking extends Component {
         // AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
 
 
-        MakeBookingService.testFunc()
-        .then(res => {
-          console.log("Succ");
-          console.log(res);
-        })
-        .catch(err => console.log('There was an error:' + err));
-        
+
+
+        // MakeBookingService.testFunc()
+        // .then(res => {
+        //   console.log("Succ");
+        //   console.log(res);
+        // })
+        // .catch(err => console.log('There was an error:' + err));
+
 
         this.bookNow = this.bookNow.bind(this);
         this.cancel = this.cancel.bind(this);
@@ -88,6 +99,11 @@ class MakeBooking extends Component {
 
     cancel(event){
       // TEST MODE
+      // MakeBookingService.getData();
+      MakeBookingService.getData().then(res => {
+        console.log(res);
+      }).catch(err => console.log('There was an error:' + err));
+
       event.preventDefault();
       // AuthService.loginUser('greenenergy@tum.de', 'pa$$w0rd');
       // AuthService.registerUser('Sasalka', 'sasi@mail.com', 'pa$$w0rd', 'EVCP');
@@ -178,6 +194,18 @@ class MakeBooking extends Component {
                                                 }
                                             ]}
                                         />
+                                        <FormInputs
+                                            ncols={["col-md-12"]}
+                                            properties={[
+                                                {
+                                                    label: "Date",
+                                                    type: "text",
+                                                    bsClass: "form-control",
+                                                    value: this.state.volumeFee,
+                                                    disabled: true
+                                                }
+                                            ]}
+                                        />
                                         <label htmlFor="chargerType">Charger Type</label>
                                         <select className="form-control" >
                                             {
@@ -187,30 +215,28 @@ class MakeBooking extends Component {
                                             }
                                         </select>
                                         <FormInputs
-                                            ncols={["col-md-12"]}
+                                            ncols={["col-md-6", "col-md-6"]}
                                             properties={[
                                                 {
-                                                    name: "date",
-                                                    label: "Date",
-                                                    type: "date",
-                                                    value: this.state.date,
-                                                    bsClass: "form-control",
-                                                    onChange: this.handleInputChange
-                                                }
-
-                                            ]}
-                                        />
-                                        <FormInputs
-                                            ncols={["col-md-12"]}
-                                            properties={[
-                                                {
-                                                    name: "time",
-                                                    label: "Time",
+                                                    label: "Start time",
                                                     type: "text",
                                                     bsClass: "form-control",
-                                                    value: this.state.time,
-                                                    name: "street",
-                                                    onChange: this.handleInputChange
+                                                    placeholder: "10.00",
+                                                    value: this.state.address.city,
+                                                    name: "city",
+                                                    onChange: this.handleInputChange,
+                                                    required: true,
+                                                    disabled: true
+                                                },
+                                                {
+                                                    label: "Finish time",
+                                                    type: "text",
+                                                    bsClass: "form-control",
+                                                    placeholder: "12.00",
+                                                    value: this.state.address.state,
+                                                    name: "state",
+                                                    onChange: this.handleInputChange,
+                                                    required: true
                                                 }
                                             ]}
                                         />

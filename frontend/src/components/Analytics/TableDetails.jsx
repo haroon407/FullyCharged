@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Tooltip, OverlayTrigger } from "react-bootstrap";
+import { Grid, Row, Col } from "react-bootstrap";
+import { Card } from "components/Card/Card.jsx";
 
 export class TableDetails extends Component {
 
@@ -20,6 +22,7 @@ export class TableDetails extends Component {
   updateTable(res){
 
     this.setState({
+        chargerLocation: res.chargerLocation,
         chargerNames: res.chargerNames,
         chargerLevels: res.chargerLevels,
         chargerPowers: res.chargerPowers,
@@ -42,18 +45,36 @@ export class TableDetails extends Component {
           </tr>
         );
       }
+      return <Row>
+      <Col md={12}>
+      <Card
+        title="Details"
+        category={"Address: " + this.state.chargerLocation}
+        content={
+          <div className="table-full-width">
+            <table className="table">
+            <tbody>
+            <tr>
+              <td><b>Name</b></td>
+              <td><b>Level</b></td>
+              <td><b>Power</b></td>
+              <td><b>Connector</b></td>
+              <td><b>Cost</b></td>
+            </tr>
+            {tasks}
+            </tbody>
+            </table>
+          </div>
+        }
+      />
+      </Col>
+      </Row>;
+    } else {
+      return null;
     }
-    return <tbody>
-    <tr>
-      <td><b>Name</b></td>
-      <td><b>Level</b></td>
-      <td><b>Power</b></td>
-      <td><b>Connector</b></td>
-      <td><b>Cost</b></td>
-    </tr>
-    {tasks}
-    </tbody>;
   }
 }
+
+
 
 export default TableDetails;

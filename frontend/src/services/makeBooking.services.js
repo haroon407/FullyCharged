@@ -3,6 +3,34 @@ import HttpService from '../services/HttpService';
 
 class MakeBookingServiceClass {
 
+  getData() {
+    let token = window.localStorage['jwtToken'];
+    console.log("Searching..");
+    const URL = 'http://localhost:3002/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-21&startTime=10&price=0.34';
+    return axios(URL, {
+      method: 'GET',
+      headers: {
+        'content-type': 'application/json',
+        'Authorization': 'Bearer ' + token
+      },
+    }).then(response => {
+      console.log("Retrieved: " + response);
+      return response.data;
+    }).catch(error => {
+      console.log("Error: " + error);
+      throw error;
+    });
+  }
+
+  getBookingInformation() {
+    let token = window.localStorage['jwtToken'];
+    console.log("My token: " + token);
+    return HttpService.get(HttpService.apiURL() + '/location/analytics', function onSuccess(res){
+      console.log(res);
+    }, function onError(error){
+      console.log(error);
+    });
+  }
 
   getChargers() {
     let token = window.localStorage['jwtToken'];
@@ -51,7 +79,7 @@ class MakeBookingServiceClass {
     // return null;
     let token = window.localStorage['jwtToken'];
     //5d307313f7d3a906618b3a49/
-    const URL = 'http://localhost:3001/locations/analytics';
+    const URL = 'http://localhost:3002/locations/analytics';
     return axios(URL, {
       method: 'GET',
       headers: {
@@ -65,23 +93,22 @@ class MakeBookingServiceClass {
     });
   }
 
-  callnext(token_val){
+  callnext(){
+    let token = window.localStorage['jwtToken'];
     var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://localhost:3001/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-15&startTime=10&price=0.34', true);
+    xhr.open("GET", 'http://localhost:3002/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-15&startTime=10&price=0.3', true);
     xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token_val);
+    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
     xhr.onload = function() {
       console.log("HELLO2")
       console.log(this.responseText);
       var data = JSON.parse(this.responseText);
       console.log(data);
-    }
-    console.log("Here: ");
-    return null;
+    };
   }
 
     makeBooking(id) {
-        const URL = 'http://localhost:3001';
+        const URL = 'http://localhost:3002';
         return axios(URL, {
             method: 'GET',
             headers: {
@@ -96,7 +123,7 @@ class MakeBookingServiceClass {
     }
 
     calculateCost(id) {
-        const URL = 'http://localhost:3001';
+        const URL = 'http://localhost:3002';
         return axios(URL, {
             method: 'GET',
             headers: {
@@ -111,7 +138,7 @@ class MakeBookingServiceClass {
     }
 
     getChargers2() {
-        const URL = 'http://localhost:3001';
+        const URL = 'http://localhost:3002';
         return axios(URL, {
             method: 'GET',
             headers: {

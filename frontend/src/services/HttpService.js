@@ -2,7 +2,7 @@ export default class HttpService {
     constructor() {
     }
 
-    static apiURL() {return "http://localhost:3001"; }
+    static apiURL() {return "http://localhost:3002"; }
 
     static get(url, onSuccess, onError) {
         let token = window.localStorage['jwtToken'];
