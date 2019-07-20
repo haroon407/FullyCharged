@@ -326,18 +326,17 @@ class AddLocation extends Component {
                                             <Col md={12}>
                                                 <label>Charging Units</label>
                                                 {this.state.locationObject.chargingUnits.map((value, index) => {
-                                                    return <div className="row charging-units">
-                                                        <div className={"col-md-8"}
-                                                             key={value._id}>{value.name + ' ' + value.charger.type.connector}</div>
-                                                        <div className={"col-md-4"}>
+                                                    return <div key={index} className="row charging-units">
+                                                        <div key={index+1}
+                                                            className={"col-md-8"}>{value.name + ' ' + value.charger.type.connector}</div>
+                                                        <div key={index+2} className={"col-md-4"}>
                                                             {this.updateLocationMode &&
-                                                            <button
+                                                            <button key={index+3}
                                                                 className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
-                                                                pullRight fill>Update
+                                                                >Update
                                                             </button>}
-                                                            <button
+                                                            <button key={index+4}
                                                                 className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
-                                                                pullRight fill
                                                                 onClick={(e) => this.onDeleteItem(e, index)}>Delete
                                                             </button>
                                                         </div>
