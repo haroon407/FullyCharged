@@ -12,26 +12,24 @@ import Button from "components/CustomButton/CustomButton.jsx";
 import ChargingLocationService from "../services/chargingLocation.services";
 
 class AddLocation extends Component {
+    state = {
+        loading: true
+    };
+    chargerTypes = [];
     updateLocationMode = false;
     preLoadedLocation;
+
     constructor(props) {
         super(props);
         // If update location, fetch state object
-        if(props.match.path === '/admin/update/location') {
+        if (props.match.path === '/admin/update/location') {
             this.preLoadedLocation = props.location.location.state;
             this.updateLocationMode = true;
         }
 
-        this.chargerTypes = [
-            {chargingLevel: 1, power: 7.4, connector: "Type 1 plug"},
-            {chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-            {chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-            {chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
-        ];
-
-        if(!this.updateLocationMode){
+        if (!this.updateLocationMode) {
             this.state = {
-                locationObject : {
+                locationObject: {
                     name: "",
                     address: {
                         street: "",
@@ -42,13 +40,15 @@ class AddLocation extends Component {
                     },
                     chargingUnits: [],
                     enabled: true,
+                    deleted: false,
                     basicBookingFee: 0.14,
-                    cancellationTimeout: 0
+                    cancellationTimeout: 0,
+                    owner: "5d2fb5270c8c3c33abfb0e72"
                 }
-            };
+            }
         } else {
             this.state = {
-                locationObject : this.preLoadedLocation
+                locationObject: this.preLoadedLocation
             }
         }
         this.state.chargingUnitObj = {
@@ -65,6 +65,13 @@ class AddLocation extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     };
+
+    componentWillMount() {
+        ChargingLocationService.getChargerTypes().then((data) => {
+            this.chargerTypes = data;
+            this.setState({loading: false});
+        });
+    }
 
     handleInputChange(event) {
         const target = event.target;
@@ -114,7 +121,11 @@ class AddLocation extends Component {
         this.props.showNotification('success', 'Location added successfully');
         alert('A form was submitted: ' + this.state);
         // Call the API function
-        // ChargingLocationService.addLocation();
+        ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+            this.props.showNotification('success', 'Added successfully');
+        }).catch((err) => {
+            this.props.showNotification('error', 'Error while adding location');
+        });
         event.preventDefault();
     }
 
@@ -158,6 +169,9 @@ class AddLocation extends Component {
     };
 
     render() {
+        if (this.loading) {
+            return 'Loading...'
+        }
         return (
             <div className="content">
                 <Grid fluid>
@@ -286,11 +300,11 @@ class AddLocation extends Component {
                                                         <div className={"col-md-8"}
                                                              key={index}>{value.name + ' ' + value.chargerType.connector}</div>
                                                         <div className={"col-md-4"}>
-                                                            {this.updateLocationMode && 
+                                                            {this.updateLocationMode &&
                                                             <button
-                                                            className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
-                                                            pullRight fill>Update
-                                                        </button>}
+                                                                className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
+                                                                pullRight fill>Update
+                                                            </button>}
                                                             <button
                                                                 className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
                                                                 pullRight fill
@@ -301,14 +315,15 @@ class AddLocation extends Component {
                                                 })}
                                             </Col>
                                         </Row>
-                                        { this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
+                                        {this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
                                             Update Charging Location
                                         </Button>}
 
-                                        { !this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
+                                        {!this.updateLocationMode &&
+                                        <Button bsStyle="info" pullRight fill type="submit">
                                             Add Charging Location
                                         </Button>}
-                                        
+
                                         <div className="clearfix"/>
                                     </form>
                                 }
