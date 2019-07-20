@@ -10,6 +10,9 @@ import {FormInputs} from "components/FormInputs/FormInputs.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
 import ChargingLocationService from "../services/chargingLocation.services";
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyDOw9FX8co2j1vwXyQehJID7ZCf9ccnttU");
 
 class AddLocation extends Component {
     state = {
@@ -65,7 +68,7 @@ class AddLocation extends Component {
         };
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        // this.handleSubmit = this.handleSubmit.bind(this);
     };
 
     componentWillMount() {
@@ -98,12 +101,11 @@ class AddLocation extends Component {
                 });
             } else if (name === 'charger') {
                 this.setState(prevState => {
-                    debugger;
                     let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
                     chargingUnitObj.charger.type = JSON.parse(value); // Parsing string value back to object
                     return {chargingUnitObj}
                 });
-            }else if (name === 'power') {
+            } else if (name === 'power') {
                 this.setState(prevState => {
                     let chargingUnitObj = Object.assign({}, prevState.chargingUnitObj);
                     chargingUnitObj.charger.power = value; // Parsing string value back to object
@@ -126,15 +128,33 @@ class AddLocation extends Component {
         }
     }
 
-    handleSubmit(event) {
-        debugger;
-        // Call the API function
-        ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
-            this.props.showNotification('success', 'Added successfully');
-        }).catch((err) => {
-            this.props.showNotification('error', 'Error while adding location');
-        });
-        event.preventDefault();
+    saveLocation(event) {
+        let addressString = this.state.locationObject.address.street +
+            ', ' + this.state.locationObject.address.postalCode + ', ' + this.state.locationObject.address.city;
+        Geocode.fromAddress(addressString).then(
+            (response) => {
+                debugger;
+                const geoCodes = response.results[0].geometry.location;
+                let geoPoint = {
+                    type: 'Point',
+                    coordinates: [geoCodes.lat, geoCodes.lng]
+                };
+                // Setting geopoints
+                this.state.locationObject.geoPoint = geoPoint;
+                debugger;
+                // Call the API function
+                ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+                    debugger;
+                    this.props.showNotification('success', 'Added successfully');
+                }).catch((err) => {
+                    this.props.showNotification('error', 'Error while adding location');
+                });
+                event.preventDefault();
+            },
+            (error) => {
+                this.props.showNotification('error', 'Cannot find entered address on map, please enter correct address');
+            }
+        );
     }
 
     onAddItem = () => {
@@ -330,7 +350,8 @@ class AddLocation extends Component {
                                         </Button>}
 
                                         {!this.updateLocationMode &&
-                                        <Button bsStyle="info" pullRight fill type="submit">
+                                        <Button bsStyle="info" pullRight fill type="button"
+                                                onClick={(e) => this.saveLocation(e)}>
                                             Add Charging Location
                                         </Button>}
 
