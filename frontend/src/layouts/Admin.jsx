@@ -7,10 +7,17 @@ import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 import {style} from "variables/Variables.jsx";
 import routes from "routes.js";
+import config from 'react-global-configuration';
+
 
 class Admin extends Component {
+    user = {}
     constructor(props) {
         super(props);
+        // this.user = config.get('user');
+        // config.set({
+        //     user: {}
+        // });
         this.state = {
             _notificationSystem: null,
             // image: image,
