@@ -133,7 +133,6 @@ class AddLocation extends Component {
             ', ' + this.state.locationObject.address.postalCode + ', ' + this.state.locationObject.address.city;
         Geocode.fromAddress(addressString).then(
             (response) => {
-                debugger;
                 const geoCodes = response.results[0].geometry.location;
                 let geoPoint = {
                     type: 'Point',
@@ -141,10 +140,8 @@ class AddLocation extends Component {
                 };
                 // Setting geopoints
                 this.state.locationObject.geoPoint = geoPoint;
-                debugger;
                 // Call the API function
                 ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
-                    debugger;
                     this.props.showNotification('success', 'Added successfully');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while adding location');
