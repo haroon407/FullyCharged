@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2a605533-ff52-4235-85de-0c93f1ba9837" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/layouts/Admin.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/layouts/Admin.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/chargingLocation.services.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/chargingLocation.services.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/AddLocation.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/AddLocation.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/views/Website.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/Website.jsx" afterDir="false" />
-    </list>
+    <list default="true" id="2a605533-ff52-4235-85de-0c93f1ba9837" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
