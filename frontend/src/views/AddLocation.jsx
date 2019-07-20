@@ -74,6 +74,26 @@ class AddLocation extends Component {
     componentWillMount() {
         ChargingLocationService.getChargerTypes().then((data) => {
             this.chargerTypes = data;
+            this.setState((prevState) => {
+                let chargingUnitObj = {...prevState.chargingUnitObj}
+                if (data.length > 0) {
+                    chargingUnitObj.charger.type = data[0];
+                    chargingUnitObj.charger.power = 0;
+                    return {
+                        chargingUnitObj,
+                    }
+                }
+            });
+
+            if (this.updateLocationMode) {
+                this.setTypesOfPreloadedChargingUnits();
+                this.setState((() => {
+                    const locationObject = this.preLoadedLocation;
+                    return {
+                        locationObject,
+                    }
+                }))
+            }
             this.setState({loading: false});
         });
     }
@@ -128,6 +148,41 @@ class AddLocation extends Component {
         }
     }
 
+    onAddItem = () => {
+        this.setState(state => {
+            if (state.chargingUnitObj.name === '') {
+                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
+            }
+            const chargingUnits = [...state.locationObject.chargingUnits, Object.assign({}, state.chargingUnitObj)];
+            let locationObject = Object.assign({}, state.locationObject);
+            locationObject.chargingUnits = chargingUnits;
+            let chargingUnitObj = Object.assign({}, state.chargingUnitObj);
+            if (this.chargerTypes.length > 0) {
+                chargingUnitObj.name = '';
+                chargingUnitObj.energyPrice = 0;
+                chargingUnitObj.charger.type = this.chargerTypes[0];
+                chargingUnitObj.charger.power = 0;
+            }
+            return {
+                locationObject,
+                chargingUnitObj
+            };
+        });
+        document.getElementById('chargerTypeSelect').selectedIndex = "0";
+    };
+
+    onDeleteItem = (e, index) => {
+        this.setState(state => {
+            let chargingUnits = [...state.locationObject.chargingUnits];
+            let locationObject = Object.assign({}, state.locationObject);
+            chargingUnits[index].deleted = true;
+            locationObject.chargingUnits = chargingUnits;
+            return {
+                locationObject,
+            };
+        });
+    };
+
     saveLocation(event) {
         let addressString = this.state.locationObject.address.street +
             ', ' + this.state.locationObject.address.postalCode + ', ' + this.state.locationObject.address.city;
@@ -146,7 +201,31 @@ class AddLocation extends Component {
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while adding location');
                 });
-                event.preventDefault();
+            },
+            (error) => {
+                this.props.showNotification('error', 'Cannot find entered address on map, please enter correct address');
+            }
+        );
+    };
+
+    updateLocation(event) {
+        let addressString = this.state.locationObject.address.street +
+            ', ' + this.state.locationObject.address.postalCode + ', ' + this.state.locationObject.address.city;
+        Geocode.fromAddress(addressString).then(
+            (response) => {
+                const geoCodes = response.results[0].geometry.location;
+                let geoPoint = {
+                    type: 'Point',
+                    coordinates: [geoCodes.lat, geoCodes.lng]
+                };
+                // Setting geopoints
+                this.state.locationObject.geoPoint = geoPoint;
+                // Call the API function
+                ChargingLocationService.updateLocation(this.state.locationObject).then((data) => {
+                    this.props.showNotification('success', 'Updated successfully');
+                }).catch((err) => {
+                    this.props.showNotification('error', 'Error while updating location');
+                });
             },
             (error) => {
                 this.props.showNotification('error', 'Cannot find entered address on map, please enter correct address');
@@ -154,46 +233,18 @@ class AddLocation extends Component {
         );
     }
 
-    onAddItem = () => {
-        this.setState(state => {
-            if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
-            }
-            const chargingUnits = [...state.locationObject.chargingUnits, state.chargingUnitObj];
-            let locationObject = Object.assign({}, state.locationObject);
-            locationObject.chargingUnits = chargingUnits;
-            const chargingUnitObj = {
-                name: "",
-                enabled: true,
-                energyPrice: 0.0,
-                charger: {
-                    power: 0,
-                    type: {
-                        chargingLevel: 0,
-                        connector: ""
-                    }
-                }
-            };
-            return {
-                locationObject,
-                chargingUnitObj
-            };
-        });
-        document.getElementById('chargerTypeSelect').selectedIndex = "0";
-    };
+    setTypesOfPreloadedChargingUnits() {
+        this.preLoadedLocation.chargingUnits.forEach((chargingUnit) => {
+            let indexOfChargerType = this.getChargingUnitTypeFromId(chargingUnit.charger.type);
+            chargingUnit.charger.type = this.chargerTypes[indexOfChargerType];
+        })
+    }
 
-    onDeleteItem = (e, index) => {
-        this.setState(state => {
-            let chargingUnits = [...state.locationObject.chargingUnits];
-            let locationObject = Object.assign({}, state.locationObject);
-            chargingUnits.splice(index, 1);
-            locationObject.chargingUnits = chargingUnits;
-            return {
-                locationObject,
-            };
+    getChargingUnitTypeFromId(lookupId) {
+        return this.chargerTypes.findIndex((chargerType) => {
+            return chargerType._id === lookupId
         });
-        e.preventDefault(); // Prevents form from auto submitting
-    };
+    }
 
     render() {
         if (this.loading) {
@@ -323,25 +374,25 @@ class AddLocation extends Component {
                                             <Col md={12}>
                                                 <label>Charging Units</label>
                                                 {this.state.locationObject.chargingUnits.map((value, index) => {
-                                                    return <div key={index} className="row charging-units">
-                                                        <div key={index+1}
-                                                            className={"col-md-8"}>{value.name + ' ' + value.charger.type.connector}</div>
-                                                        <div key={index+2} className={"col-md-4"}>
-                                                            {this.updateLocationMode &&
-                                                            <button key={index+3}
-                                                                className="btn-xs btn-info btn-text-white btn-margin-15 btn-position"
-                                                                >Update
-                                                            </button>}
-                                                            <button key={index+4}
-                                                                className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
-                                                                onClick={(e) => this.onDeleteItem(e, index)}>Delete
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                    {
+                                                        return !value.deleted &&
+                                                            <div key={index} className="row charging-units">
+                                                                <div key={index + 1}
+                                                                     className={"col-md-8"}>{value.name + ' ' + value.charger.type.connector}</div>
+                                                                <div key={index + 2} className={"col-md-1"}></div>
+                                                                <div key={index + 3} className={"col-md-3"}>
+                                                                    <button key={index + 4}
+                                                                            className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
+                                                                            onClick={(e) => this.onDeleteItem(e, index)}>Delete
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                    }
                                                 })}
                                             </Col>
                                         </Row>
-                                        {this.updateLocationMode && <Button bsStyle="info" pullRight fill type="submit">
+                                        {this.updateLocationMode && <Button bsStyle="info" pullRight fill type="button"
+                                                                            onClick={(e) => this.updateLocation(e)}>
                                             Update Charging Location
                                         </Button>}
 
@@ -359,7 +410,7 @@ class AddLocation extends Component {
 
                         <Col md={6}>
                             <Card
-                                title="Add/Edit Charging Unit"
+                                title="Add Charging Unit"
                                 content={
                                     <form>
                                         <FormInputs id="charging-unit"
@@ -420,7 +471,7 @@ class AddLocation extends Component {
                                         <Button name="charging_unit_form" style={{marginRight: '15px'}} bsStyle="info"
                                                 pullRight fill type="button"
                                                 onClick={this.onAddItem}>
-                                            Add/Update Charging unit
+                                            Add Charging unit
                                         </Button>
                                         <div className="clearfix"/>
                                     </form>

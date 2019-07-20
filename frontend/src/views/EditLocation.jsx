@@ -15,120 +15,15 @@ class EditLocation extends Component {
         loading: true,
         locations: []
     };
+    owner = "5d2fb5270c8c3c33abfb0e72";
     constructor(props) {
         super(props);
-        // this.state = {
-        //     locations: [
-        //         {
-        //             _id: '1132',
-        //             name: "A location 1",
-        //             address: {
-        //                 street: "xyz",
-        //                 city: "Munich",
-        //                 state: "Bavaria",
-        //                 postalCode: 12345,
-        //                 country: "Deutschland"
-        //             },
-        //             chargingUnits: [{
-        //                 name: "unit 1",
-        //                 enabled: true,
-        //                 energyPrice: 0.4,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 1',
-        //                     power: 220,
-        //                     connector: "ADC"
-        //                 }
-        //             },
-        //             {
-        //                 name: "unit 2",
-        //                 enabled: true,
-        //                 energyPrice: 0.5,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 3',
-        //                     power: 420,
-        //                     connector: "ADC Super"
-        //                 }
-        //             }],
-        //             enabled: true,
-        //             basicBookingFee: 0.34,
-        //             cancellationTimeout: 120
-        //         },
-        //         {
-        //             _id: '13123',
-        //             name: "A location 2",
-        //             address: {
-        //                 street: "asdas",
-        //                 city: "Berlin",
-        //                 state: "Berlin state",
-        //                 postalCode: 12312,
-        //                 country: "Deutschland"
-        //             },
-        //             chargingUnits: [{
-        //                 name: "unit 3",
-        //                 enabled: true,
-        //                 energyPrice: 0.4,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 2',
-        //                     power: 220,
-        //                     connector: "Some level 2"
-        //                 }
-        //             },
-        //             {
-        //                 name: "unit 4",
-        //                 enabled: true,
-        //                 energyPrice: 0.5,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 1',
-        //                     power: 420,
-        //                     connector: "JKH common"
-        //                 }
-        //             }],
-        //             enabled: true,
-        //             basicBookingFee: 0.24,
-        //             cancellationTimeout: 120
-        //         },
-        //         {
-        //             _id: '432434',
-        //             name: "A location 3",
-        //             address: {
-        //                 street: "xyz",
-        //                 city: "Cologne",
-        //                 state: "Cologne state",
-        //                 postalCode: 4535,
-        //                 country: "Deutschland"
-        //             },
-        //             chargingUnits: [{
-        //                 name: "unit 5",
-        //                 enabled: true,
-        //                 energyPrice: 0.4,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 4',
-        //                     power: 220,
-        //                     connector: "ADC asdsd"
-        //                 }
-        //             },
-        //             {
-        //                 name: "unit 6",
-        //                 enabled: true,
-        //                 energyPrice: 0.5,
-        //                 chargerType: {
-        //                     chargingLevel: 'level 5',
-        //                     power: 420,
-        //                     connector: "ADC Super asd"
-        //                 }
-        //             }],
-        //             enabled: true,
-        //             basicBookingFee: 0.24,
-        //             cancellationTimeout: 20
-        //         }
-        //     ]
-        // };
     };
 
     history = createBrowserHistory();
 
     componentWillMount() {
-        ChargingLocationService.getAllLocations().then((data) => {
+        ChargingLocationService.getAllLocations(this.owner).then((data) => {
             this.setState(()=>{
                 const locations = data;
                 return {
