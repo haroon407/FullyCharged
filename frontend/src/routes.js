@@ -1,13 +1,7 @@
-import Dashboard from "views/Dashboard.jsx";
 import AddLocation from "views/AddLocation";
+import EditLocation from "views/EditLocation";
 import MakeBooking from "views/MakeBooking";
 import Analytics from "views/Analytics";
-import UserProfile from "views/UserProfile.jsx";
-import TableList from "views/TableList.jsx";
-import Typography from "views/Typography.jsx";
-import Icons from "views/Icons.jsx";
-import Maps from "views/Maps.jsx";
-import Notifications from "views/Notifications.jsx";
 import Website from "views/Website";
 
 const dashboardRoutes = [
@@ -16,20 +10,21 @@ const dashboardRoutes = [
         name: "Landing Page",
         icon: "pe-7s-graph",
         component: Website,
-        layout: "/index"
-    },
-    {
-        path: "/dashboard",
-        name: "Dashboard",
-        icon: "pe-7s-graph",
-        component: Dashboard,
-        layout: "/admin"
+        layout: "/index",
+        noSideNav: true
     },
     {
         path: "/add/location",
         name: "Add Location",
         icon: "pe-7s-plus",
         component: AddLocation,
+        layout: "/admin"
+    },
+    {
+        path: "/edit/location",
+        name: "Edit Location",
+        icon: "pe-7s-pen",
+        component: EditLocation,
         layout: "/admin"
     },
     {
@@ -47,46 +42,12 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/user",
-        name: "User Profile",
-        icon: "pe-7s-user",
-        component: UserProfile,
-        layout: "/admin"
-    },
-    {
-        path: "/table",
-        name: "Table List",
-        icon: "pe-7s-note2",
-        component: TableList,
-        layout: "/admin"
-    },
-    {
-        path: "/typography",
-        name: "Typography",
-        icon: "pe-7s-news-paper",
-        component: Typography,
-        layout: "/admin"
-    },
-    {
-        path: "/icons",
-        name: "Icons",
-        icon: "pe-7s-science",
-        component: Icons,
-        layout: "/admin"
-    },
-    {
-        path: "/maps",
-        name: "Maps",
-        icon: "pe-7s-map-marker",
-        component: Maps,
-        layout: "/admin"
-    },
-    {
-        path: "/notifications",
-        name: "Notifications",
-        icon: "pe-7s-bell",
-        component: Notifications,
-        layout: "/admin"
+        path: "/update/location",
+        name: "Edit Location",
+        icon: "pe-7s-plus",
+        component: AddLocation,
+        layout: "/admin",
+        noSideNav: true
     }
 ];
 

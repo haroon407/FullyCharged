@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {MenuItem, Nav, NavDropdown, NavItem} from "react-bootstrap";
+import {MenuItem, NavDropdown, NavItem} from "react-bootstrap";
 import logo from "assets/img/logo.png";
 
 class Website extends Component {

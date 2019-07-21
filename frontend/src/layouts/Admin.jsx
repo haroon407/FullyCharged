@@ -5,14 +5,11 @@ import NotificationSystem from "react-notification-system";
 import AdminNavbar from "components/Navbars/AdminNavbar";
 import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
-
 import {style} from "variables/Variables.jsx";
-
 import routes from "routes.js";
 
-import image from "assets/img/sidebar-3.jpg";
-
 class Admin extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -25,38 +22,20 @@ class Admin extends Component {
         };
     }
 
-    handleNotificationClick = position => {
-        var color = Math.floor(Math.random() * 4 + 1);
-        var level;
-        switch (color) {
-            case 1:
-                level = "success";
-                break;
-            case 2:
-                level = "warning";
-                break;
-            case 3:
-                level = "error";
-                break;
-            case 4:
-                level = "info";
-                break;
-            default:
-                break;
-        }
+    showNotification = (level, message) => {
         this.state._notificationSystem.addNotification({
-            title: <span data-notify="icon" className="pe-7s-gift"/>,
+            title: <span data-notify="icon" className="pe-7s-info"/>,
             message: (
                 <div>
-                    Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-                    every web developer.
+                    {message}
                 </div>
             ),
             level: level,
-            position: position,
+            position: 'tr',
             autoDismiss: 15
         });
     };
+
     getRoutes = routes => {
         return routes.map((prop, key) => {
             if (prop.layout === "/admin") {
@@ -66,7 +45,7 @@ class Admin extends Component {
                         render={props => (
                             <prop.component
                                 {...props}
-                                handleClick={this.handleNotificationClick}
+                                showNotification={this.showNotification}
                             />
                         )}
                         key={key}
@@ -111,18 +90,6 @@ class Admin extends Component {
             default:
                 break;
         }
-        _notificationSystem.addNotification({
-            title: <span data-notify="icon" className="pe-7s-gift"/>,
-            message: (
-                <div>
-                    Welcome to <b>Light Bootstrap Dashboard</b> - a beautiful freebie for
-                    every web developer.
-                </div>
-            ),
-            level: level,
-            position: "tr",
-            autoDismiss: 15
-        });
     }
 
     componentDidUpdate(e) {

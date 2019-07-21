@@ -57,9 +57,11 @@ class Website extends Component {
 
     render() {
         return (
-            <div className="wrapper">
+            <div>
+                <div className="wrapper">
                 <Switch>{this.getRoutes(routes)}</Switch>
-                <Footer/>
+            </div>
+            <Footer/>
             </div>
         );
     }
