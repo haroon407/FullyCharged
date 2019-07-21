@@ -3,10 +3,52 @@ import HttpService from '../services/HttpService';
 
 class MakeBookingServiceClass {
 
+  parseLocation(data){
+    let location = data.address.street + ", " + data.address.postalCode + ", " +
+    data.address.city + ", " + data.address.state + ", " + data.address.country
+    return location;
+  }
+
+  parseChargers(data){
+    let result = [];
+    var i;
+    for (i=0; i<data.chargingUnits.length; i++){
+      if (true){
+      // if (data.chargingUnits[i].status === "OK"){
+        let charger = {
+          id: data.chargingUnits[i]._id,
+          basicBookingFee: data.basicBookingFee,
+          maxAvailabilityHours: data.chargingUnits[i].maxDuration,
+          power: data.chargingUnits[i].charger.power,
+          cost: data.chargingUnits[i].energyPrice,
+          charger: data.chargingUnits[i].name + " | " + data.chargingUnits[i].charger.power + "kW | " + data.chargingUnits[i].energyPrice + " €"
+        }
+        result.push(charger);
+      }
+    }
+    return result;
+  }
+
+  getCostDetails(charger, hours, user) {
+    let estimatedCharge = (Math.round(Math.min(hours * charger.power, user.vehicleModel.batteryCapacity) * 100) / 100);
+    let basicBookingFee = (charger.basicBookingFee);
+    let estimatedChargingCost = (Math.round(estimatedCharge * charger.cost * 100) / 100);
+    let volumeFee = (Math.round(((estimatedChargingCost * user.volumeFeePrecentage) / 100) * 100) / 100);
+    let estimatedTotalCost = (basicBookingFee + estimatedChargingCost + volumeFee).toFixed(2);
+    let result = {
+      estimatedCharge: estimatedCharge,
+      basicBookingFee: basicBookingFee,
+      estimatedChargingCost: estimatedChargingCost,
+      volumeFee: volumeFee,
+      estimatedTotalCost: estimatedTotalCost
+    };
+    return result;
+  }
+
   getData() {
     let token = window.localStorage['jwtToken'];
     console.log("Searching..");
-    const URL = 'http://localhost:3002/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-21&startTime=10&price=0.34';
+    const URL = HttpService.apiURL() + '/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-21&startTime=10&price=0.34';
     return axios(URL, {
       method: 'GET',
       headers: {
@@ -14,72 +56,30 @@ class MakeBookingServiceClass {
         'Authorization': 'Bearer ' + token
       },
     }).then(response => {
-      console.log("Retrieved: " + response);
-      return response.data;
+      let data = response.data[0];
+      console.log(data);
+      let location = this.parseLocation(data);
+      let date = "TODO: Get date";
+      let startTime = "TODO: Get available start time";
+      let chargers = this.parseChargers(data);
+      // TODO: Get first element
+      let result = {
+        chargingLocation: location,
+        chargerTypes: chargers,
+        date: date,
+        startTime: startTime,
+        defaultHours: 1
+      };
+      return result;
     }).catch(error => {
       console.log("Error: " + error);
       throw error;
     });
   }
 
-  getBookingInformation() {
+  makeBooking(id) {
     let token = window.localStorage['jwtToken'];
-    console.log("My token: " + token);
-    return HttpService.get(HttpService.apiURL() + '/location/analytics', function onSuccess(res){
-      console.log(res);
-    }, function onError(error){
-      console.log(error);
-    });
-  }
-
-  getChargers() {
-    let token = window.localStorage['jwtToken'];
-    console.log("My token: " + token);
-    return HttpService.get(HttpService.apiURL() + '/location/analytics', function onSuccess(res){
-      console.log(res);
-    }, function onError(error){
-      console.log(error);
-    });
-  }
-
-
-  testFunc() {
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", 'http://localhost:3001/auth/register', true);
-    // xhr.setRequestHeader('Content-Type', 'application/json');
-    // xhr.send(JSON.stringify({
-    //   name: "Peta",
-    //   email: 'petuh2@gmail.com',
-    //   password: 'test2012ktl',
-    //   role: 'EVCP'
-    // }));
-    // xhr.onload = function() {
-    //   console.log("HELLO")
-    //   console.log(this.responseText);
-    //   var data = JSON.parse(this.responseText);
-    //   console.log(data);
-    // }
-
-    // var xhr = new XMLHttpRequest();
-    // xhr.open("POST", 'http://localhost:3001/auth/login', true);
-    // xhr.setRequestHeader('Content-Type', 'application/json');
-    // xhr.send(JSON.stringify({
-    //   email: 'petuh2@gmail.com',
-    //   password: 'test2012ktl'
-    // }));
-    // xhr.onload = function() {
-    //   // console.log(this.responseText);
-    //   var data = JSON.parse(this.responseText);
-    //   var str = data.token;
-    //   console.log("Got: " + str);
-    //   this.callnext(str);
-    //
-    // }
-    // return null;
-    let token = window.localStorage['jwtToken'];
-    //5d307313f7d3a906618b3a49/
-    const URL = 'http://localhost:3002/locations/analytics';
+    const URL = HttpService.apiURL();
     return axios(URL, {
       method: 'GET',
       headers: {
@@ -93,70 +93,7 @@ class MakeBookingServiceClass {
     });
   }
 
-  callnext(){
-    let token = window.localStorage['jwtToken'];
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", 'http://localhost:3002/locations/search?sw=48.25653029401251,11.633186874796593&ne=48.27181450576806,11.713309822489464&startDate=2019-07-15&startTime=10&price=0.3', true);
-    xhr.setRequestHeader('Content-Type', 'application/json');
-    xhr.setRequestHeader('Authorization', 'Bearer ' + token);
-    xhr.onload = function() {
-      console.log("HELLO2")
-      console.log(this.responseText);
-      var data = JSON.parse(this.responseText);
-      console.log(data);
-    };
-  }
-
-    makeBooking(id) {
-        const URL = 'http://localhost:3002';
-        return axios(URL, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-        }).then(response => {
-          return response.data;
-        })
-            .catch(error => {
-                throw error;
-            });
-    }
-
-    calculateCost(id) {
-        const URL = 'http://localhost:3002';
-        return axios(URL, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-        }).then(response => {
-          return response.data;
-        })
-            .catch(error => {
-                throw error;
-            });
-    }
-
-    getChargers2() {
-        const URL = 'http://localhost:3002';
-        return axios(URL, {
-            method: 'GET',
-            headers: {
-                'content-type': 'application/json'
-            },
-        }).then(response => {
-          return [
-              {id: 1, chargingLevel: 1, power: 7.4, connector: "Tesla HPWC"},
-              {id: 2, chargingLevel: 2, power: 22, connector: "Type 2 plug"},
-              {id: 3, chargingLevel: 3, power: 50, connector: "TCHAdeMO plug"},
-              {id: 4, chargingLevel: 3, power: 150, connector: "Tesla Supercharger"}
-          ];
-          // return response.data;
-        })
-            .catch(error => {
-                throw error;
-            });
-    }
 }
+
 const MakeBookingService = new MakeBookingServiceClass();
 export default MakeBookingService;
