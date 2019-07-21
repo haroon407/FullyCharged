@@ -2,13 +2,13 @@ import axios from 'axios';
 import baseUrl from './baseUrl';
 
 class ChargingLocationServiceClass {
-    addLocation(locationObject) {
+    addLocation(locationObject, user) {
         const URL = baseUrl + '/locations/addlocation';
         return axios(URL, {
             method: 'POST',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJmYjUyNzBjOGMzYzMzYWJmYjBlNzIiLCJpYXQiOjE1NjM0MDc2NTUsImV4cCI6MTU2MzQ5NDA1NX0.YNZXuLEwvG8Uj-y6lxwy5tIxhEBS1zK48msTmU31m14'
+                'Authorization': user.token
             },
             data: locationObject,
         }).then(response => response.data)
@@ -17,13 +17,13 @@ class ChargingLocationServiceClass {
             });
     }
 
-    getChargerTypes() {
+    getChargerTypes(user) {
         const URL = baseUrl + '/locations/chargertypes';
         return axios(URL, {
             method: 'Get',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJmYjUyNzBjOGMzYzMzYWJmYjBlNzIiLCJpYXQiOjE1NjM0MDc2NTUsImV4cCI6MTU2MzQ5NDA1NX0.YNZXuLEwvG8Uj-y6lxwy5tIxhEBS1zK48msTmU31m14'
+                'Authorization': user.token
             },
         }).then(response => response.data)
             .catch(error => {
@@ -32,13 +32,13 @@ class ChargingLocationServiceClass {
 
     }
 
-    getAllLocations(owner) {
-        const URL = baseUrl + '/locations/alllocations/' + owner;
+    getAllLocations(user) {
+        const URL = baseUrl + '/locations/alllocations/' + user.user.id;
         return axios(URL, {
             method: 'Get',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJmYjUyNzBjOGMzYzMzYWJmYjBlNzIiLCJpYXQiOjE1NjM0MDc2NTUsImV4cCI6MTU2MzQ5NDA1NX0.YNZXuLEwvG8Uj-y6lxwy5tIxhEBS1zK48msTmU31m14'
+                'Authorization': user.token
             },
         }).then(response => response.data)
             .catch(error => {
@@ -47,13 +47,13 @@ class ChargingLocationServiceClass {
 
     }
 
-    updateLocation(locationObject) {
+    updateLocation(locationObject, user) {
         const URL = baseUrl + '/locations/';
         return axios(URL, {
             method: 'Put',
             headers: {
                 'content-type': 'application/json',
-                'Authorization': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDJmYjUyNzBjOGMzYzMzYWJmYjBlNzIiLCJpYXQiOjE1NjM0MDc2NTUsImV4cCI6MTU2MzQ5NDA1NX0.YNZXuLEwvG8Uj-y6lxwy5tIxhEBS1zK48msTmU31m14'
+                'Authorization': user.token
             },
             data: locationObject,
         }).then(response => response.data)

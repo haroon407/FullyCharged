@@ -9,22 +9,31 @@ import {
 import {Card} from "components/Card/Card.jsx";
 
 import ChargingLocationService from "../services/chargingLocation.services";
+import config from "react-global-configuration";
 
 class EditLocation extends Component {
     state = {
         loading: true,
         locations: []
     };
+    user = null;
     owner = "5d2fb5270c8c3c33abfb0e72";
 
     constructor(props) {
         super(props);
+        let configFile = config.serialize();
+        if (configFile !== "null") {
+            this.user = config.get('user')
+        } else {
+            // If the user is not signed in
+            this.props.history.push('/index');
+        }
     };
 
     history = createBrowserHistory();
 
     componentWillMount() {
-        ChargingLocationService.getAllLocations(this.owner).then((data) => {
+        ChargingLocationService.getAllLocations(this.user).then((data) => {
             this.setState(() => {
                 const locations = data;
                 return {
@@ -44,7 +53,7 @@ class EditLocation extends Component {
                 unit.enabled = !unit.enabled
             });
             let updatedLocation = locations[index];
-            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+            ChargingLocationService.updateLocation(updatedLocation, this.user).then(() => {
                 this.props.showNotification('success', 'Location disabled successfully');
             }).catch((e) => {
                 this.props.showNotification('error', 'Error while disabling the location');
@@ -62,7 +71,7 @@ class EditLocation extends Component {
             let updatedLocation = {};
             locations[index].deleted = true;
             updatedLocation = locations[index];
-            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+            ChargingLocationService.updateLocation(updatedLocation, this.user).then(() => {
                 this.props.showNotification('success', 'Location deleted successfully');
             }).catch((e) => {
                 this.props.showNotification('error', 'Error while deleting the location');
@@ -89,7 +98,7 @@ class EditLocation extends Component {
     }
 
     render() {
-        if (this.loading) {
+        if (this.loading || this.user === null) {
             return 'Loading...'
         }
         return (

@@ -7,11 +7,22 @@ import Footer from "components/Footer/Footer";
 import Sidebar from "components/Sidebar/Sidebar";
 import {style} from "variables/Variables.jsx";
 import routes from "routes.js";
+import config from "react-global-configuration";
 
 class Admin extends Component {
 
+    user = null;
+
     constructor(props) {
         super(props);
+        // Checking for role and redirecting if not signed in
+        let configFile = config.serialize();
+        if (configFile !== "null") {
+            this.user = config.get('user')
+        } else {
+            // If the user is not signed in
+            this.props.history.push('/index');
+        }
         this.state = {
             _notificationSystem: null,
             // image: image,
@@ -35,6 +46,10 @@ class Admin extends Component {
             autoDismiss: 15
         });
     };
+    componentDidMount() {
+        this.setState({_notificationSystem: this.refs.notificationSystem});
+        var _notificationSystem = this.refs.notificationSystem;
+    }
 
     getRoutes = routes => {
         return routes.map((prop, key) => {
@@ -69,29 +84,6 @@ class Admin extends Component {
         return "Brand";
     };
 
-    componentDidMount() {
-        this.setState({_notificationSystem: this.refs.notificationSystem});
-        var _notificationSystem = this.refs.notificationSystem;
-        var color = Math.floor(Math.random() * 4 + 1);
-        var level;
-        switch (color) {
-            case 1:
-                level = "success";
-                break;
-            case 2:
-                level = "warning";
-                break;
-            case 3:
-                level = "error";
-                break;
-            case 4:
-                level = "info";
-                break;
-            default:
-                break;
-        }
-    }
-
     componentDidUpdate(e) {
         if (
             window.innerWidth < 993 &&
@@ -111,9 +103,13 @@ class Admin extends Component {
         return (
             <div className="wrapper">
                 <NotificationSystem ref="notificationSystem" style={style}/>
-                <Sidebar {...this.props} routes={routes} image={this.state.image}
-                         color={this.state.color}
-                         hasImage={this.state.hasImage}/>
+                <Sidebar
+                    {...this.props}
+                    routes={routes}
+                    image={this.state.image}
+                    color={this.state.color}
+                    hasImage={this.state.hasImage}
+                />
                 <div id="main-panel" className="main-panel" ref="mainPanel">
                     <AdminNavbar
                         {...this.props}

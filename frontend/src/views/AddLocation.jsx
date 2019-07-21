@@ -11,10 +11,12 @@ import Button from "components/CustomButton/CustomButton.jsx";
 
 import ChargingLocationService from "../services/chargingLocation.services";
 import Geocode from "react-geocode";
+import config from "react-global-configuration";
 
 Geocode.setApiKey("AIzaSyDOw9FX8co2j1vwXyQehJID7ZCf9ccnttU");
 
 class AddLocation extends Component {
+    user = null;
     state = {
         loading: true
     };
@@ -24,6 +26,14 @@ class AddLocation extends Component {
 
     constructor(props) {
         super(props);
+        // Checking for role and redirecting if not signed in
+        let configFile = config.serialize();
+        if (configFile !== "null") {
+            this.user = config.get('user')
+        } else {
+            // If the user is not signed in
+            this.props.history.push('/index');
+        }
         // If update location, fetch state object
         if (props.match.path === '/admin/update/location') {
             this.preLoadedLocation = props.location.location.state;
@@ -46,7 +56,7 @@ class AddLocation extends Component {
                     deleted: false,
                     basicBookingFee: 0.50,
                     cancellationTimeout: 0,
-                    owner: "5d2fb5270c8c3c33abfb0e72"
+                    owner: ""
                 }
             }
         } else {
@@ -72,7 +82,7 @@ class AddLocation extends Component {
     };
 
     componentWillMount() {
-        ChargingLocationService.getChargerTypes().then((data) => {
+        ChargingLocationService.getChargerTypes(this.user).then((data) => {
             this.chargerTypes = data;
             this.setState((prevState) => {
                 let chargingUnitObj = {...prevState.chargingUnitObj}
@@ -196,7 +206,7 @@ class AddLocation extends Component {
                 // Setting geopoints
                 this.state.locationObject.geoPoint = geoPoint;
                 // Call the API function
-                ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+                ChargingLocationService.addLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Added successfully');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while adding location');
@@ -221,7 +231,7 @@ class AddLocation extends Component {
                 // Setting geopoints
                 this.state.locationObject.geoPoint = geoPoint;
                 // Call the API function
-                ChargingLocationService.updateLocation(this.state.locationObject).then((data) => {
+                ChargingLocationService.updateLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Updated successfully');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while updating location');
@@ -247,7 +257,7 @@ class AddLocation extends Component {
     }
 
     render() {
-        if (this.loading) {
+        if (this.loading || this.user === null) {
             return 'Loading...'
         }
         return (
