@@ -3,6 +3,7 @@ import ChartistGraph from "react-chartist";
 import { Grid, Row, Col } from "react-bootstrap";
 import { Card } from "components/Card/Card.jsx";
 import { TableDetails } from "components/Analytics/TableDetails.jsx";
+import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import {
   responsiveSales,
   responsiveBar
@@ -140,17 +141,21 @@ class Analytics extends Component {
             <Card
               title="Location Analytics"
               content={
-                <div>
-                <label htmlFor="chargerLocations">Choose location</label>
-                <select className="form-control" onChange={this.updateUI} value={this.state.selectedLocationId}>
-                    {
-                        this.chargerLocations.map((x) =>
-                        <option value={x.id}>
-                          {x.location}
-                        </option>)
-                    }
-                </select>
+                <Row>
+                <div className="col-md-12">
+                <FormGroup>
+                  <ControlLabel>Choose location</ControlLabel>
+                  <select className="form-control" onChange={this.updateUI} value={this.state.selectedLocationId}>
+                      {
+                          this.chargerLocations.map((x) =>
+                          <option value={x.id}>
+                            {x.location}
+                          </option>)
+                      }
+                  </select>
+                </FormGroup>
                 </div>
+                </Row>
               }
             />
             </Col>
