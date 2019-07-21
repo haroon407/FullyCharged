@@ -32,7 +32,7 @@ class AddLocation extends Component {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index');
+            this.props.history.push('/index/sign-in');
         }
         // If update location, fetch state object
         if (props.match.path === '/admin/update/location') {
@@ -82,30 +82,32 @@ class AddLocation extends Component {
     };
 
     componentWillMount() {
-        ChargingLocationService.getChargerTypes(this.user).then((data) => {
-            this.chargerTypes = data;
-            this.setState((prevState) => {
-                let chargingUnitObj = {...prevState.chargingUnitObj}
-                if (data.length > 0) {
-                    chargingUnitObj.charger.type = data[0];
-                    chargingUnitObj.charger.power = 0;
-                    return {
-                        chargingUnitObj,
+        if (this.user !== null) {
+            ChargingLocationService.getChargerTypes(this.user).then((data) => {
+                this.chargerTypes = data;
+                this.setState((prevState) => {
+                    let chargingUnitObj = {...prevState.chargingUnitObj}
+                    if (data.length > 0) {
+                        chargingUnitObj.charger.type = data[0];
+                        chargingUnitObj.charger.power = 0;
+                        return {
+                            chargingUnitObj,
+                        }
                     }
-                }
-            });
+                });
 
-            if (this.updateLocationMode) {
-                this.setTypesOfPreloadedChargingUnits();
-                this.setState((() => {
-                    const locationObject = this.preLoadedLocation;
-                    return {
-                        locationObject,
-                    }
-                }))
-            }
-            this.setState({loading: false});
-        });
+                if (this.updateLocationMode) {
+                    this.setTypesOfPreloadedChargingUnits();
+                    this.setState((() => {
+                        const locationObject = this.preLoadedLocation;
+                        return {
+                            locationObject,
+                        }
+                    }))
+                }
+                this.setState({loading: false});
+            });
+        }
     }
 
     handleInputChange(event) {

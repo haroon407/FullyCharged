@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Pie } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
-import { Table } from "react-bootstrap";
+import { Table, Button } from "react-bootstrap";
 
 import { createBrowserHistory } from "history";
 
@@ -69,6 +69,7 @@ class DashboardEVO extends Component {
               <th>Date and Time</th>
               <th>Location</th>
               <th>Status</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -77,12 +78,22 @@ class DashboardEVO extends Component {
               <td>22-07-2019 14:00 - 14:30</td>
               <td>Theresienstraße 23 80333 München</td>
               <td>Active</td>
+              <td>
+                <button type="button" class="btn btn-warning active">
+                  Cancel
+                </button>
+              </td>
             </tr>
             <tr>
               <td>2</td>
               <td>18-07-2019 10:00 - 11:00</td>
               <td>Boltzmannstraße 12 85748 Garching bei München</td>
               <td>Cancelled - Basic booking fees deducted!</td>
+              <td>
+                <button type="button" class="btn btn-warning disabled">
+                  Cancel
+                </button>
+              </td>
             </tr>
 
             <tr>
@@ -90,6 +101,11 @@ class DashboardEVO extends Component {
               <td>10-07-2019 17:00 - 17:30</td>
               <td>Boltzmannstraße 12 85748 Garching bei München</td>
               <td>Charged - Payment 8.9 Euros successful</td>
+              <td>
+                <button type="button" class="btn btn-warning disabled">
+                  Cancel
+                </button>
+              </td>
             </tr>
 
             <tr>
@@ -97,6 +113,11 @@ class DashboardEVO extends Component {
               <td>05-07-2019 12:00 - 13:00</td>
               <td>Theresienstraße 23 80333 München</td>
               <td>Charged - Payment 12.5 Euros successful</td>
+              <td>
+                <button type="button" class="btn btn-warning disabled">
+                  Cancel
+                </button>
+              </td>
             </tr>
           </tbody>
         </Table>

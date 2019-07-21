@@ -300,7 +300,7 @@ input:focus {
 .sidebar .logo,
 body > .navbar-collapse .logo {
   padding: 10px 30px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+  border-bottom: none; }
   .sidebar .logo p,
   body > .navbar-collapse .logo p {
     float: left;
