@@ -5,6 +5,9 @@ import SignIn from "views/SignIn";
 import EVORegister from "views/EVORegister";
 import EVCPRegister from "views/EVCPRegister";
 import DashboardEVO from "views/DashboardEVO";
+import Analytics from "views/Analytics";
+import MakeBooking from "views/MakeBooking";
+import FindChargers from "views/FindChargers.jsx";
 
 const dashboardRoutes = [
   {
@@ -14,6 +17,31 @@ const dashboardRoutes = [
     component: SignIn,
     layout: "/index",
     noSideNav: true
+  },
+  {
+    path: "/analytics",
+    name: "Analytics",
+    icon: "pe-7s-graph1",
+    component: Analytics,
+    layout: "/admin",
+    role: "EVCP"
+  },
+  {
+    path: "/make_booking",
+    name: "Make Booking",
+    icon: "pe-7s-plus",
+    component: MakeBooking,
+    layout: "/admin",
+    noSideNav: true,
+    role: "EVO"
+  },
+  {
+    path: "/find_chargers",
+    name: "Find Chargers",
+    icon: "pe-7s-map",
+    component: FindChargers,
+    layout: "/admin",
+    role: "EVO"
   },
   {
     path: "/evo-register",
