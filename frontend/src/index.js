@@ -11,6 +11,8 @@ import "./assets/css/website.css";
 import "./assets/css/register.css";
 import "./assets/css/signin.css";
 import "./assets/css/bookings.css";
+import "./assets/css/add-location.css";
+import "./assets/css/edit-location.css";
 import "./assets/css/pe-icon-7-stroke.css";
 
 import AdminLayout from "layouts/Admin.jsx";

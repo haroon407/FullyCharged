@@ -1,0 +1,44 @@
+.location-cell {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.margin-disabled {
+    margin-left: 10px;
+}
+
+.btn:focus{
+    outline: none;
+    border: none;
+}
+
+.btn-warning:focus{
+    outline: none;
+    border: none;
+    border-color: #f0ad4e;
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.btn-success:focus {
+    outline: none;
+    border: none;
+    border-color: #5cb85c;
+    background-color: #5cb85c;
+    color: white;
+}
+
+.btn-danger:focus {
+    outline: none;
+    border: none;
+    color: #fff;
+    background-color: #d9534f;
+    border-color: #d43f3a;
+}
+.btn-primary:focus {
+    outline: none;
+    border: none;
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #337ab7;
+}
