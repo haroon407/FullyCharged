@@ -11,10 +11,7 @@ class AdminNavbarLinks extends Component {
           </NavItem>
         </Nav>
         <Nav pullRight>
-          <NavItem eventKey={1} href="#">
-            Account
-          </NavItem>
-          <NavItem eventKey={3} href="#">
+          <NavItem eventKey={3} href="/index">
             Log out
           </NavItem>
         </Nav>

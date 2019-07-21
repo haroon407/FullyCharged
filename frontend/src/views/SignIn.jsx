@@ -4,7 +4,6 @@ import {
     Row,
     Col,
     MenuItem,
-    Nav,
     NavDropdown,
     NavItem
 } from "react-bootstrap";
@@ -14,21 +13,15 @@ import {FormInputs} from "components/FormInputs/FormInputs.jsx";
 import {UserCard} from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 import config from "react-global-configuration";
-import {createBrowserHistory} from "history";
 
 import UsersService from "../services/users.services";
 
-import avatar from "assets/img/faces/face-3.jpg";
-import {isContext} from "vm";
-
-import axios from "axios";
 
 class SignIn extends Component {
     constructor(props) {
         super(props);
         this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
         this.onChangePassword = this.onChangePassword.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             email: "",
@@ -48,9 +41,7 @@ class SignIn extends Component {
         });
     }
 
-    history = createBrowserHistory();
-
-    onSubmit() {
+    signIn(e) {
         const obj = {
             email: this.state.email,
             password: this.state.password
@@ -68,9 +59,9 @@ class SignIn extends Component {
                     this.props.history.location.pathname = "/admin/dashboard-evo";
                 }
                 if (data.user.role === "EVCP") {
-                    this.props.history.location.pathname = "/analytics";
+                    this.props.history.push('/admin/add/location');
                 } else {
-                    alert("The user does not exist. Please register.");
+                    this.props.showNotification('error', 'Invalid email or password');
                 }
             });
 
@@ -151,7 +142,7 @@ class SignIn extends Component {
                                                     }
                                                 ]}
                                             />
-                                            <Button bsStyle="info" pullRight fill type="submit">
+                                            <Button bsStyle="info" pullRight fill type="button" onClick={(e) => this.signIn(e)}>
                                                 Sign In
                                             </Button>
                                             <div className="clearfix"/>

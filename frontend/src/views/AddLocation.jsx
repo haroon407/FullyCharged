@@ -11,10 +11,12 @@ import Button from "components/CustomButton/CustomButton.jsx";
 
 import ChargingLocationService from "../services/chargingLocation.services";
 import Geocode from "react-geocode";
+import config from "react-global-configuration";
 
 Geocode.setApiKey("AIzaSyDOw9FX8co2j1vwXyQehJID7ZCf9ccnttU");
 
 class AddLocation extends Component {
+    user = null;
     state = {
         loading: true
     };
@@ -24,6 +26,15 @@ class AddLocation extends Component {
 
     constructor(props) {
         super(props);
+        this.props.showNotification('success', 'Added successfully');
+        // Checking for role and redirecting if not signed in
+        let configFile = config.serialize();
+        if (configFile !== "null") {
+            this.user = config.get('user')
+        } else {
+            // If the user is not signed in
+            this.props.history.push('/index');
+        }
         // If update location, fetch state object
         if (props.match.path === '/admin/update/location') {
             this.preLoadedLocation = props.location.location.state;
@@ -247,7 +258,7 @@ class AddLocation extends Component {
     }
 
     render() {
-        if (this.loading) {
+        if (this.loading || this.user === null) {
             return 'Loading...'
         }
         return (

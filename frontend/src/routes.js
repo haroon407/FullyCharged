@@ -44,21 +44,24 @@ const dashboardRoutes = [
         name: "Dashboard EVO",
         icon: "pe-7s-graph",
         component: DashboardEVO,
-        layout: "/admin"
+        layout: "/admin",
+        role: "EVO"
     },
     {
         path: "/add/location",
         name: "Add Location",
         icon: "pe-7s-plus",
         component: AddLocation,
-        layout: "/admin"
+        layout: "/admin",
+        role: "EVCP"
     },
     {
         path: "/edit/location",
         name: "Edit Location",
         icon: "pe-7s-pen",
         component: EditLocation,
-        layout: "/admin"
+        layout: "/admin",
+        role: "EVCP"
     },
     {
         path: "/update/location",
