@@ -56,7 +56,7 @@ class AddLocation extends Component {
                     deleted: false,
                     basicBookingFee: 0.50,
                     cancellationTimeout: 0,
-                    owner: "5d2fb5270c8c3c33abfb0e72"
+                    owner: ""
                 }
             }
         } else {
@@ -82,7 +82,7 @@ class AddLocation extends Component {
     };
 
     componentWillMount() {
-        ChargingLocationService.getChargerTypes().then((data) => {
+        ChargingLocationService.getChargerTypes(this.user).then((data) => {
             this.chargerTypes = data;
             this.setState((prevState) => {
                 let chargingUnitObj = {...prevState.chargingUnitObj}
@@ -206,7 +206,7 @@ class AddLocation extends Component {
                 // Setting geopoints
                 this.state.locationObject.geoPoint = geoPoint;
                 // Call the API function
-                ChargingLocationService.addLocation(this.state.locationObject).then((data) => {
+                ChargingLocationService.addLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Added successfully');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while adding location');
@@ -231,7 +231,7 @@ class AddLocation extends Component {
                 // Setting geopoints
                 this.state.locationObject.geoPoint = geoPoint;
                 // Call the API function
-                ChargingLocationService.updateLocation(this.state.locationObject).then((data) => {
+                ChargingLocationService.updateLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Updated successfully');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while updating location');

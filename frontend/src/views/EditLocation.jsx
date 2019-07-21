@@ -33,7 +33,7 @@ class EditLocation extends Component {
     history = createBrowserHistory();
 
     componentWillMount() {
-        ChargingLocationService.getAllLocations(this.owner).then((data) => {
+        ChargingLocationService.getAllLocations(this.user).then((data) => {
             this.setState(() => {
                 const locations = data;
                 return {
@@ -53,7 +53,7 @@ class EditLocation extends Component {
                 unit.enabled = !unit.enabled
             });
             let updatedLocation = locations[index];
-            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+            ChargingLocationService.updateLocation(updatedLocation, this.user).then(() => {
                 this.props.showNotification('success', 'Location disabled successfully');
             }).catch((e) => {
                 this.props.showNotification('error', 'Error while disabling the location');
@@ -71,7 +71,7 @@ class EditLocation extends Component {
             let updatedLocation = {};
             locations[index].deleted = true;
             updatedLocation = locations[index];
-            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+            ChargingLocationService.updateLocation(updatedLocation, this.user).then(() => {
                 this.props.showNotification('success', 'Location deleted successfully');
             }).catch((e) => {
                 this.props.showNotification('error', 'Error while deleting the location');

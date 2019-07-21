@@ -116,7 +116,6 @@ class EVORegister extends Component {
                     this.props.history.push("/index/sign-in");
                 })
                 .catch(error => {
-                    debugger;
                     alert("Error signingup, please try again");
                 });
         }
@@ -148,7 +147,6 @@ class EVORegister extends Component {
     //         this.props.history.push("/index/sign-in");
     //       })
     //       .catch(error => {
-    //         debugger;
     //         alert("Error signingup, please try again");
     //       });
     //   }
