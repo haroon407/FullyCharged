@@ -1,15 +1,13 @@
 import React, { Component } from "react";
-//import { Tabs } from "components/Tabs/Tabs.jsx";
+import { Tabs } from "components/Tabs/Tabs.jsx";
 //import Button from "components/CustomButton/CustomButton.jsx";
 import { Grid, Row, Col, Table, Button } from "react-bootstrap";
-//import { thArray, tdArray } from "variables/Variables.jsx";
+import { thArray, tdArray } from "variables/Variables.jsx";
 import Card from "components/Card/Card.jsx";
 
-import { MyTest } from "components/Analytics/MyTest.jsx";
+import { createBrowserHistory } from "history";
 
-//import { createBrowserHistory } from "history";
-
-//import BookingsService from "../services/bookings.services";
+import BookingsService from "../services/bookings.services";
 //import VehicleModelsService from "../services/vehiclemodels.services";
 
 class DashboardEVO extends Component {
@@ -36,32 +34,76 @@ class DashboardEVO extends Component {
       //   }
       // ]
     };
-    this.collapseBool = false;
-    this.tableElement = React.createRef();
-
-    this.cancel = this.cancel.bind(this);
   }
 
-  cancel(event) {
-    this.collapseBool = !this.collapseBool;
-    this.tableElement.current.setOpen(this.collapseBool);
+  componentWillMount() {
+    debugger;
+    BookingsService.getAllBookings().then(data => {
+      this.bookingsObject = data;
+      this.setState({ loading: false });
+    });
+  }
+
+  onCancel = (event, bookingId) => {
     event.preventDefault();
-  }
+    if (window.confirm("Are you sure you wish to cancel your booking?")) {
+      console.log("Yes, cancel it");
+      //BookingsService.cancelBookingById(bookingId).then
+    }
+  };
+
+  history = createBrowserHistory();
 
   render() {
+    if (this.loading) {
+      return "Loading...";
+    }
     return (
       <div className="content">
-        <Button
-          bsStyle="danger"
-          pullRight
-          fill
-          type="cancel"
-          onClick={this.cancel}
-        >
-          Cancel
-        </Button>
-        TEXT
-        <MyTest ref={this.tableElement} />
+        <Grid fluid>
+          <Row>
+            <Col md={12}>
+              <Card
+                title="All Booking details"
+                category="Here is a subtitle for this table"
+                ctTableFullWidth
+                ctTableResponsive
+                content={
+                  <Table striped hover>
+                    <thead>
+                      <tr>
+                        {thArray.map((prop, key) => {
+                          return <th key={key}>{prop}</th>;
+                        })}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <Col md={10}>
+                        {this.bookingsObject.map((prop, key) => {
+                          return (
+                            <tr key={key}>
+                              {prop.map((prop, key) => {
+                                return <td key={key}>{prop}</td>;
+                              })}
+                            </tr>
+                          );
+                        })}
+                      </Col>
+                      <Col md={2}>
+                        <button
+                          className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
+                          // onClick={() => this.onCancel(bookingsObject.id)}
+                        >
+                          Cancel
+                        </button>
+                      </Col>
+                    </tbody>
+                  </Table>
+                }
+              />
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
