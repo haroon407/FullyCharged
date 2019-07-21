@@ -50,20 +50,12 @@ class SignIn extends Component {
 
   history = createBrowserHistory();
 
-  onSubmit(e) {
-    e.preventDefault();
-    console.log(
-      `The values are ${this.state.email_address} and ${this.state.password}`
-    );
-
+  onSubmit() {
     const obj = {
       email: this.state.email,
       password: this.state.password
     };
 
-    //this.props.showNotification("success", "Logged in");
-
-    // calling API here
     UsersService.signIn(obj)
       //.then(res => res.json())
       .then(data => {
