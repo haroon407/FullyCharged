@@ -50,8 +50,7 @@ class Website extends Component {
         }
         if (e.history.action === "PUSH") {
             document.documentElement.scrollTop = 0;
-            document.scrollingElement.scrollTop = 0;
-            this.refs.mainPanel.scrollTop = 0;
+            document.scrollingElement.scrollTop = 0;confirm_password
         }
     }
 
