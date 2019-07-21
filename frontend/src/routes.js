@@ -4,7 +4,7 @@ import UserProfile from "views/UserProfile.jsx";
 import TableList from "views/TableList.jsx";
 import Typography from "views/Typography.jsx";
 import Icons from "views/Icons.jsx";
-import Maps from "views/Maps.jsx";
+import SearchForChargingLocation from "views/SearchForChargingLocation.jsx";
 import Notifications from "views/Notifications.jsx";
 import Website from "views/Website";
 
@@ -59,10 +59,10 @@ const dashboardRoutes = [
         layout: "/admin"
     },
     {
-        path: "/maps",
-        name: "Maps",
+        path: "/locations/search",
+        name: "Find chargers",
         icon: "pe-7s-map-marker",
-        component: Maps,
+        component: SearchForChargingLocation,
         layout: "/admin"
     },
     {
