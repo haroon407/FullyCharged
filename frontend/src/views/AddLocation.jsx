@@ -26,7 +26,6 @@ class AddLocation extends Component {
 
     constructor(props) {
         super(props);
-        this.props.showNotification('success', 'Added successfully');
         // Checking for role and redirecting if not signed in
         let configFile = config.serialize();
         if (configFile !== "null") {

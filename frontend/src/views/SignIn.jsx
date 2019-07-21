@@ -53,17 +53,16 @@ class SignIn extends Component {
                 //setting User values as global
                 config.set({user: data}, {freeze: false});
                 if (data.user.role === "EVO") {
-                    //<Redirect to='/admin/dashboard-evo'/>
-                    //this.history.push("dashboard-evo", data);
-                    //this.props.history.push(this.history);
-                    this.props.history.location.pathname = "/admin/dashboard-evo";
+                    this.props.history.push('/admin/add/location');
                 }
                 if (data.user.role === "EVCP") {
                     this.props.history.push('/admin/add/location');
                 } else {
-                    this.props.showNotification('error', 'Invalid email or password');
+                    alert('Invalid email or password');
                 }
-            });
+            }).catch((e) => {
+            alert('Invalid email or password');
+        });
 
         //alert("A form was submitted: " + this.state);
         // Move to Respective page
@@ -142,7 +141,8 @@ class SignIn extends Component {
                                                     }
                                                 ]}
                                             />
-                                            <Button bsStyle="info" pullRight fill type="button" onClick={(e) => this.signIn(e)}>
+                                            <Button bsStyle="info" pullRight fill type="button"
+                                                    onClick={(e) => this.signIn(e)}>
                                                 Sign In
                                             </Button>
                                             <div className="clearfix"/>
