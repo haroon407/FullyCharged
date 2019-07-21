@@ -15,6 +15,7 @@ import Button from "components/CustomButton/CustomButton.jsx";
 
 import UsersService from "../services/users.services";
 import VehicleModelsService from "../services/vehiclemodels.services";
+import { createBrowserHistory } from "history";
 
 import avatar from "assets/img/faces/face-3.jpg";
 
@@ -31,16 +32,14 @@ class EVORegister extends Component {
     super(props);
 
     this.state = {
-      first_name: "",
-      last_name: "",
+      name: "",
       email: "",
       vehicleModel: "",
       password: "",
       confirm_password: ""
     };
 
-    this.onChangeFirstName = this.onChangeFirstName.bind(this);
-    this.onChangeLastName = this.onChangeLastName.bind(this);
+    this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
     this.onChangeVehicleModel = this.onChangeVehicleModel.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -54,14 +53,9 @@ class EVORegister extends Component {
       this.setState({ loading: false });
     });
   }
-  onChangeFirstName(e) {
+  onChangeName(e) {
     this.setState({
-      first_name: e.target.value
-    });
-  }
-  onChangeLastName(e) {
-    this.setState({
-      last_name: e.target.value
+      name: e.target.value
     });
   }
 
@@ -94,32 +88,28 @@ class EVORegister extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    /* Add a notification. Add to database. Take to Sign in page */
+    if (this.state.password !== this.state.confirm_password) {
+      alert("Passwords don't match"); //Add notification
+    } else {
+      // make API call
+      const obj = {
+        //name: this.state.first_name + this.state.last_name,
+        name: this.state.name,
+        role: "EVO",
+        email: this.state.email,
+        vehicleModels: this.state.vehicleModels,
+        password: this.state.password
+      };
+      // calling API here
+      UsersService.signUpEVO(obj);
+      /* Add a notification. Add to database. Take to Sign in page */
     //this.props.history.push("/index/sign-in");
     this.props.history.location.pathname = "/index/sign-in";
-
     console.log(
-      `The values are ${this.state.email_address} and ${this.state.password}`
-    );
-
-    const obj = {
-      name: this.state.first_name + this.state.last_name,
-      role: "EVO",
-      email: this.state.email,
-      vehicleModels: this.state.vehicleModels,
-      password: this.state.password
-    };
-
-    // calling API here
-    UsersService.signUpEVO(obj);
-
-    //axios
-    //.post("http://localhost:5000/backend/sign-up", obj)
-    //.then(res => console.log(res.data));
-
+      `The values are ${this.state.email} and ${this.state.password}`
+    );}
     this.setState({
-      first_name: "",
-      last_name: "",
+      name: "",
       email: "",
       password: "",
       confirm_password: ""
@@ -169,34 +159,39 @@ class EVORegister extends Component {
             <Row>
               <Col md={8}>
                 <Card
-                  title="EVO Sign Up"
+                  title="EV Owner Sign Up"
                   content={
                     <form onSubmit={this.onSubmit}>
                       <FormInputs
-                        ncols={["col-md-6", "col-md-6"]}
+                        ncols={["col-md-12"]}
                         properties={[
                           {
-                            label: "First Name",
+                            label: "Name",
                             type: "text",
                             bsClass: "form-control",
-                            placeholder: "First Name",
-                            defaultValue: "e.g. Elon",
-                            value: this.state.first_name,
-                            onChange: this.onChangeFirstName,
-                            required: true
-                          },
-                          {
-                            label: "Last Name",
-                            type: "text",
-                            bsClass: "form-control",
-                            placeholder: "Last Name",
-                            defaultValue: "e.g. Musk",
-                            value: this.state.last_name,
-                            onChange: this.onChangeLastName,
+                            placeholder: "Name",
+                            defaultValue: "e.g. Elon Musk",
+                            value: this.state.name,
+                            onChange: this.onChangeName,
                             required: true
                           }
                         ]}
                       />
+
+                      <label htmlFor="vehicleModels">Vehicle Model</label>
+                      <select
+                        id="Select"
+                        className="form-control"
+                        name="vehicleModel"
+                        placeholder="Select your Models"
+                        onChange={this.handleInputChange}
+                      >
+                        {this.vehicleModels.map((x, value) => (
+                          <option key={x._id} value={JSON.stringify(x)}>
+                            {x.manufacturer} {x.name}
+                          </option>
+                        ))}
+                      </select>
                       <FormInputs
                         ncols={["col-md-12"]}
                         properties={[
@@ -212,21 +207,8 @@ class EVORegister extends Component {
                           }
                         ]}
                       />
-                      <label htmlFor="vehicleModels">Vehicle Model</label>
-                      <select
-                        id="Select"
-                        className="form-control"
-                        name="vehicleModel"
-                        onChange={this.handleInputChange}
-                      >
-                        {this.vehicleModels.map((x, value) => (
-                          <option key={x._id} value={JSON.stringify(x)}>
-                            {x.name} {x.manufacturer}
-                          </option>
-                        ))}
-                      </select>
                       <FormInputs
-                        ncols={["col-md-6", "col-md-6"]}
+                        ncols={["col-md-12"]}
                         properties={[
                           {
                             label: "Password",
@@ -237,7 +219,12 @@ class EVORegister extends Component {
                             value: this.state.password,
                             onChange: this.onChangePassword,
                             required: true
-                          },
+                          }
+                        ]}
+                      />
+                      <FormInputs
+                        ncols={["col-md-12"]}
+                        properties={[
                           {
                             label: "Confirm password",
                             type: "password",

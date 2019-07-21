@@ -13,6 +13,8 @@ import { Card } from "components/Card/Card.jsx";
 import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
+import config from "react-global-configuration";
+import { createBrowserHistory } from "history";
 
 import UsersService from "../services/users.services";
 
@@ -21,13 +23,10 @@ import { isContext } from "vm";
 
 import axios from "axios";
 
-const StoreContext = React.createContext();
-//here
-//var Global = require("react-global");
-
 class SignIn extends Component {
   constructor(props) {
     super(props);
+
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -49,21 +48,10 @@ class SignIn extends Component {
     });
   }
 
+  history = createBrowserHistory();
+
   onSubmit(e) {
     e.preventDefault();
-    alert("A form was submitted: " + this.state);
-
-    //Use below line of code
-    //this.props.showNotification("success", "Logged in successfully");
-
-    //this.props
-    //.login(this.state) // calling login function of Context
-    // .then(() => this.props.history.push("/index")); //admin/dashboard-evo
-
-    //this.clearInputs();
-    //{
-    /* Add Role based Auth */
-    //}
     console.log(
       `The values are ${this.state.email_address} and ${this.state.password}`
     );
@@ -73,16 +61,30 @@ class SignIn extends Component {
       password: this.state.password
     };
 
+    //this.props.showNotification("success", "Logged in");
+
     // calling API here
+    UsersService.signIn(obj)
+      //.then(res => res.json())
+      .then(data => {
+        //setting User values as global
+        config.set({ user: data }, { freeze: false });
+        if (data.user.role === "EVO") {
+          //<Redirect to='/admin/dashboard-evo'/>
+          //this.history.push("dashboard-evo", data);
+          //this.props.history.push(this.history);
+          this.props.history.location.pathname = "/admin/dashboard-evo";
+        }
+        if (data.user.role === "EVCP") {
+          this.props.history.location.pathname = "/analytics";
+        } else {
+          alert("The user does not exist. Please register.");
+        }
+      });
 
-    // UsersService.signIn(obj)
-    //.then(res => res.json())
-    //.then((data) => {
-    //Global values={{
-    //TOKEN: data.token
-    //}}
-    //})
-
+    //alert("A form was submitted: " + this.state);
+    // Move to Respective page
+    console.log("Role Auth");
     this.setState({
       email: "",
       password: ""

@@ -14,6 +14,7 @@ import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
 import UsersService from "../services/users.services";
+import { createBrowserHistory } from "history";
 
 import avatar from "assets/img/faces/face-3.jpg";
 
@@ -24,41 +25,25 @@ import axios from "axios";
 class EVCPRegister extends Component {
   constructor(props) {
     super(props);
-    this.onChangeFirstName = this.onChangeFirstName.bind(this);
-    this.onChangeLastName = this.onChangeLastName.bind(this);
+    this.onChangeName = this.onChangeName.bind(this);
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
-    this.onChangeCompanyName = this.onChangeCompanyName.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      first_name: "",
-      last_name: "",
-      email_address: "",
-      company_name: "",
+      name: "",
+      email: "",
       password: "",
       confirm_password: ""
     };
   }
 
-  onChangeFirstName(e) {
+  onChangeName(e) {
     this.setState({
-      first_name: e.target.value
+      name: e.target.value
     });
   }
-  onChangeLastName(e) {
-    this.setState({
-      last_name: e.target.value
-    });
-  }
-
-  onChangeCompanyName(e) {
-    this.setState({
-      company_name: e.target.value
-    });
-  }
-
   onChangeEmailAddress(e) {
     this.setState({
       email_address: e.target.value
@@ -78,35 +63,32 @@ class EVCPRegister extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    /* Add a notification. Add to database. Take to Sign in page */
-    //this.props.history.push("/index/sign-in");
-    this.props.history.location.pathname = "/index/sign-in";
 
-    console.log(
-      `The values are ${this.state.email_address} and ${this.state.password}`
-    );
+    // perform all neccassary validations
+    if (this.state.password !== this.state.confirm_password) {
+      alert("Passwords don't match");
+    } else {
+      // make API call
+      const obj = {
+        name: this.state.name,
+        role: "EVCP",
+        email: this.state.email,
+        password: this.state.password
+      };
 
-    const obj = {
-      first_name: this.state.first_name,
-      last_name: this.state.last_name,
-      company_name: this.company_name,
-      role: "EVCP",
-      email_address: this.state.email_address,
-      password: this.state.password,
-      confirm_password: this.state.confirm_password
-    };
+      // calling API here
+      UsersService.signUpEVCP(obj);
+      /* Add a notification. Add to database. Take to Sign in page */
+      //this.props.history.push("/index/sign-in");
+      this.props.history.location.pathname = "/index/sign-in";
 
-    // calling API here
-    UsersService.signUpEVCP(obj);
-
-    //axios
-    //.post("http://localhost:5000/backend/sign-up", obj)
-    //.then(res => console.log(res.data));
-
+      console.log(
+        `The values are ${this.state.email_address} and ${this.state.password}`
+      );
+    }
     this.setState({
-      first_name: "",
-      last_name: "",
-      email_address: "",
+      name: "",
+      email: "",
       password: "",
       confirm_password: ""
     });
@@ -152,36 +134,26 @@ class EVCPRegister extends Component {
             <Row>
               <Col md={8}>
                 <Card
-                  title="EVCP Sign Up"
+                  title="EV Charging Provider Sign Up"
                   content={
                     <form onSubmit={this.onSubmit}>
                       <FormInputs
-                        ncols={["col-md-6", "col-md-6"]}
+                        ncols={["col-md-12"]}
                         properties={[
                           {
-                            label: "First Name",
+                            label: "Name",
                             type: "text",
                             bsClass: "form-control",
                             placeholder: "First Name",
                             defaultValue: "e.g. Elon",
-                            value: this.state.first_name,
-                            onChange: this.onChangeFirstName,
-                            required: true
-                          },
-                          {
-                            label: "Last Name",
-                            type: "text",
-                            bsClass: "form-control",
-                            placeholder: "Last Name",
-                            defaultValue: "e.g. Musk",
-                            value: this.state.last_name,
-                            onChange: this.onChangeLastName,
+                            value: this.state.name,
+                            onChange: this.onChangeName,
                             required: true
                           }
                         ]}
                       />
                       <FormInputs
-                        ncols={["col-md-6", "col-md-6"]}
+                        ncols={["col-md-12"]}
                         properties={[
                           {
                             label: "Email address",
@@ -191,20 +163,11 @@ class EVCPRegister extends Component {
                             value: this.state.email_address,
                             onChange: this.onChangeEmailAddress,
                             required: true
-                          },
-                          {
-                            label: "Company",
-                            type: "name",
-                            bsClass: "form-control",
-                            placeholder: "Company Name",
-                            value: this.state.company_name,
-                            onChange: this.onChangeCompanyName,
-                            required: true
                           }
                         ]}
                       />
                       <FormInputs
-                        ncols={["col-md-6", "col-md-6"]}
+                        ncols={["col-md-12"]}
                         properties={[
                           {
                             label: "Password",
@@ -214,10 +177,15 @@ class EVCPRegister extends Component {
                             value: this.state.password,
                             onChange: this.onChangePassword,
                             required: true
-                          },
+                          }
+                        ]}
+                      />
+                      <FormInputs
+                        ncols={["col-md-12"]}
+                        properties={[
                           {
                             label: "Confirm password",
-                            type: "tepasswordxt",
+                            type: "password",
                             bsClass: "form-control",
                             placeholder: "Confirm password",
                             value: this.state.confirm_password,
