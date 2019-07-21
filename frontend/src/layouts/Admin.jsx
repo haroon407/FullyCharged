@@ -46,7 +46,6 @@ class Admin extends Component {
             autoDismiss: 15
         });
     };
-
     componentDidMount() {
         this.setState({_notificationSystem: this.refs.notificationSystem});
         var _notificationSystem = this.refs.notificationSystem;
