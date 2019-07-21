@@ -16,6 +16,7 @@ class EditLocation extends Component {
         locations: []
     };
     owner = "5d2fb5270c8c3c33abfb0e72";
+
     constructor(props) {
         super(props);
     };
@@ -24,7 +25,7 @@ class EditLocation extends Component {
 
     componentWillMount() {
         ChargingLocationService.getAllLocations(this.owner).then((data) => {
-            this.setState(()=>{
+            this.setState(() => {
                 const locations = data;
                 return {
                     locations,
@@ -37,11 +38,17 @@ class EditLocation extends Component {
     onToggleDisableItem = (e, locationId) => {
         this.setState(prevState => {
             let locations = [...prevState.locations];
-            let index = this.getLocationFromId(locationId, locations)
+            let index = this.getLocationFromId(locationId, locations);
             locations[index].enabled = !locations[index].enabled;
-            locations[index].chargingUnits.forEach((unit)=>{
+            locations[index].chargingUnits.forEach((unit) => {
                 unit.enabled = !unit.enabled
             });
+            let updatedLocation = locations[index];
+            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+                this.props.showNotification('success', 'Location disabled successfully');
+            }).catch((e) => {
+                this.props.showNotification('error', 'Error while disabling the location');
+            })
             return {
                 locations,
             };
@@ -51,8 +58,15 @@ class EditLocation extends Component {
     onDeleteItem = (e, locationId) => {
         this.setState(prevState => {
             let locations = [...prevState.locations];
-            let index = this.getLocationFromId(locationId, locations)
-            locations.splice(index, 1);
+            let index = this.getLocationFromId(locationId, locations);
+            let updatedLocation = {};
+            locations[index].deleted = true;
+            updatedLocation = locations[index];
+            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+                this.props.showNotification('success', 'Location deleted successfully');
+            }).catch((e) => {
+                this.props.showNotification('error', 'Error while deleting the location');
+            })
             return {
                 locations,
             };
@@ -69,7 +83,7 @@ class EditLocation extends Component {
     };
 
     getLocationFromId(locationId, locationsList) {
-        return locationsList.findIndex((location)=>{
+        return locationsList.findIndex((location) => {
             return location._id === locationId
         });
     }
@@ -80,48 +94,56 @@ class EditLocation extends Component {
         }
         return (
             <div className="content">
-        <Grid fluid>
-          <Row>
-            <Col md={12}>
-              <Card
-                title="Charging Location Management"
-                ctTableFullWidth
-                ctTableResponsive
-                content={
-                  <Table striped hover>
-                    <tbody>
-                      {this.state.locations.map((location, key) => {
-                        return (
-                          <tr key={key}>
-                              <td key={location._id}>
-                                  <Row className="location-cell">
-                                      <Col md={8}>{location.name} - {location.address.street}, {location.address.city}, {location.address.postalCode} {location.address.country}
-                                      {!location.enabled && <b className="margin-disabled">(DISABLED)</b>}
-                                      </Col>
-                                      <Col md={4}>
-                                          <button className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
-                                           onClick={() => this.onEditItem(location)}>Edit</button>
-                                          <button className={"btn-xs btn-text-white btn-margin-15 btn-position " + (location.enabled ? "btn-warning" : "btn-success")}
-                                              onClick={(e) => this.onToggleDisableItem(e, location._id)}>
-                                                  {!location.enabled && <span>Enable</span>}
-                                                  {location.enabled && <span>Disable</span>}
-                                              </button>
-                                            <button className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
-                                              onClick={(e) => this.onDeleteItem(e, location._id)}>Delete</button>
-                                        </Col>
-                                    </Row>
-                              </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </Table>
-                }
-              />
-            </Col>
-          </Row>
-        </Grid>
-      </div>
+                <Grid fluid>
+                    <Row>
+                        <Col md={12}>
+                            <Card
+                                title="Charging Location Management"
+                                ctTableFullWidth
+                                ctTableResponsive
+                                content={
+                                    <Table striped hover>
+                                        <tbody>
+                                        {this.state.locations.map((location, key) => {
+                                            return (!location.deleted &&
+                                                <tr key={key}>
+                                                    <td key={location._id}>
+                                                        <Row className="location-cell">
+                                                            <Col
+                                                                md={8}>{location.name} - {location.address.street}, {location.address.city}, {location.address.postalCode} {location.address.country}
+                                                                {!location.enabled &&
+                                                                <b className="margin-disabled">(DISABLED)</b>}
+                                                            </Col>
+                                                            <Col md={4}>{
+                                                                <button
+                                                                    className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
+                                                                    onClick={() => this.onEditItem(location)} disabled={!location.enabled}>Edit
+                                                                </button>
+                                                            }
+                                                                <button
+                                                                    className={"btn-xs btn-text-white btn-margin-15 btn-position " + (location.enabled ? "btn-warning" : "btn-success")}
+                                                                    onClick={(e) => this.onToggleDisableItem(e, location._id)}>
+                                                                    {!location.enabled && <span>Enable</span>}
+                                                                    {location.enabled && <span>Disable</span>}
+                                                                </button>
+                                                                <button
+                                                                    className="btn-xs btn-danger btn-text-white btn-margin-15 btn-position"
+                                                                    onClick={(e) => this.onDeleteItem(e, location._id)}>Delete
+                                                                </button>
+                                                            </Col>
+                                                        </Row>
+                                                    </td>
+                                                </tr>
+                                            );
+                                        })}
+                                        </tbody>
+                                    </Table>
+                                }
+                            />
+                        </Col>
+                    </Row>
+                </Grid>
+            </div>
         );
     }
 }
