@@ -1,8 +1,9 @@
 import axios from "axios";
+import baseUrl from './baseUrl';
 
 class UsersServiceClass {
   signIn(signInObject) {
-    const URL = "http://localhost:3200/auth/login"; // port of backend
+    const URL = baseUrl +"/auth/login"; // port of backend
     return axios(URL, {
       method: "POST",
       headers: {
@@ -17,7 +18,7 @@ class UsersServiceClass {
       });
   }
   signUpEVO(signUpObject) {
-    const URL = "http://localhost:3200/auth/register";
+    const URL = baseUrl +"/auth/register";
     return axios(URL, {
       method: "POST",
       headers: {
@@ -31,7 +32,7 @@ class UsersServiceClass {
       });
   }
   signUpEVCP(signUpObject) {
-    const URL = "http://localhost:3200/auth/register";
+    const URL = baseUrl +"/auth/register";
     return axios(URL, {
       method: "POST",
       headers: {

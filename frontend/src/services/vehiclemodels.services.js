@@ -1,8 +1,9 @@
 import axios from "axios";
+import baseUrl from './baseUrl';
 
 class VehicleModelsServiceClass {
   getVehicleModels() {
-    const URL = "http://localhost:5000/vehicles/vehicletypes"; // port of backend
+    const URL = baseUrl +"/vehicles/vehicletypes"; // port of backend
     return axios(URL, {
       method: "GET",
       headers: {

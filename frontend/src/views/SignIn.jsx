@@ -4,7 +4,6 @@ import {
   Row,
   Col,
   MenuItem,
-  Nav,
   NavDropdown,
   NavItem
 } from "react-bootstrap";
@@ -14,22 +13,14 @@ import { FormInputs } from "components/FormInputs/FormInputs.jsx";
 import { UserCard } from "components/UserCard/UserCard.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 import config from "react-global-configuration";
-import { createBrowserHistory } from "history";
 
 import UsersService from "../services/users.services";
-
-import avatar from "assets/img/faces/face-3.jpg";
-import { isContext } from "vm";
-
-import axios from "axios";
 
 class SignIn extends Component {
   constructor(props) {
     super(props);
-
     this.onChangeEmailAddress = this.onChangeEmailAddress.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
       email: "",
@@ -42,49 +33,34 @@ class SignIn extends Component {
       email: e.target.value
     });
   }
+
   onChangePassword(e) {
     this.setState({
       password: e.target.value
     });
   }
 
-  history = createBrowserHistory();
-
-  onSubmit(e) {
-    e.preventDefault();
-    console.log(
-      `The values are ${this.state.email_address} and ${this.state.password}`
-    );
-
+  signIn(e) {
     const obj = {
       email: this.state.email,
       password: this.state.password
     };
 
-    //this.props.showNotification("success", "Logged in");
-
-    // calling API here
     UsersService.signIn(obj)
       //.then(res => res.json())
       .then(data => {
         //setting User values as global
         config.set({ user: data }, { freeze: false });
         if (data.user.role === "EVO") {
-          //<Redirect to='/admin/dashboard-evo'/>
-          //this.history.push("dashboard-evo", data);
-          //this.props.history.push(this.history);
-          this.props.history.location.pathname = "/admin/dashboard-evo";
+          this.props.history.push("/admin/dashboard-evo");
         }
         if (data.user.role === "EVCP") {
-          this.props.history.location.pathname = "/analytics";
-        } else {
-          alert("The user does not exist. Please register.");
+          this.props.history.push("/admin/add/location");
         }
+      })
+      .catch(e => {
+        alert("Invalid email or password");
       });
-
-    //alert("A form was submitted: " + this.state);
-    // Move to Respective page
-    console.log("Role Auth");
     this.setState({
       email: "",
       password: ""
@@ -159,7 +135,13 @@ class SignIn extends Component {
                           }
                         ]}
                       />
-                      <Button bsStyle="info" pullRight fill type="submit">
+                      <Button
+                        bsStyle="info"
+                        pullRight
+                        fill
+                        type="button"
+                        onClick={e => this.signIn(e)}
+                      >
                         Sign In
                       </Button>
                       <div className="clearfix" />

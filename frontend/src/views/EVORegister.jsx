@@ -15,13 +15,8 @@ import Button from "components/CustomButton/CustomButton.jsx";
 
 import UsersService from "../services/users.services";
 import VehicleModelsService from "../services/vehiclemodels.services";
-import { createBrowserHistory } from "history";
-
-import avatar from "assets/img/faces/face-3.jpg";
 
 import logo from "assets/img/logo.png";
-
-import axios from "axios";
 
 class EVORegister extends Component {
   state = {
@@ -45,7 +40,7 @@ class EVORegister extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.onChangePassword = this.onChangePassword.bind(this);
     this.onChangeConfirmPassword = this.onChangeConfirmPassword.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    //this.onSubmit = this.onSubmit.bind(this);
   }
   componentWillMount() {
     VehicleModelsService.getVehicleModels().then(data => {
@@ -86,28 +81,30 @@ class EVORegister extends Component {
     });
   }
 
-  onSubmit(e) {
-    e.preventDefault();
+  signUp(e) {
+    // perform all neccassary validations
     if (this.state.password !== this.state.confirm_password) {
-      alert("Passwords don't match"); //Add notification
+      alert("Passwords don't match");
     } else {
       // make API call
       const obj = {
-        //name: this.state.first_name + this.state.last_name,
         name: this.state.name,
         role: "EVO",
         email: this.state.email,
-        vehicleModels: this.state.vehicleModels,
         password: this.state.password
       };
+
       // calling API here
-      UsersService.signUpEVO(obj);
-      /* Add a notification. Add to database. Take to Sign in page */
-    //this.props.history.push("/index/sign-in");
-    this.props.history.location.pathname = "/index/sign-in";
-    console.log(
-      `The values are ${this.state.email} and ${this.state.password}`
-    );}
+      UsersService.signUpEVO(obj)
+        .then(() => {
+          alert("Registered successfully, please sign in to continue");
+          this.props.history.push("/index/sign-in");
+        })
+        .catch(error => {
+          debugger;
+          alert("Error signingup, please try again");
+        });
+    }
     this.setState({
       name: "",
       email: "",
@@ -115,6 +112,38 @@ class EVORegister extends Component {
       confirm_password: ""
     });
   }
+
+  // onSubmit(e) {
+  //   e.preventDefault();
+  //   if (this.state.password !== this.state.confirm_password) {
+  //     alert("Passwords don't match");
+  //   } else {
+  //     // make API call
+  //     const obj = {
+  //       name: this.state.name,
+  //       role: "EVO",
+  //       email: this.state.email,
+  //       vehicleModels: this.state.vehicleModels,
+  //       password: this.state.password
+  //     };
+  //     // calling API here
+  //     UsersService.signUpEVO(obj)
+  //       .then(() => {
+  //         alert("Registered successfully, please sign in to continue");
+  //         this.props.history.push("/index/sign-in");
+  //       })
+  //       .catch(error => {
+  //         debugger;
+  //         alert("Error signingup, please try again");
+  //       });
+  //   }
+  //   this.setState({
+  //     name: "",
+  //     email: "",
+  //     password: "",
+  //     confirm_password: ""
+  //   });
+  // }
 
   render() {
     if (this.loading) {
@@ -236,7 +265,13 @@ class EVORegister extends Component {
                           }
                         ]}
                       />
-                      <Button bsStyle="info" pullRight fill type="submit">
+                      <Button
+                        bsStyle="info"
+                        pullRight
+                        fill
+                        type="button"
+                        onClick={e => this.signUp(e)}
+                      >
                         Sign Up
                       </Button>
                       <div className="clearfix" />

@@ -1,9 +1,9 @@
 import axios from "axios";
-import config from "react-global-configuration";
+import baseUrl from "./baseUrl";
 
 class BookingsServiceClass {
   getAllBookings() {
-    const URL = "http://localhost:3200/bookings"; // port of backend
+    const URL = baseUrl + "/bookings"; // port of backend
     return axios(URL, {
       method: "GET",
       headers: {
@@ -18,12 +18,13 @@ class BookingsServiceClass {
       });
   }
   getBookingById(bookingIdObject) {
-    const URL = "http://localhost:3200//bookings/:id/charge";
+    const URL = baseUrl + "/bookings/:id/charge";
     return axios(URL, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        Authorization: "" //TOKEN
+        Authorization:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZDMwZWZjMWMwZWE0NTM5ZDgxNWY1ZWEiLCJpYXQiOjE1NjM2NTk5OTEsImV4cCI6MTU2Mzc0NjM5MX0.VnJnO4_muMuWZVnbAzDQelbeNttykiVbiYjAFKd0G1M" // token
       },
       data: bookingIdObject
     })
@@ -33,7 +34,7 @@ class BookingsServiceClass {
       });
   }
   cancelBookingById(bookingIdObject) {
-    const URL = "http://localhost:3200/bookings/:id/cancel";
+    const URL = baseUrl + "/bookings/:id/cancel";
     return axios(URL, {
       method: "PUT",
       headers: {

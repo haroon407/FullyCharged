@@ -1,10 +1,5 @@
-import Dashboard from "views/Dashboard.jsx";
-import UserProfile from "views/UserProfile.jsx";
-import TableList from "views/TableList.jsx";
-import Typography from "views/Typography.jsx";
-import Icons from "views/Icons.jsx";
-import Maps from "views/Maps.jsx";
-import Notifications from "views/Notifications.jsx";
+import AddLocation from "views/AddLocation";
+import EditLocation from "views/EditLocation";
 import Website from "views/Website";
 import SignIn from "views/SignIn";
 import EVORegister from "views/EVORegister";
@@ -17,84 +12,64 @@ const dashboardRoutes = [
     name: "Sign In",
     icon: "pe-7s-graph",
     component: SignIn,
-    layout: "/index"
+    layout: "/index",
+    noSideNav: true
   },
   {
     path: "/evo-register",
     name: "EVO Registration",
     icon: "pe-7s-graph",
     component: EVORegister,
-    layout: "/index"
+    layout: "/index",
+    noSideNav: true
   },
   {
     path: "/evcp-register",
     name: "EVCP Registration",
     icon: "pe-7s-graph",
     component: EVCPRegister,
-    layout: "/index"
-  },
-  {
-    path: "/dasboard-evo",
-    name: "Dashboard EVO",
-    icon: "pe-7s-graph",
-    component: DashboardEVO,
-    layout: "/admin"
+    layout: "/index",
+    noSideNav: true
   },
   {
     path: "/",
     name: "Landing Page",
     icon: "pe-7s-graph",
     component: Website,
-    layout: "/index"
+    layout: "/index",
+    noSideNav: true
   },
   {
-    path: "/dashboard",
-    name: "Dashboard",
+    path: "/dashboard-evo",
+    name: "Dashboard EVO",
     icon: "pe-7s-graph",
-    component: Dashboard,
-    layout: "/admin"
+    component: DashboardEVO,
+    layout: "/admin",
+    role: "EVO"
   },
   {
-    path: "/user",
-    name: "User Profile",
-    icon: "pe-7s-user",
-    component: UserProfile,
-    layout: "/admin"
+    path: "/add/location",
+    name: "Add Location",
+    icon: "pe-7s-plus",
+    component: AddLocation,
+    layout: "/admin",
+    role: "EVCP"
   },
   {
-    path: "/table",
-    name: "Table List",
-    icon: "pe-7s-note2",
-    component: TableList,
-    layout: "/admin"
+    path: "/edit/location",
+    name: "Edit Location",
+    icon: "pe-7s-pen",
+    component: EditLocation,
+    layout: "/admin",
+    role: "EVCP"
   },
   {
-    path: "/typography",
-    name: "Typography",
-    icon: "pe-7s-news-paper",
-    component: Typography,
-    layout: "/admin"
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "pe-7s-science",
-    component: Icons,
-    layout: "/admin"
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "pe-7s-map-marker",
-    component: Maps,
-    layout: "/admin"
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "pe-7s-bell",
-    component: Notifications,
-    layout: "/admin"
+    path: "/update/location",
+    name: "Edit Location",
+    icon: "pe-7s-plus",
+    component: AddLocation,
+    layout: "/admin",
+    noSideNav: true
   }
 ];
 
