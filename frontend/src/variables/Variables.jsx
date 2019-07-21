@@ -249,7 +249,8 @@ var style = {
 // // // For tables
 // //
 //
-const thArray = ["ID", "Name", "Salary", "Country", "City"];
+const thArray = ["ID", "Start Time", "End Time", "Charging Unit", "Estimated charge (in %)", 
+"Estimated charge (in kwh)", "Estimated charging cost (in Euros)", "Estimated Voulme fee(in Euros)", "Booked on", "Last updated", "Used", "Canceled"];
 const tdArray = [
   ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
   ["2", "Minerva Hooper", "$23,789", "Curaçao", "Sinaai-Waas"],

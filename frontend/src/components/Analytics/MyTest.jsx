@@ -5,40 +5,37 @@ import { Card } from "components/Card/Card.jsx";
 import Button from "components/CustomButton/CustomButton.jsx";
 
 export class MyTest extends Component {
-
   constructor(props) {
-      super(props);
-      // Initializing state
-      this.state = {
-          open: false
-      };
+    super(props);
+    // Initializing state
+    this.state = {
+      open: false
+    };
 
-      this.setOpen = this.setOpen.bind(this);
-  };
+    this.setOpen = this.setOpen.bind(this);
+  }
 
-  setOpen(val){
+  setOpen(val) {
     let state = {
-        open: val
+      open: val
     };
 
     this.setState(state);
   }
 
   render() {
-    return <div><Button aria-controls="example-collapse-text" aria-expanded={this.state.open} >
-      click
-    </Button>
-    <Collapse in={this.state.open}>
-      <div id="example-collapse-text">
-        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
-        terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
-        labore wes anderson cred nesciunt sapiente ea proident.
+    return (
+      <div>
+        <Collapse in={this.state.open}>
+          <div id="example-collapse-text">
+            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus
+            terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer
+            labore wes anderson cred nesciunt sapiente ea proident.
+          </div>
+        </Collapse>
       </div>
-    </Collapse>
-  </div>;
+    );
   }
 }
-
-
 
 export default MyTest;
