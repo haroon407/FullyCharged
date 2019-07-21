@@ -17,7 +17,6 @@ class EditLocation extends Component {
         locations: []
     };
     user = null;
-    owner = "5d2fb5270c8c3c33abfb0e72";
 
     constructor(props) {
         super(props);
