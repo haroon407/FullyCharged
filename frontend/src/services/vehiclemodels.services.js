@@ -3,7 +3,7 @@ import baseUrl from './baseUrl';
 
 class VehicleModelsServiceClass {
   getVehicleModels() {
-    const URL = baseUrl +"/vehicles/vehicletypes"; // port of backend
+    const URL = baseUrl +"/vehicles/"; // port of backend
     return axios(URL, {
       method: "GET",
       headers: {
