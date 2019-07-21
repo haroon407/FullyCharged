@@ -52,10 +52,10 @@ class SignIn extends Component {
         //setting User values as global
         config.set({ user: data }, { freeze: false });
         if (data.user.role === "EVO") {
-          this.props.history.push("/admin/dashboard-evo");
+          this.props.history.push("/admin/find_chargers");
         }
         if (data.user.role === "EVCP") {
-          this.props.history.push("/admin/add/location");
+          this.props.history.push("/admin/analytics");
         }
       })
       .catch(e => {
