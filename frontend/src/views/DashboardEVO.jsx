@@ -36,10 +36,26 @@ class DashboardEVO extends Component {
     };
   }
 
+  // componentDidMount() {
+  // debugger;
+  // BookingsService.getAllBookings().then(res => {
+  // const bookingsObject = res.data;
+  // this.setState({bookingsObject});
+  // this.setState({ loading: false });
+  // });
+  // }
+
   componentWillMount() {
     debugger;
     BookingsService.getAllBookings().then(data => {
+      //   this.setState(()=>{
+      //     const bookingsObject = data;
+      //     return {
+      //       bookingsObject,
+      //     }
+      // });
       this.bookingsObject = data;
+      debugger;
       this.setState({ loading: false });
     });
   }
@@ -78,18 +94,18 @@ class DashboardEVO extends Component {
                       </tr>
                     </thead>
                     <tbody>
-                      <Col md={10}>
-                        {this.bookingsObject.map((prop, key) => {
+                      <Col md={8}>
+                        {this.state.bookingsObject.map((x, key) => {
                           return (
-                            <tr key={key}>
-                              {prop.map((prop, key) => {
-                                return <td key={key}>{prop}</td>;
+                            <tr key={x._id}>
+                              {x.map((x, key) => {
+                                return <td key={x._id}>{JSON.stringify(x)}</td>;
                               })}
                             </tr>
                           );
                         })}
                       </Col>
-                      <Col md={2}>
+                      <Col md={4}>
                         <button
                           className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
                           // onClick={() => this.onCancel(bookingsObject.id)}
