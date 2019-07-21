@@ -47,11 +47,17 @@ class EditLocation extends Component {
     onToggleDisableItem = (e, locationId) => {
         this.setState(prevState => {
             let locations = [...prevState.locations];
-            let index = this.getLocationFromId(locationId, locations)
+            let index = this.getLocationFromId(locationId, locations);
             locations[index].enabled = !locations[index].enabled;
             locations[index].chargingUnits.forEach((unit) => {
                 unit.enabled = !unit.enabled
             });
+            let updatedLocation = locations[index];
+            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+                this.props.showNotification('success', 'Location disabled successfully');
+            }).catch((e) => {
+                this.props.showNotification('error', 'Error while disabling the location');
+            })
             return {
                 locations,
             };
@@ -61,8 +67,15 @@ class EditLocation extends Component {
     onDeleteItem = (e, locationId) => {
         this.setState(prevState => {
             let locations = [...prevState.locations];
-            let index = this.getLocationFromId(locationId, locations)
-            locations.splice(index, 1);
+            let index = this.getLocationFromId(locationId, locations);
+            let updatedLocation = {};
+            locations[index].deleted = true;
+            updatedLocation = locations[index];
+            ChargingLocationService.updateLocation(updatedLocation).then(() => {
+                this.props.showNotification('success', 'Location deleted successfully');
+            }).catch((e) => {
+                this.props.showNotification('error', 'Error while deleting the location');
+            })
             return {
                 locations,
             };
@@ -101,7 +114,7 @@ class EditLocation extends Component {
                                     <Table striped hover>
                                         <tbody>
                                         {this.state.locations.map((location, key) => {
-                                            return (
+                                            return (!location.deleted &&
                                                 <tr key={key}>
                                                     <td key={location._id}>
                                                         <Row className="location-cell">
@@ -110,11 +123,12 @@ class EditLocation extends Component {
                                                                 {!location.enabled &&
                                                                 <b className="margin-disabled">(DISABLED)</b>}
                                                             </Col>
-                                                            <Col md={4}>
+                                                            <Col md={4}>{
                                                                 <button
                                                                     className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
-                                                                    onClick={() => this.onEditItem(location)}>Edit
+                                                                    onClick={() => this.onEditItem(location)} disabled={!location.enabled}>Edit
                                                                 </button>
+                                                            }
                                                                 <button
                                                                     className={"btn-xs btn-text-white btn-margin-15 btn-position " + (location.enabled ? "btn-warning" : "btn-success")}
                                                                     onClick={(e) => this.onToggleDisableItem(e, location._id)}>
