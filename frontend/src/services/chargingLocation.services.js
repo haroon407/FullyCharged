@@ -4,6 +4,7 @@ import baseUrl from './baseUrl';
 class ChargingLocationServiceClass {
     addLocation(locationObject, user) {
         const URL = baseUrl + '/locations/addlocation';
+        locationObject.owner = user.user.id;
         return axios(URL, {
             method: 'POST',
             headers: {

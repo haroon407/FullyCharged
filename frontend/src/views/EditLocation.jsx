@@ -26,22 +26,24 @@ class EditLocation extends Component {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index');
+            this.props.history.push('/index/sign-in');
         }
     };
 
     history = createBrowserHistory();
 
     componentWillMount() {
-        ChargingLocationService.getAllLocations(this.user).then((data) => {
-            this.setState(() => {
-                const locations = data;
-                return {
-                    locations,
-                }
+        if (this.user !== null) {
+            ChargingLocationService.getAllLocations(this.user).then((data) => {
+                this.setState(() => {
+                    const locations = data;
+                    return {
+                        locations,
+                    }
+                });
+                this.setState({loading: false});
             });
-            this.setState({loading: false});
-        });
+        }
     }
 
     onToggleDisableItem = (e, locationId) => {
@@ -126,7 +128,8 @@ class EditLocation extends Component {
                                                             <Col md={4}>{
                                                                 <button
                                                                     className="btn-xs btn-primary btn-text-white btn-margin-15 btn-position"
-                                                                    onClick={() => this.onEditItem(location)} disabled={!location.enabled}>Edit
+                                                                    onClick={() => this.onEditItem(location)}
+                                                                    disabled={!location.enabled}>Edit
                                                                 </button>
                                                             }
                                                                 <button
