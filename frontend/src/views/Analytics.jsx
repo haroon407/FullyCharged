@@ -14,16 +14,18 @@ import config from "react-global-configuration";
 
 
 class Analytics extends Component {
+    user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null;
     constructor(props) {
         super(props);
         this.chargerLocations = [];
-        this.user = null;
         let configFile = config.serialize();
         if (configFile !== "null") {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index/sign-in');
+            if (!this.user) {
+                this.props.history.push('/index/sign-in');
+            }
         }
         AnalyticsService.getChargerLocations(this.user)
         .then(res => {

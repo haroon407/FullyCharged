@@ -7,7 +7,7 @@ import logo from "assets/img/logo.png";
 import config from "react-global-configuration";
 
 class Sidebar extends Component {
-    user = null;
+    user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null;
 
     constructor(props) {
         super(props);
@@ -17,7 +17,9 @@ class Sidebar extends Component {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index');
+            if (!this.user) {
+                this.props.history.push('/index/sign-in');
+            }
         }
         this.state = {
             width: window.innerWidth

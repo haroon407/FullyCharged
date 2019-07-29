@@ -28,6 +28,7 @@ const mapContainerStyle2 = {
 };
 
 class FindChargers extends Component {
+    user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null;
     constructor(props) {
         super(props);
 
@@ -42,14 +43,14 @@ class FindChargers extends Component {
           markerName: "Marker",
           showingInfoWindow: false
         };
-
-        this.user = null;
         let configFile = config.serialize();
         if (configFile !== "null") {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index/sign-in');
+            if (!this.user) {
+                this.props.history.push('/index/sign-in');
+            }
         }
 
         FindChargersService.getData(48.25653029401251, 11.633186874796593, 48.27181450576806, 11.713309822489464, '2019-07-24', 10, this.user).then(res => {

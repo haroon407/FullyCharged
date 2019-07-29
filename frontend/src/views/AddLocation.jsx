@@ -16,7 +16,7 @@ import config from "react-global-configuration";
 Geocode.setApiKey("AIzaSyDOw9FX8co2j1vwXyQehJID7ZCf9ccnttU");
 
 class AddLocation extends Component {
-    user = null;
+    user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null;
     state = {
         loading: true
     };
@@ -31,8 +31,9 @@ class AddLocation extends Component {
         if (configFile !== "null") {
             this.user = config.get('user')
         } else {
-            // If the user is not signed in
-            this.props.history.push('/index/sign-in');
+            if (!this.user) {
+                this.props.history.push('/index/sign-in');
+            }
         }
         // If update location, fetch state object
         if (props.match.path === '/admin/update/location') {
@@ -161,14 +162,17 @@ class AddLocation extends Component {
     }
 
     onAddItem = () => {
-        this.setState(state => {
-            if (state.chargingUnitObj.name === '') {
-                state.chargingUnitObj.name = 'Charger ' + (state.locationObject.chargingUnits.length + 1);
+        const chargingUnitTemp = Object.assign({}, this.state.chargingUnitObj);
+
+        this.setState(prevState => {
+            if (chargingUnitTemp.name === '') {
+                chargingUnitTemp.name = 'Charger ' + (prevState.locationObject.chargingUnits.length + 1);
             }
-            const chargingUnits = [...state.locationObject.chargingUnits, Object.assign({}, state.chargingUnitObj)];
-            let locationObject = Object.assign({}, state.locationObject);
-            locationObject.chargingUnits = chargingUnits;
-            let chargingUnitObj = Object.assign({}, state.chargingUnitObj);
+            let locationObject = JSON.parse(JSON.stringify(prevState.locationObject));
+            let chargingUnitObj = JSON.parse(JSON.stringify(prevState.chargingUnitObj));
+            let chargingUnits = JSON.parse(JSON.stringify(locationObject.chargingUnits));
+            chargingUnits = chargingUnits.concat(chargingUnitTemp);
+            locationObject.chargingUnits = JSON.parse(JSON.stringify(chargingUnits));
             if (this.chargerTypes.length > 0) {
                 chargingUnitObj.name = '';
                 chargingUnitObj.energyPrice = 0;
@@ -210,6 +214,7 @@ class AddLocation extends Component {
                 // Call the API function
                 ChargingLocationService.addLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Added successfully');
+                    this.resetFormAfterAddLocation();
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while adding location');
                 });
@@ -235,6 +240,7 @@ class AddLocation extends Component {
                 // Call the API function
                 ChargingLocationService.updateLocation(this.state.locationObject, this.user).then((data) => {
                     this.props.showNotification('success', 'Updated successfully');
+                    this.props.history.push('/admin/edit/location');
                 }).catch((err) => {
                     this.props.showNotification('error', 'Error while updating location');
                 });
@@ -256,6 +262,30 @@ class AddLocation extends Component {
         return this.chargerTypes.findIndex((chargerType) => {
             return chargerType._id === lookupId
         });
+    }
+
+    resetFormAfterAddLocation() {
+        this.setState(() => {
+            let locationObject = {
+                name: "",
+                address: {
+                    street: "",
+                    city: "",
+                    state: "",
+                    postalCode: "",
+                    country: ""
+                },
+                chargingUnits: [],
+                enabled: true,
+                deleted: false,
+                basicBookingFee: 0.50,
+                cancellationTimeout: 0,
+                owner: ""
+            };
+            return {
+                locationObject,
+            }
+        })
     }
 
     render() {

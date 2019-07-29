@@ -77,7 +77,6 @@ class EVCPRegister extends Component {
                 alert('Registered successfully, please sign in to continue');
                 this.props.history.push('/index/sign-in');
             }).catch((error) => {
-                debugger;
                 alert('Error signingup, please try again');
             });
         }

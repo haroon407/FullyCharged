@@ -16,7 +16,7 @@ class EditLocation extends Component {
         loading: true,
         locations: []
     };
-    user = null;
+    user = localStorage.getItem("user") !== null ? JSON.parse(localStorage.getItem("user")) : null;
 
     constructor(props) {
         super(props);
@@ -25,7 +25,9 @@ class EditLocation extends Component {
             this.user = config.get('user')
         } else {
             // If the user is not signed in
-            this.props.history.push('/index/sign-in');
+            if (!this.user) {
+                this.props.history.push('/index/sign-in');
+            }
         }
     };
 
